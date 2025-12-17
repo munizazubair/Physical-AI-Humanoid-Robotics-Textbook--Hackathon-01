@@ -1,0 +1,279 @@
+---
+id: 06-system-integration
+title: "Chapter 6: ROS 2 System Integration for Humanoids"
+sidebar_label: "6. System Integration"
+sidebar_position: 6
+---
+
+# Chapter 6: ROS 2 System Integration for Humanoids
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+- Integrate perception, planning, and control subsystems using ROS 2
+- Understand how a complete humanoid robot system is structured with ROS 2
+- Recognize best practices for ROS 2 system design
+- Apply ROS 2 concepts to real humanoid robot architectures
+
+---
+
+## Introduction
+
+In Chapters 3-5, we learned the building blocks of ROS 2: nodes, topics, messages, services, and actions. Now it's time to assemble these pieces into a complete humanoid robot system.
+
+Building a humanoid robot isn't just about understanding individual components—it's about integrating them into a cohesive architecture where perception informs planning, planning generates control commands, and control executes physical motion, all while maintaining balance and safety.
+
+In this chapter, we'll walk through a complete ROS 2-based humanoid system, examining how real robots like those from Boston Dynamics (Atlas), Agility Robotics (Digit), and research platforms use ROS 2 to coordinate dozens of nodes across perception, planning, and control subsystems.
+
+---
+
+## The Three-Layer Architecture in ROS 2
+
+Recall from Chapter 2 the three-layer architecture: **Perception**, **Planning**, and **Control**. In ROS 2, each layer is implemented as a collection of nodes communicating via topics, services, and actions.
+
+```
+┌───────────────────────────────────────────────────────────┐
+│                    PLANNING LAYER                         │
+│  [Task Planner] → [Motion Planner] → [Behavior Manager]   │
+└───────────────────────────────────────────────────────────┘
+                    ↑ Topics/Services ↓
+┌───────────────────────────────────────────────────────────┐
+│                   PERCEPTION LAYER                        │
+│  [Camera Driver] → [Object Detector] → [SLAM] → [Fusion]  │
+└───────────────────────────────────────────────────────────┘
+                    ↑ Topics ↓
+┌───────────────────────────────────────────────────────────┐
+│                    CONTROL LAYER                          │
+│  [Joint Controller] ← [Balance Controller] ← [Safety Mon] │
+└───────────────────────────────────────────────────────────┘
+                    ↓ Motor Commands
+                 [Actuators]
+```
+
+Let's explore each layer.
+
+---
+
+## Perception Layer: Sensing the World
+
+The perception layer transforms raw sensor data into structured information about the robot's state and environment.
+
+### Key Nodes
+
+**1. Sensor Drivers**:
+- `camera_driver`: Publishes RGB images to `/camera/image`
+- `depth_driver`: Publishes depth data to `/camera/depth`
+- `imu_driver`: Publishes accelerometer/gyroscope data to `/imu/data`
+- `lidar_driver`: Publishes 3D point clouds to `/scan`
+
+**2. State Estimation**:
+- `robot_state_publisher`: Publishes robot's kinematic tree (joint positions, link poses) to `/robot_state`
+- `joint_state_publisher`: Reads encoders, publishes joint angles to `/joint_states`
+
+**3. Perception Algorithms**:
+- `object_detector`: Subscribes to `/camera/image`, publishes detected objects to `/objects`
+- `slam_node`: Subscribes to `/scan` and `/odom`, publishes map to `/map` and localization to `/amcl_pose`
+- `obstacle_detector`: Subscribes to `/camera/depth`, publishes obstacles to `/obstacles`
+
+### Data Flow Example
+
+```
+Camera → /camera/image → Object Detector → /objects → Planner
+Depth  → /camera/depth → Obstacle Detector → /obstacles → Planner
+IMU    → /imu/data → State Estimator → /robot_pose → Planner
+```
+
+---
+
+## Planning Layer: Deciding What to Do
+
+The planning layer decides **what actions to take** based on perception data and high-level goals.
+
+### Key Nodes
+
+**1. Task Planning**:
+- `task_planner`: Breaks high-level goals ("Pick up cup") into subtasks ("Navigate to table", "Reach for cup", "Grasp cup")
+- Uses **actions** to send goals: `/navigate_to_pose`, `/reach_target`, `/grasp_object`
+
+**2. Motion Planning**:
+- `move_group` (MoveIt 2): Computes collision-free arm trajectories
+- Subscribes to `/planning_scene` (obstacles, robot state)
+- Publishes planned trajectories to `/planned_path`
+
+**3. Navigation**:
+- `nav2_planner`: Computes global path from current position to goal
+- `nav2_controller`: Generates local velocity commands to follow path
+- Publishes to `/cmd_vel` (linear and angular velocities)
+
+### Example Flow: "Pick Up Cup"
+
+```
+1. Task Planner receives goal: "Pick up cup at (x, y, z)"
+2. Task Planner sends navigation action: "Navigate to (x, y)"
+   → nav2_planner computes path
+   → nav2_controller publishes /cmd_vel
+3. Upon arrival, Task Planner calls service: "/check_ik" (is cup reachable?)
+4. Task Planner sends grasp action to move_group:
+   → MoveIt computes arm trajectory
+   → Publishes /planned_path
+5. Control layer executes trajectory
+```
+
+---
+
+## Control Layer: Executing Actions
+
+The control layer translates high-level commands (velocities, trajectories) into low-level motor signals.
+
+### Key Nodes
+
+**1. Joint Controllers**:
+- `joint_trajectory_controller`: Subscribes to `/planned_path`, sends position/torque commands to motors
+- Uses PID or model-based control
+
+**2. Balance Controller**:
+- `balance_controller`: Subscribes to `/imu/data`, adjusts leg joint torques to maintain stability
+- Publishes `/joint_corrections` (torque adjustments)
+
+**3. Safety Monitor**:
+- `safety_monitor`: Monitors all sensor data, detects unsafe conditions (falling, collision), triggers emergency stop
+- Can cancel actions mid-execution
+
+### Data Flow Example
+
+```
+Planner → /cmd_vel → Joint Trajectory Controller → /joint_commands → Motors
+IMU → /imu/data → Balance Controller → /joint_corrections → Motors
+```
+
+---
+
+## Complete Humanoid System Example
+
+Let's trace data flow through a complete humanoid system for the task: **"Navigate across the room and grasp a bottle"**.
+
+### System Diagram
+
+```
+SENSORS:
+[Camera] → /camera/image
+[Depth]  → /camera/depth
+[IMU]    → /imu/data
+[Encoders] → /joint_states
+
+PERCEPTION:
+/camera/image → [Object Detector] → /objects
+/camera/depth → [Obstacle Detector] → /obstacles
+/imu/data + /joint_states → [State Estimator] → /robot_pose
+
+PLANNING:
+[Task Planner] receives goal "Grasp bottle"
+  → Sends navigation action: /navigate_to_pose (goal: bottle location)
+  → [nav2_planner] subscribes to /obstacles, /map
+  → [nav2_controller] publishes /cmd_vel
+
+CONTROL:
+/cmd_vel → [Joint Trajectory Controller] → /joint_commands → Motors
+/imu/data → [Balance Controller] → /joint_corrections → Motors
+
+SAFETY:
+[Safety Monitor] subscribes to /imu/data, /obstacles, /joint_states
+  → If unsafe: publishes /emergency_stop
+```
+
+### Execution Trace
+
+1. **User sends goal**: "Grasp bottle at (5, 10, 1)"
+2. **Task Planner** breaks this into:
+   - Subtask 1: Navigate to (5, 10)
+   - Subtask 2: Reach for bottle at z=1m
+   - Subtask 3: Grasp bottle
+3. **Navigation** (Subtask 1):
+   - `nav2_planner` computes path using `/obstacles` (from depth camera)
+   - `nav2_controller` publishes velocity commands to `/cmd_vel` at 10 Hz
+   - `joint_trajectory_controller` converts velocities to leg joint commands
+   - `balance_controller` monitors `/imu/data`, adjusts torques to prevent falling
+4. **Arrival**:
+   - Navigation action reports "Goal reached"
+5. **Grasp** (Subtask 2 & 3):
+   - Task Planner calls service `/check_ik` (bottle position) → "Reachable"
+   - Task Planner sends grasp action to MoveIt
+   - MoveIt computes arm trajectory, publishes to `/planned_path`
+   - `joint_trajectory_controller` executes trajectory
+6. **Success**:
+   - Grasp action reports "Success: Bottle grasped"
+
+---
+
+## Best Practices for ROS 2 System Design
+
+### 1. Keep Nodes Single-Purpose
+
+Each node should do **one thing well**. Don't combine object detection and path planning in the same node—split them. This makes testing easier and failures isolated.
+
+### 2. Use Standard Message Types
+
+Prefer `sensor_msgs`, `geometry_msgs`, and `nav_msgs` over custom messages whenever possible. This ensures compatibility with community packages (MoveIt, Nav2).
+
+### 3. Separate Perception and Control Frequencies
+
+Perception (e.g., object detection) can run at 10-30 Hz. Control (e.g., balance) must run at 100-1000 Hz. Use separate nodes with appropriate QoS settings.
+
+### 4. Implement Safety Monitors
+
+Always have a **safety monitor node** that can trigger emergency stops. Monitor critical data (IMU tilt, joint limits, collision risk) and halt unsafe motion.
+
+### 5. Use Launch Files
+
+ROS 2 **launch files** (Python scripts) start multiple nodes with configuration. Example:
+
+```python
+def generate_launch_description():
+    return LaunchDescription([
+        Node(package='camera_driver', executable='camera_node'),
+        Node(package='object_detector', executable='detector_node'),
+        Node(package='nav2', executable='planner_node'),
+        Node(package='control', executable='joint_controller'),
+    ])
+```
+
+Launch files make starting complex systems easy: `ros2 launch my_robot humanoid.launch.py`.
+
+---
+
+## Real-World Humanoid Robots Using ROS 2
+
+**Boston Dynamics Atlas**: While proprietary, Atlas-like systems use middleware similar to ROS 2 for coordinating perception (cameras, IMUs), planning (whole-body motion planning), and control (torque controllers).
+
+**Agility Robotics Digit**: Digit uses ROS 2 for navigation, object detection, and task planning. Researchers can write custom ROS 2 nodes to extend Digit's capabilities.
+
+**University Research Platforms**: Many humanoid research platforms (e.g., TALOS, iCub, NAO) have ROS 2 interfaces, enabling students and researchers to build on community packages like MoveIt 2 and Nav2.
+
+---
+
+## Summary
+
+In this chapter, we integrated ROS 2 concepts into a complete humanoid robot system:
+
+**Three-Layer Architecture in ROS 2**:
+- **Perception Layer**: Sensor drivers, object detectors, SLAM (topics: `/camera/image`, `/objects`, `/map`)
+- **Planning Layer**: Task planners, motion planners, navigation (actions: `/navigate_to_pose`, `/grasp_object`)
+- **Control Layer**: Joint controllers, balance controllers, safety monitors (topics: `/cmd_vel`, `/joint_commands`)
+
+**Data Flow**: Sensors publish raw data → Perception processes data and publishes features → Planning computes actions and sends commands → Control executes commands via motors.
+
+**Best Practices**: Single-purpose nodes, standard message types, separate perception/control frequencies, safety monitors, launch files for system startup.
+
+With ROS 2, building complex humanoid robots becomes manageable: instead of monolithic software, you compose systems from reusable, tested nodes. This modularity is why ROS 2 has become the standard for research and increasingly for production humanoid robots.
+
+In Module 2, we'll explore **Digital Twins**—how to simulate humanoid robots in virtual environments before deploying to hardware, using tools like Gazebo and Unity integrated with ROS 2.
+
+---
+
+**Further Reading**:
+- Macenski, S., Foote, T., Gerkey, B., Lalancette, C., & Woodall, W. (2022). Robot Operating System 2: Design, architecture, and uses in the wild. *Science Robotics*, 7(66), eabm6074.
+- Open Robotics. (2023). *ROS 2 Documentation*. https://docs.ros.org/en/rolling/
+
+---
+
+**Word Count**: 1,534 words

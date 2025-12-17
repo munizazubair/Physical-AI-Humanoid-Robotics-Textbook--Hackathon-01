@@ -1,0 +1,583 @@
+---
+id: 16-vision-systems
+title: "Chapter 16: Vision Systems for Humanoid VLA"
+sidebar_label: "16. Vision Systems"
+sidebar_position: 16
+---
+
+# Chapter 16: Vision Systems for Humanoid VLA
+
+You tell your humanoid robot: **"Pick up the red cup on the table."** The robot looks at the table, identifies multiple objects (book, laptop, cup, lamp), distinguishes the cup from other objects, recognizes it's red (not the blue cup next to it), estimates its 3D position, and reaches for it. All of this happens because of **vision systems**—the robot's ability to see and understand the world.
+
+In Vision-Language-Action (VLA) systems, vision is the **grounding layer** that connects language commands to physical reality. Without vision, the robot cannot answer: *"Where is the red cup?"* or *"Is that a cup or a bowl?"*
+
+In this chapter, we'll explore the vision systems that enable VLA: object detection, semantic segmentation, depth estimation, visual grounding, and scene understanding—all optimized for humanoid robots operating in human environments.
+
+---
+
+## Why Vision Matters for VLA
+
+### The Grounding Problem
+
+**Language is symbolic**: "red cup" is a text string.
+
+**World is physical**: Red cup exists at position (0.45, 0.32, 0.85) meters with specific shape, size, and orientation.
+
+**Vision bridges the gap**:
+- Detects objects in camera images
+- Identifies "cup" among other objects
+- Filters by attribute: "red" cup (not blue)
+- Outputs 3D position for manipulation
+
+Without vision, language commands like "pick up the red cup" are meaningless—the robot has no way to find the cup in the world.
+
+---
+
+## Vision Tasks for Humanoid VLA
+
+Humanoid robots in human environments need several vision capabilities:
+
+### 1. Object Detection
+
+**Task**: Find objects in an image and classify them.
+
+**Input**: RGB image (640×480 pixels)
+
+**Output**: List of detected objects with bounding boxes and class labels
+
+**Example**:
+```
+Detections:
+- Cup (red, ceramic) at bbox [120, 200, 180, 280], confidence 0.94
+- Book (blue cover) at bbox [250, 150, 400, 300], confidence 0.91
+- Laptop (silver) at bbox [100, 100, 500, 350], confidence 0.88
+```
+
+**Models**:
+- YOLO (You Only Look Once): Real-time, 30-60 FPS
+- Faster R-CNN: High accuracy, slower (5-15 FPS)
+- EfficientDet: Good balance (20-30 FPS)
+
+---
+
+### 2. Semantic Segmentation
+
+**Task**: Label every pixel with its object class.
+
+**Input**: RGB image
+
+**Output**: Segmentation mask (same size as input, each pixel has class label)
+
+**Example**:
+- Pixel (120, 200): "cup"
+- Pixel (250, 150): "book"
+- Pixel (300, 400): "table"
+- Pixel (500, 100): "background"
+
+**Use Case**: Precise object boundaries for grasping (where exactly does the cup end and the table begin?)
+
+**Models**:
+- DeepLabV3+: High accuracy, 10-20 FPS
+- Mask R-CNN: Instance segmentation (separate overlapping objects), 5-10 FPS
+
+---
+
+### 3. Depth Estimation
+
+**Task**: Estimate distance to every point in the scene.
+
+**Input**: RGB image or stereo pair or RGB-D camera
+
+**Output**: Depth map (same size as input, each pixel has distance in meters)
+
+**Example**:
+- Cup at pixel (150, 220): **0.8 meters** away
+- Table at pixel (300, 400): **0.75 meters** away
+- Wall at pixel (200, 50): **3.5 meters** away
+
+**Hardware Options**:
+- **Stereo cameras**: Two cameras compute depth via disparity (like human eyes)
+- **RGB-D cameras**: Active depth sensor (Intel RealSense, Kinect)
+- **Monocular depth**: Single camera + neural network (MiDaS, DPT)
+
+**Why Critical for VLA**: Language describes objects, but actions require 3D positions.
+- "Pick up the cup" → Need to know cup is at (x, y, z) in 3D space, not just (u, v) in image
+
+---
+
+### 4. Visual Grounding
+
+**Task**: Given a language phrase, locate the corresponding object in the image.
+
+**Input**:
+- Image
+- Language query: "the red cup"
+
+**Output**: Bounding box or segmentation mask of the referenced object
+
+**Example**:
+- Query: "the red cup"
+- Image: Table with red cup, blue cup, book
+- Output: Bounding box around red cup (not blue cup)
+
+**Models**:
+- CLIP (OpenAI): Matches image regions to text descriptions
+- GroundingDINO: State-of-the-art open-vocabulary grounding
+- MDETR: End-to-end modulated detection for grounding
+
+**Difference from Object Detection**:
+- Object detection: Find all cups
+- Visual grounding: Find *the red cup* (uses language to disambiguate)
+
+---
+
+### 5. Scene Understanding
+
+**Task**: High-level reasoning about the scene (spatial relationships, object affordances, scene type).
+
+**Input**: Image
+
+**Output**: Scene graph or semantic description
+
+**Example**:
+```
+Scene: Kitchen
+Objects: table, cup (on table), book (on table), laptop (on table)
+Relationships:
+  - cup is_on table
+  - cup is_left_of book
+  - book is_in_front_of laptop
+Affordances:
+  - cup: graspable, holds liquid
+  - book: readable, graspable
+```
+
+**Use Case**: Answering complex queries
+- "Is the cup to the left of the book?" → Parse scene graph
+- "Can I put the cup on the laptop?" → Reason about affordances (bad idea: liquid + electronics)
+
+**Models**:
+- Visual Genome scene graphs
+- LLaVA (Large Language and Vision Assistant): Multimodal LLM for scene reasoning
+
+---
+
+## Vision Pipeline for Humanoid VLA
+
+Let's trace how vision processes the command: **"Pick up the red cup on the table"**
+
+### Step 1: Image Acquisition
+
+Robot's head camera captures RGB image (640×480) and depth map (if RGB-D camera).
+
+```
+Image: Kitchen table scene
+Objects visible: red cup, blue cup, book, laptop
+```
+
+---
+
+### Step 2: Object Detection
+
+Run YOLO or Faster R-CNN to detect all objects.
+
+**Output**:
+```
+Detections:
+1. Cup (confidence 0.94) at [120, 200, 180, 280]
+2. Cup (confidence 0.89) at [220, 210, 280, 290]
+3. Book (confidence 0.91) at [250, 150, 400, 300]
+4. Laptop (confidence 0.88) at [100, 100, 500, 350]
+```
+
+**Problem**: Two cups detected—which one is "red"?
+
+---
+
+### Step 3: Visual Grounding
+
+Use CLIP or GroundingDINO to match language phrase "red cup" to image regions.
+
+**CLIP Workflow**:
+1. Encode text: "a red cup" → text embedding
+2. Encode image crops: Each detected cup → image embedding
+3. Compute similarity: Which cup embedding is closest to "red cup" text embedding?
+
+**Output**:
+```
+Cup 1 (bbox [120, 200, 180, 280]): similarity = 0.87 (red cup)
+Cup 2 (bbox [220, 210, 280, 290]): similarity = 0.43 (blue cup)
+```
+
+**Result**: Cup 1 is the red cup
+
+---
+
+### Step 4: 3D Localization
+
+Use depth map to convert 2D bounding box center to 3D position.
+
+**Bounding Box**: [120, 200, 180, 280]
+**Center**: (150, 240) pixels
+
+**Depth Lookup**: depth_map[240, 150] = 0.8 meters
+
+**Camera Intrinsics** (convert pixel → 3D):
+```
+fx, fy = 525.0  # Focal length in pixels
+cx, cy = 320, 240  # Principal point (image center)
+
+x_3d = (u - cx) * depth / fx = (150 - 320) * 0.8 / 525 = -0.26 meters
+y_3d = (v - cy) * depth / fy = (240 - 240) * 0.8 / 525 = 0.0 meters
+z_3d = depth = 0.8 meters
+```
+
+**Red Cup Position (camera frame)**: (-0.26, 0.0, 0.8) meters
+
+---
+
+### Step 5: Transform to Robot Frame
+
+Camera is mounted on robot head. Transform from camera frame to robot base frame.
+
+**Transformation**:
+```
+T_base_camera = [rotation matrix, translation vector]
+position_base = T_base_camera * position_camera
+```
+
+**Red Cup Position (robot base frame)**: (0.45, 0.32, 0.85) meters
+
+---
+
+### Step 6: Output to Action Planner
+
+Vision system outputs to VLA action planner:
+
+```
+Object: red_cup
+Class: cup
+Position: (0.45, 0.32, 0.85) meters (robot base frame)
+Orientation: upright (estimated from segmentation)
+Graspable: yes
+```
+
+**Action Planner** (next chapter) uses this to plan:
+1. Navigate to table
+2. Reach to (0.45, 0.32, 0.85)
+3. Grasp cup
+4. Deliver to human
+
+---
+
+## Object Detection for VLA: YOLO vs. CLIP
+
+### YOLO (You Only Look Once)
+
+**Type**: Closed-vocabulary object detection
+
+**Training**: Trained on fixed classes (e.g., COCO dataset: 80 classes like "cup", "book", "person")
+
+**Pros**:
+- Very fast: 30-60 FPS on GPU, 10-15 FPS on Jetson Orin
+- Accurate for known classes
+- Lightweight models (YOLOv5n: 1.9M parameters)
+
+**Cons**:
+- Cannot detect novel objects (if not in training set, won't recognize)
+- Cannot understand attributes (detects "cup" but not "red cup")
+
+**Use Case**: Detect common household objects in real-time
+
+---
+
+### CLIP + Region Proposals (Open-Vocabulary Detection)
+
+**Type**: Open-vocabulary object detection
+
+**Training**: Pre-trained on 400M image-text pairs from the internet (zero-shot generalization)
+
+**Workflow**:
+1. Generate region proposals (e.g., selective search or region proposal network)
+2. For each region, encode image crop with CLIP vision encoder
+3. Encode text query (e.g., "red cup") with CLIP text encoder
+4. Compute similarity: If similarity > threshold, region matches query
+
+**Pros**:
+- Recognizes novel objects (never seen "purple mug" in training, but can match to description)
+- Understands attributes ("red cup" vs. "blue cup")
+- Generalizes to arbitrary queries ("the book with a dog on the cover")
+
+**Cons**:
+- Slower: 2-5 FPS (many region proposals to encode)
+- Less accurate than YOLO for standard classes
+
+**Use Case**: Flexible object search when user describes objects in novel ways
+
+---
+
+## Practical Vision Pipeline for Humanoids: Isaac ROS + CLIP
+
+Let's implement a VLA vision pipeline using **Isaac ROS** (GPU-accelerated perception) and **CLIP** (visual grounding).
+
+### Step 1: Object Detection with Isaac ROS
+
+```python
+# ROS 2 node: Object detection with Isaac ROS YOLO
+import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import Image
+from vision_msgs.msg import Detection2DArray
+
+class ObjectDetectorNode(Node):
+    def __init__(self):
+        super().__init__('object_detector')
+        self.subscription = self.create_subscription(
+            Image, '/camera/image_raw', self.image_callback, 10)
+        self.publisher = self.create_publisher(
+            Detection2DArray, '/detections', 10)
+
+    def image_callback(self, msg):
+        # Isaac ROS runs YOLO on GPU (30-60 FPS)
+        # Detections published automatically
+        pass
+```
+
+**Isaac ROS YOLO** publishes detections: bounding boxes, class labels, confidence scores
+
+---
+
+### Step 2: Visual Grounding with CLIP
+
+```python
+import rclpy
+from rclpy.node import Node
+from vision_msgs.msg import Detection2DArray
+from geometry_msgs.msg import PointStamped
+import clip
+import torch
+from PIL import Image as PILImage
+
+class VisualGroundingNode(Node):
+    def __init__(self):
+        super().__init__('visual_grounding')
+        self.subscription = self.create_subscription(
+            Detection2DArray, '/detections', self.detections_callback, 10)
+        self.publisher = self.create_publisher(
+            PointStamped, '/grounded_object_position', 10)
+
+        # Load CLIP model
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.model, self.preprocess = clip.load("ViT-B/32", device=self.device)
+
+        # Language query (from LLM or speech recognition)
+        self.query = "a red cup"
+
+    def detections_callback(self, detections_msg):
+        # Get current image
+        image = self.get_latest_image()  # Assume function to fetch latest image
+
+        # Encode text query
+        text = clip.tokenize([self.query]).to(self.device)
+        text_features = self.model.encode_text(text)
+
+        best_match = None
+        best_similarity = 0.0
+
+        # For each detection, crop image and compute similarity
+        for detection in detections_msg.detections:
+            bbox = detection.bbox
+            crop = image.crop((bbox.center.x - bbox.size_x/2,
+                               bbox.center.y - bbox.size_y/2,
+                               bbox.center.x + bbox.size_x/2,
+                               bbox.center.y + bbox.size_y/2))
+
+            # Encode image crop
+            crop_input = self.preprocess(crop).unsqueeze(0).to(self.device)
+            image_features = self.model.encode_image(crop_input)
+
+            # Compute similarity
+            similarity = torch.cosine_similarity(image_features, text_features)
+
+            if similarity > best_similarity:
+                best_similarity = similarity
+                best_match = detection
+
+        # Publish best match position
+        if best_match and best_similarity > 0.5:  # Threshold
+            position = self.get_3d_position(best_match)  # Use depth map
+            self.publisher.publish(position)
+            self.get_logger().info(f'Grounded "{self.query}" at {position}')
+```
+
+---
+
+### Step 3: Depth Estimation
+
+```python
+# Assume RGB-D camera (e.g., Intel RealSense)
+from sensor_msgs.msg import Image, CameraInfo
+import numpy as np
+
+class DepthEstimationNode(Node):
+    def __init__(self):
+        super().__init__('depth_estimation')
+        self.depth_sub = self.create_subscription(
+            Image, '/camera/depth/image_raw', self.depth_callback, 10)
+        self.info_sub = self.create_subscription(
+            CameraInfo, '/camera/depth/camera_info', self.info_callback, 10)
+
+        self.depth_map = None
+        self.camera_intrinsics = None
+
+    def depth_callback(self, msg):
+        # Convert ROS Image to numpy array
+        self.depth_map = np.frombuffer(msg.data, dtype=np.uint16).reshape(
+            (msg.height, msg.width))
+
+    def info_callback(self, msg):
+        self.camera_intrinsics = msg.k  # [fx, 0, cx, 0, fy, cy, 0, 0, 1]
+
+    def get_3d_position(self, bbox_center):
+        """Convert 2D bbox center + depth to 3D position"""
+        u, v = int(bbox_center.x), int(bbox_center.y)
+        depth = self.depth_map[v, u] / 1000.0  # Convert mm to meters
+
+        fx, fy = self.camera_intrinsics[0], self.camera_intrinsics[4]
+        cx, cy = self.camera_intrinsics[2], self.camera_intrinsics[5]
+
+        x = (u - cx) * depth / fx
+        y = (v - cy) * depth / fy
+        z = depth
+
+        return (x, y, z)  # Position in camera frame
+```
+
+---
+
+## Challenges in Vision for VLA
+
+### 1. Occlusion
+
+**Problem**: Object is partially hidden behind another object.
+
+**Example**: "Pick up the cup behind the laptop"
+
+**Solutions**:
+- Multi-view: Look from different angles
+- Reasoning: Use scene understanding ("cup is typically on table, not floating")
+- Active perception: Move head to get better view
+
+---
+
+### 2. Lighting Variation
+
+**Problem**: Object looks different under different lighting (shadows, glare, color changes).
+
+**Solutions**:
+- Domain randomization: Train on varied lighting during data collection
+- Invariant features: Use models robust to lighting (CLIP pre-trained on diverse internet images)
+- Active lighting: Robot has onboard LED lights for consistent illumination
+
+---
+
+### 3. Novel Objects
+
+**Problem**: Object not seen during training.
+
+**Example**: "Pick up the fidget spinner" (not in COCO dataset)
+
+**Solutions**:
+- Open-vocabulary models: CLIP, GroundingDINO
+- Few-shot learning: Show robot 1-3 examples, it learns on the fly
+- Language grounding: Describe object ("small plastic toy with three lobes")
+
+---
+
+### 4. Ambiguity
+
+**Problem**: Multiple valid matches for language query.
+
+**Example**: "Pick up the cup" → There are three cups on the table
+
+**Solutions**:
+- Clarification: Robot asks "Which cup? The red one, the blue one, or the white one?"
+- Context: Use conversation history (user was just looking at the red cup)
+- Proximity: Default to closest object if ambiguous
+
+---
+
+### 5. Real-Time Performance
+
+**Problem**: Vision must run at robot control rates (10-30 Hz).
+
+**Latency Budget**:
+- Object detection: 30-50ms (GPU acceleration needed)
+- Visual grounding (CLIP): 100-200ms (slower, acceptable for one-time grounding)
+- Depth estimation: 30-50ms (RGB-D camera provides real-time depth)
+
+**Solutions**:
+- GPU acceleration: Isaac ROS, TensorRT
+- Caching: Once object is grounded, track it across frames (don't re-run CLIP every frame)
+- Hierarchy: Fast detection (YOLO) + slow grounding (CLIP) only when needed
+
+---
+
+## Comparison: Vision Models for VLA
+
+| Model | Type | Speed (FPS) | Vocabulary | Attributes | Use Case |
+|-------|------|-------------|------------|------------|----------|
+| **YOLOv8** | Detection | 30-60 | Closed (80 classes) | No | Real-time detection of common objects |
+| **Faster R-CNN** | Detection | 5-15 | Closed | No | High-accuracy detection |
+| **CLIP + Proposals** | Grounding | 2-5 | Open (any text) | Yes | Flexible object search by description |
+| **GroundingDINO** | Grounding | 5-10 | Open | Yes | State-of-the-art open-vocab grounding |
+| **Mask R-CNN** | Segmentation | 5-10 | Closed | No | Precise object boundaries for grasping |
+| **LLaVA** | Scene reasoning | 1-2 | Open | Yes | High-level scene understanding |
+
+---
+
+## Summary
+
+**Vision systems** are the grounding layer for VLA—they connect language commands to physical objects in the world. For humanoid robots, vision enables:
+
+1. **Object Detection**: Identify objects in the scene (YOLO, Faster R-CNN)
+2. **Visual Grounding**: Match language descriptions to objects (CLIP, GroundingDINO)
+3. **Depth Estimation**: Compute 3D positions for manipulation (RGB-D cameras, stereo vision)
+4. **Semantic Segmentation**: Precise object boundaries for grasping (Mask R-CNN)
+5. **Scene Understanding**: High-level reasoning about spatial relationships (scene graphs, LLaVA)
+
+**Key Technologies**:
+- **YOLO**: Real-time closed-vocabulary object detection
+- **CLIP**: Zero-shot open-vocabulary visual grounding
+- **RGB-D cameras**: Real-time depth maps (Intel RealSense, Kinect)
+- **Isaac ROS**: GPU-accelerated perception (4-8x speedup)
+
+**Vision Pipeline for "Pick up the red cup"**:
+1. Detect all objects (YOLO) → Find cups
+2. Ground "red cup" (CLIP) → Identify which cup is red
+3. Estimate 3D position (depth map + camera intrinsics) → (x, y, z)
+4. Transform to robot frame → Ready for manipulation
+5. Output to action planner → Plan grasp and navigation
+
+**Challenges**:
+- Occlusion (objects hidden behind others)
+- Lighting variation (shadows, glare)
+- Novel objects (not in training set)
+- Ambiguity (multiple matches)
+- Real-time performance (30-50ms latency)
+
+**When to Use Each Model**:
+- **YOLO**: Fast detection of common objects (cups, books, people)
+- **CLIP**: Flexible grounding for novel objects or attributes ("red cup", "book with dog on cover")
+- **GroundingDINO**: State-of-the-art open-vocabulary grounding when CLIP is too slow or inaccurate
+- **Mask R-CNN**: Need precise object boundaries for grasping
+
+In the next chapter (Chapter 17), we'll explore how LLMs use vision outputs to plan actions: translating "pick up the red cup" from grounded visual information into executable robot commands.
+
+---
+
+## Further Reading
+
+- Radford, A., et al. (2021). Learning transferable visual models from natural language supervision. *International Conference on Machine Learning*.
+- Liu, S., et al. (2023). Grounding DINO: Marrying DINO with grounded pre-training for open-set object detection. *arXiv preprint arXiv:2303.05499*.
+- He, K., et al. (2017). Mask R-CNN. *IEEE International Conference on Computer Vision*.

@@ -1,0 +1,196 @@
+---
+id: 05-services-actions
+title: "Chapter 5: ROS 2 Services and Actions"
+sidebar_label: "5. Services and Actions"
+sidebar_position: 5
+---
+
+# Chapter 5: ROS 2 Services and Actions
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+- Distinguish between **topics** (continuous data) and **services** (request-response)
+- Understand when to use **actions** for long-running tasks with feedback
+- Apply services and actions to humanoid robot use cases
+
+---
+
+## Introduction
+
+In Chapter 4, we learned about topics—asynchronous, continuous data streams perfect for sensor data and control commands. But not all robot communication fits this pattern. Sometimes you need:
+- **Synchronous request-response**: "Is this grasp position valid?" → "Yes/No"
+- **Long-running tasks with feedback**: "Navigate to kitchen" → "10% complete... 50% complete... 100% done"
+
+This is where **services** and **actions** come in. Services provide synchronous request-response communication, while actions add feedback and cancellation for long-running goals.
+
+---
+
+## Services: Request-Response Communication
+
+A **service** is a synchronous call where a client node sends a **request** and waits for a **response** from a server node.
+
+### When to Use Services
+
+Use services for:
+- **One-time queries**: "What's the current battery level?"
+- **Configuration changes**: "Set camera exposure to 0.5"
+- **Computations**: "Compute inverse kinematics for this pose"
+- **State checks**: "Is the robot in a safe state?"
+
+**Example**: A humanoid needs to check if a grasp position is reachable before attempting to grab an object. The planning node calls a service `/check_ik` (inverse kinematics check) and waits for a "reachable" or "not reachable" response.
+
+### Service vs. Topic
+
+| Aspect | Topic | Service |
+|--------|-------|---------|
+| **Pattern** | Publish-subscribe | Request-response |
+| **Timing** | Asynchronous | Synchronous (blocks until response) |
+| **Use Case** | Continuous data streams | One-time queries or commands |
+| **Example** | Camera images, sensor data | "Check if position is valid" |
+
+### Service Example: Inverse Kinematics
+
+```python
+# Client code (simplified pseudo-code)
+def check_if_reachable(target_pose):
+    # Create service client
+    client = node.create_client('/check_ik', CheckIK)
+
+    # Create request
+    request = CheckIK.Request()
+    request.target_pose = target_pose
+
+    # Call service (blocks until response)
+    response = client.call(request)
+
+    # Return result
+    return response.is_reachable
+```
+
+**Server node** receives the request, computes inverse kinematics, and returns `is_reachable = True` or `False`.
+
+---
+
+## Actions: Long-Running Goals with Feedback
+
+An **action** is like a service but designed for tasks that take time and provide periodic feedback. Actions support:
+1. **Goal**: Send a goal to an action server
+2. **Feedback**: Receive periodic progress updates
+3. **Result**: Get the final result when the task completes
+4. **Cancellation**: Cancel the task mid-execution
+
+### When to Use Actions
+
+Use actions for:
+- **Navigation**: "Navigate to kitchen" (feedback: "80% of path completed")
+- **Manipulation**: "Pick up cup" (feedback: "Reaching... grasping... lifting...")
+- **Long computations**: "Build map of room" (feedback: "50 square meters mapped")
+
+**Example**: A humanoid receives a goal "Navigate to coordinates (5, 10)". The navigation action provides feedback every second: "Distance remaining: 8m... 5m... 2m..." and finally returns "Goal reached" or "Goal failed: obstacle blocking path".
+
+### Action Structure
+
+An action has three parts:
+1. **Goal**: What you want to achieve (e.g., target position)
+2. **Feedback**: Periodic updates during execution (e.g., distance remaining)
+3. **Result**: Final outcome (e.g., "Success" or "Failed: timeout")
+
+### Action Example: Navigation
+
+```python
+# Action client (simplified pseudo-code)
+def navigate_to_goal(target_x, target_y):
+    # Create action client
+    client = ActionClient(node, NavigateToPose, '/navigate_to_pose')
+
+    # Create goal
+    goal = NavigateToPose.Goal()
+    goal.pose.x = target_x
+    goal.pose.y = target_y
+
+    # Send goal (non-blocking)
+    goal_handle = client.send_goal(goal, feedback_callback=on_feedback)
+
+    # Wait for result
+    result = goal_handle.get_result()
+    return result
+
+def on_feedback(feedback):
+    print(f"Distance remaining: {feedback.distance_remaining}m")
+```
+
+**Action server** (navigation node):
+- Accepts the goal
+- Periodically publishes feedback (distance remaining)
+- Completes with result ("Success" or error message)
+- Allows client to cancel mid-execution
+
+---
+
+## Comparing Topics, Services, and Actions
+
+| Feature | Topic | Service | Action |
+|---------|-------|---------|--------|
+| **Communication** | Asynchronous | Synchronous | Asynchronous with feedback |
+| **Duration** | Continuous | Instant | Long-running |
+| **Feedback** | No | No | Yes (periodic updates) |
+| **Cancellation** | N/A | N/A | Yes |
+| **Use Case** | Sensor data, commands | One-time queries | Long tasks (navigate, grasp) |
+
+---
+
+## Humanoid Robot Use Cases
+
+### Use Case 1: Grasping an Object
+
+**Scenario**: Humanoid needs to grasp a cup on a table.
+
+**Implementation**:
+- **Action**: `/grasp_object` (goal: object ID, feedback: "Reaching... contact detected... gripping", result: "Success" or "Failed: object slipped")
+- **Topic**: `/joint_states` (continuous joint angle updates during grasping)
+- **Service**: `/check_ik` (before attempting grasp, check if target is reachable)
+
+**Flow**:
+1. Call service `/check_ik` with cup position → Response: "Reachable"
+2. Send action goal to `/grasp_object` with cup ID
+3. Receive feedback: "Moving arm...", "Fingers closing...", "Grasp stable"
+4. Receive result: "Success: Object grasped"
+
+### Use Case 2: Multi-Stage Task
+
+**Scenario**: "Go to kitchen and pick up the blue bottle".
+
+**Implementation**:
+- **Action 1**: `/navigate_to_pose` (goal: kitchen coordinates)
+- **Service**: `/detect_objects` (request: "Find blue bottle", response: bottle position)
+- **Action 2**: `/grasp_object` (goal: blue bottle)
+
+**Flow**:
+1. Send navigation action goal: "Navigate to kitchen" → Feedback: "50% complete" → Result: "Arrived"
+2. Call service: "Detect blue bottle" → Response: bottle at (x, y, z)
+3. Send grasp action goal: "Grasp bottle at (x, y, z)" → Feedback: "Reaching" → Result: "Success"
+
+---
+
+## Summary
+
+In this chapter, we expanded our ROS 2 communication toolkit beyond topics:
+
+**Services**: Synchronous request-response for one-time queries or commands. Use when you need an immediate answer (e.g., "Is this position reachable?").
+
+**Actions**: Asynchronous goals with feedback and cancellation for long-running tasks. Use for navigation, manipulation, or any task that takes time and benefits from progress updates.
+
+**Comparison**: Topics stream continuous data asynchronously. Services provide instant responses synchronously. Actions handle long-running goals with feedback.
+
+With topics, services, and actions, you can express any communication pattern in a robotic system. In Chapter 6, we'll see how to integrate all these concepts into a complete humanoid robot system.
+
+---
+
+**Further Reading**:
+- Open Robotics. (2023). *ROS 2 Tutorials: Understanding Services*. https://docs.ros.org/en/rolling/Tutorials.html
+- Open Robotics. (2023). *ROS 2 Tutorials: Understanding Actions*. https://docs.ros.org/en/rolling/Tutorials.html
+
+---
+
+**Word Count**: 1,136 words
