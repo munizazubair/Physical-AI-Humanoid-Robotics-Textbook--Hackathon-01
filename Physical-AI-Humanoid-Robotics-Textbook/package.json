@@ -1,0 +1,57 @@
+{
+  "name": "physical-ai-humanoid-robotics-textbook",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A comprehensive textbook on Physical AI, ROS 2, Digital Twins, NVIDIA Isaac, and Vision-Language-Action systems for humanoid robotics",
+  "keywords": [
+    "physical-ai",
+    "humanoid-robotics",
+    "ros2",
+    "digital-twin",
+    "nvidia-isaac",
+    "vision-language-action",
+    "vla",
+    "robotics-education"
+  ],
+  "author": "Physical AI Textbook Team",
+  "license": "MIT",
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.0.0",
+    "@docusaurus/preset-classic": "^3.0.0",
+    "@mdx-js/react": "^3.0.0",
+    "clsx": "^2.0.0",
+    "prism-react-renderer": "^2.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "^3.0.0",
+    "@docusaurus/types": "^3.0.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0"
+  }
+}
