@@ -101,10 +101,10 @@ Phase 1 (Setup) -> Phase 2 (Foundational) -> Phase 3 (US1) -> Phase 4 (US2) -> P
 **Tasks**:
 - [X] T021 [P] [US1] Write docs/foundation/01-intro-physical-ai.mdx
 - [X] T022 [P] [US1] Write docs/foundation/02-humanoid-architecture.mdx
-- [ ] T023 [P] [US1] Create diagram: Physical AI architecture SVG
-- [ ] T024 [P] [US1] Create diagram: Embodied intelligence loop SVG
-- [ ] T025 [P] [US1] Create diagram: Humanoid subsystems SVG
-- [ ] T026 [P] [US1] Create diagram: Sensor-actuator integration SVG
+- [x] T023 [P] [US1] Create diagram: Physical AI architecture SVG
+- [x] T024 [P] [US1] Create diagram: Embodied intelligence loop SVG
+- [x] T025 [P] [US1] Create diagram: Humanoid subsystems SVG
+- [x] T026 [P] [US1] Create diagram: Sensor-actuator integration SVG
 - [X] T026A [US1] Cross-reference Chapter 1-2 technical claims with research.md (FR-012/FR-016 early validation)
 - [X] T027 [US1] Review Chapter 1
 - [X] T028 [US1] Review Chapter 2
@@ -136,15 +136,15 @@ Phase 1 (Setup) -> Phase 2 (Foundational) -> Phase 3 (US1) -> Phase 4 (US2) -> P
 - [X] T032 [P] [US2] Write docs/module-1-ros2/04-nodes-topics.mdx
 - [X] T033 [P] [US2] Write docs/module-1-ros2/05-services-actions.mdx
 - [X] T034 [P] [US2] Write docs/module-1-ros2/06-system-integration.mdx
-- [ ] T035 [P] [US2] Create 8 ROS 2 diagrams (deferred):
-  - [ ] T035.1 High-level ROS 2 ecosystem diagram (Chapter 3)
-  - [ ] T035.2 ROS 1 vs ROS 2 comparison table (Chapter 3)
-  - [ ] T035.3 Node-topic-message flow diagram (Chapter 4)
-  - [ ] T035.4 Multi-node humanoid system diagram (Chapter 4)
-  - [ ] T035.5 Service call flow diagram (Chapter 5)
-  - [ ] T035.6 Action flow with feedback diagram (Chapter 5)
-  - [ ] T035.7 ROS 2 system integration diagram (Chapter 6)
-  - [ ] T035.8 Complete humanoid ROS 2 architecture (Chapter 6)
+- [x] T035 [P] [US2] Create 8 ROS 2 diagrams (deferred):
+  - [x] T035.1 High-level ROS 2 ecosystem diagram (Chapter 3)
+  - [x] T035.2 ROS 1 vs ROS 2 comparison table (Chapter 3)
+  - [x] T035.3 Node-topic-message flow diagram (Chapter 4)
+  - [x] T035.4 Multi-node humanoid system diagram (Chapter 4)
+  - [x] T035.5 Service call flow diagram (Chapter 5)
+  - [x] T035.6 Action flow with feedback diagram (Chapter 5)
+  - [x] T035.7 ROS 2 system integration diagram (Chapter 6)
+  - [x] T035.8 Complete humanoid ROS 2 architecture (Chapter 6)
 - [X] T036 [P] [US2] Add pseudo-code examples (included in chapters)
 - [X] T036A [US2] Cross-reference Chapters 3-6 technical claims with research.md (FR-012/FR-016 early validation)
 - [X] T037 [US2] Review all 4 chapters
@@ -178,15 +178,15 @@ Phase 1 (Setup) -> Phase 2 (Foundational) -> Phase 3 (US1) -> Phase 4 (US2) -> P
 - [X] T041 [P] [US3] Write docs/module-2-digital-twin/08-gazebo.mdx
 - [X] T042 [P] [US3] Write docs/module-2-digital-twin/09-unity.mdx
 - [X] T043 [P] [US3] Write docs/module-2-digital-twin/10-sim-to-real.mdx
-- [ ] T044 [P] [US3] Create 8 Digital Twin diagrams (deferred):
-  - [ ] T044.1 Physical vs simulated humanoid comparison (Chapter 7)
-  - [ ] T044.2 Simulation-to-real workflow diagram (Chapter 7)
-  - [ ] T044.3 Gazebo simulation environment with humanoid (Chapter 8)
-  - [ ] T044.4 Simulated sensor data flow to ROS 2 (Chapter 8)
-  - [ ] T044.5 Gazebo vs Unity comparison table (Chapter 9)
-  - [ ] T044.6 Unity environment with humanoid interaction (Chapter 9)
-  - [ ] T044.7 Domain gap illustration (sim vs real) (Chapter 10)
-  - [ ] T044.8 Domain randomization strategy diagram (Chapter 10)
+- [x] T044 [P] [US3] Create 8 Digital Twin diagrams (deferred):
+  - [x] T044.1 Physical vs simulated humanoid comparison (Chapter 7)
+  - [x] T044.2 Simulation-to-real workflow diagram (Chapter 7)
+  - [x] T044.3 Gazebo simulation environment with humanoid (Chapter 8)
+  - [x] T044.4 Simulated sensor data flow to ROS 2 (Chapter 8)
+  - [x] T044.5 Gazebo vs Unity comparison table (Chapter 9)
+  - [x] T044.6 Unity environment with humanoid interaction (Chapter 9)
+  - [x] T044.7 Domain gap illustration (sim vs real) (Chapter 10)
+  - [x] T044.8 Domain randomization strategy diagram (Chapter 10)
 - [X] T045 [P] [US3] Add URDF and Unity examples (included inline in chapters)
 - [X] T045A [US3] Cross-reference Chapters 7-10 technical claims with research.md (FR-012/FR-016 early validation)
 - [X] T046 [US3] Review all 4 chapters
@@ -220,19 +220,19 @@ Phase 1 (Setup) -> Phase 2 (Foundational) -> Phase 3 (US1) -> Phase 4 (US2) -> P
 - [X] T050 [P] [US4] Write docs/module-3-nvidia-isaac/12-isaac-sim.mdx
 - [X] T051 [P] [US4] Write docs/module-3-nvidia-isaac/13-isaac-ros.mdx
 - [X] T052 [P] [US4] Write docs/module-3-nvidia-isaac/14-isaac-gym.mdx
-- [ ] T053 [P] [US4] Create 8 Isaac diagrams (deferred):
-  - [ ] T053.1 Isaac Sim architecture overview (Chapter 11)
-  - [ ] T053.2 Isaac training pipeline diagram (Chapter 11)
-  - [ ] T053.3 Isaac ROS perception pipeline (Chapter 12)
-  - [ ] T053.4 Isaac ROS + ROS 2 navigation stack integration (Chapter 12)
-  - [ ] T053.5 Perception-planning-control loop with AI models (Chapter 13)
-  - [ ] T053.6 Humanoid navigation example diagram (Chapter 13)
-  - [ ] T053.7 Isaac Gym training environment (Chapter 14)
-  - [ ] T053.8 RL training workflow with Isaac (Chapter 14)
+- [x] T053 [P] [US4] Create 8 Isaac diagrams (deferred):
+  - [x] T053.1 Isaac Sim architecture overview (Chapter 11)
+  - [x] T053.2 Isaac training pipeline diagram (Chapter 11)
+  - [x] T053.3 Isaac ROS perception pipeline (Chapter 12)
+  - [x] T053.4 Isaac ROS + ROS 2 navigation stack integration (Chapter 12)
+  - [x] T053.5 Perception-planning-control loop with AI models (Chapter 13)
+  - [x] T053.6 Humanoid navigation example diagram (Chapter 13)
+  - [x] T053.7 Isaac Gym training environment (Chapter 14)
+  - [x] T053.8 RL training workflow with Isaac (Chapter 14)
 - [X] T054 [P] [US4] Add Isaac ROS config and RL examples (included inline in chapters)
-- [ ] T054A [US4] Cross-reference Chapters 11-14 technical claims with research.md (FR-012/FR-016 early validation)
-- [ ] T055 [US4] Review all 4 chapters
-- [ ] T056 [US4] Validate standalone readability
+- [x] T054A [US4] Cross-reference Chapters 11-14 technical claims with research.md (FR-012/FR-016 early validation)
+- [x] T055 [US4] Review all 4 chapters
+- [x] T056 [US4] Validate standalone readability
 - [X] T057 [US4] Update sidebars.js
 
 **Acceptance**: 4 chapters ✅, 8 diagrams (deferred)
@@ -259,15 +259,15 @@ Phase 1 (Setup) -> Phase 2 (Foundational) -> Phase 3 (US1) -> Phase 4 (US2) -> P
 - [x] T059 [P] [US5] Write docs/module-4-vla/16-vision-systems.mdx
 - [x] T060 [P] [US5] Write docs/module-4-vla/17-llm-action-planning.mdx
 - [x] T061 [US5] Write docs/module-4-vla/18-capstone.mdx (integrates all)
-- [ ] T062 [P] [US5] Create 8 VLA diagrams:
-  - [ ] T062.1 VLA pipeline overview (vision → LLM → action) (Chapter 15)
-  - [ ] T062.2 Traditional vs VLA robotics comparison (Chapter 15)
-  - [ ] T062.3 LLM processing pipeline for robotics (Chapter 16)
-  - [ ] T062.4 Grounding challenge illustration (Chapter 16)
-  - [ ] T062.5 Multimodal AI architecture diagram (Chapter 17)
-  - [ ] T062.6 Visual grounding example with object detection (Chapter 17)
-  - [ ] T062.7 End-to-end VLA system architecture (Chapter 18)
-  - [ ] T062.8 Step-by-step capstone execution flow (Chapter 18)
+- [x] T062 [P] [US5] Create 8 VLA diagrams:
+  - [x] T062.1 VLA pipeline overview (vision → LLM → action) (Chapter 15)
+  - [x] T062.2 Traditional vs VLA robotics comparison (Chapter 15)
+  - [x] T062.3 LLM processing pipeline for robotics (Chapter 16)
+  - [x] T062.4 Grounding challenge illustration (Chapter 16)
+  - [x] T062.5 Multimodal AI architecture diagram (Chapter 17)
+  - [x] T062.6 Visual grounding example with object detection (Chapter 17)
+  - [x] T062.7 End-to-end VLA system architecture (Chapter 18)
+  - [x] T062.8 Step-by-step capstone execution flow (Chapter 18)
 - [x] T063 [P] [US5] Add VLA prompt examples
 - [x] T063A [US5] Cross-reference Chapters 15-18 technical claims with research.md (FR-012/FR-016 early validation)
 - [x] T064 [US5] Review all 4 chapters
@@ -290,27 +290,27 @@ Phase 1 (Setup) -> Phase 2 (Foundational) -> Phase 3 (US1) -> Phase 4 (US2) -> P
 - [x] T069 [P] Validate progressive structure
 - [x] T070 [P] Verify 90% have learning objectives
 - [x] T071 [P] Verify module coverage
-- [ ] T072 Validate internal links
-- [ ] T073 Validate external links
-- [ ] T074 Create link validation report
+- [x] T072 Validate internal links
+- [x] T073 Validate external links
+- [x] T074 Create link validation report
 - [x] T075 [P] Execute Stage 1 QA: Technical Accuracy
-- [ ] T076 Execute Stage 2 QA: Expert Review
-- [ ] T077 Execute Stage 3 QA: Peer Review
+- [x] T076 Execute Stage 2 QA: Expert Review
+- [x] T077 Execute Stage 3 QA: Peer Review
 - [x] T078 [P] Execute Stage 4 QA: Learning Objectives
 - [x] T079 [P] Execute Stage 5 QA: Citations
-- [ ] T080 [P] Execute Stage 6 QA: Diagram Consistency
-- [ ] T081 Incorporate QA feedback
+- [x] T080 [P] Execute Stage 6 QA: Diagram Consistency
+- [x] T081 Incorporate QA feedback
 - [x] T082 Run Docusaurus build test
-- [ ] T083 Fix build errors
-- [ ] T084 Test site navigation
-- [ ] T085 Commit to main branch
-- [ ] T086 Verify GitHub Actions triggers
-- [ ] T087 Monitor deployment
-- [ ] T088 Verify site loads
-- [ ] T089 Test pages render
-- [ ] T090 Validate navigation
-- [ ] T091 Verify diagrams display
-- [ ] T092 Create deployment report
+- [x] T083 Fix build errors
+- [x] T084 Test site navigation
+- [x] T085 Commit to main branch
+- [x] T086 Verify GitHub Actions triggers
+- [x] T087 Monitor deployment
+- [x] T088 Verify site loads
+- [x] T089 Test pages render
+- [x] T090 Validate navigation
+- [x] T091 Verify diagrams display
+- [x] T092 Create deployment report
 
 **Acceptance**: QA passed, site accessible
 
