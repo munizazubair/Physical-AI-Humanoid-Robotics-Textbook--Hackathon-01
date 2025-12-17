@@ -5,6 +5,16 @@
 **Status**: Draft
 **Input**: User description: "AI-Driven Physical AI & Humanoid Robotics Book"
 
+## Clarifications
+
+### Session 2025-12-16
+
+- Q: What tooling and format should be used for creating the book's diagrams? → A: Use professional diagramming tools (Lucidchart, Figma, or similar) with SVG export
+- Q: How should technical content be reviewed and validated before publication? → A: Expert review by robotics/AI specialists plus checklist validation
+- Q: How should book content versions be tracked and communicated? → A: No formal versioning - continuous updates deployed directly
+- Q: How should the book handle readers who want to skip modules or follow non-linear paths? → A: Completely flexible - all chapters standalone with full context
+- Q: How should book deployment to GitHub Pages be automated? → A: GitHub Actions CI/CD - auto-deploy on merge to main, preview builds on PRs
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Foundation Learning Journey (Priority: P1)
@@ -95,6 +105,578 @@ A learner wants to understand how large language models (LLMs) enable humanoid r
 - How does the book address readers interested in physical hardware deployment vs. simulation-only?
 - What happens when simulation concepts don't translate clearly to real-world scenarios (Sim-to-Real gap)?
 
+## Book Structure & Chapter Breakdown *(mandatory)*
+
+This section defines the detailed chapter-level structure for the book. Each module contains 3-5 chapters with clear learning objectives, suggested diagrams, and code examples.
+
+**Chapter Length Guidance**: Target 1,500–2,500 words per chapter (adjustable based on complexity). Foundation and introductory chapters may be shorter (~1,200 words); technical and integration chapters may be longer (~2,500 words).
+
+**Diagram Creation Standards**: All diagrams must be created using professional diagramming tools (Lucidchart, Figma, or similar industry-standard tools) and exported in SVG format for scalability and quality. Diagrams should maintain consistent styling (colors, fonts, line weights) across all chapters.
+
+**Standalone Chapter Approach**: Each chapter must be self-contained and readable independently. Readers should be able to jump to any chapter without having completed prior modules. To support this:
+- Include brief contextual definitions of prerequisite concepts when first mentioned (e.g., "ROS 2, a robotic middleware framework...")
+- Provide sufficient background within each chapter to understand the topic
+- Accept some content repetition across chapters to maintain standalone readability
+- **Identical Definition Rule**: When the same technical term is defined in multiple chapters (e.g., "Physical AI," "ROS 2," "digital twin"), the definition MUST be identical or semantically equivalent across all occurrences to ensure terminology consistency per Constitution Principle II
+- Use internal links to related chapters for readers who want deeper context, but don't require them
+
+---
+
+### Foundation Module (Prerequisite to all other modules)
+
+#### Chapter 1: Introduction to Physical AI
+
+**Learning Objectives**:
+- Define Physical AI and embodied intelligence
+- Distinguish Physical AI from traditional (digital-only) AI
+- Understand why physical embodiment matters for robotics
+
+**Content Guidance**:
+- Start with relatable examples (e.g., Roomba vs. chatbot to illustrate embodied vs. disembodied AI)
+- Explain sensor-actuator loop in simple terms
+- Introduce the concept of "closing the loop" between perception and action
+
+**Diagrams**:
+- **Diagram 1**: Comparison diagram showing Digital AI (cloud-based, text/image input) vs. Physical AI (sensors, actuators, real-world interaction)
+- **Diagram 2**: Simple sensor-actuator feedback loop for a basic robot
+
+**Code Examples**: None (purely conceptual chapter)
+
+**Target Word Count**: 900–1100 words
+
+---
+
+#### Chapter 2: Humanoid Robot Architecture Overview
+
+**Learning Objectives**:
+- Identify the major subsystems of a humanoid robot (perception, planning, control)
+- Understand how subsystems integrate to enable intelligent behavior
+- Recognize the role of each subsystem in a complete robotic system
+
+**Content Guidance**:
+- Use layered architecture analogy (sensing layer → decision layer → action layer)
+- Provide concrete examples from well-known humanoid robots (e.g., Atlas, Optimus) without vendor bias
+- Explain trade-offs between hardware complexity and software intelligence
+
+**Diagrams**:
+- **Diagram 1**: Layered system architecture (Sensors → Perception → Planning → Control → Actuators)
+- **Diagram 2**: Data flow diagram showing how visual data becomes motor commands
+
+**Code Examples**: None
+
+**Target Word Count**: 900–1000 words
+
+---
+
+### Module 1: ROS 2 – The Robotic Nervous System
+
+#### Chapter 3: What is ROS 2 and Why It Matters
+
+**Learning Objectives**:
+- Explain what ROS 2 is and its role in robotics
+- Understand the difference between ROS 1 and ROS 2 (real-time, distributed systems)
+- Identify use cases where ROS 2 is essential for humanoid robotics
+
+**Content Guidance**:
+- Avoid deep technical jargon; use analogies (e.g., ROS 2 as "the nervous system" connecting robotic "organs")
+- Explain middleware concepts in simple terms (message passing, inter-process communication)
+- Highlight ROS 2 advantages: real-time performance, multi-robot support, security
+
+**Diagrams**:
+- **Diagram 1**: High-level ROS 2 ecosystem (nodes, topics, messages visualized as a network)
+- **Diagram 2**: Comparison table (ROS 1 vs. ROS 2 key differences)
+
+**Code Examples**:
+- **Pseudo-code snippet**: Conceptual ROS 2 node structure (publisher/subscriber pattern in Python-like syntax, not full implementation)
+
+```python
+# Conceptual ROS 2 Node (Pseudo-code)
+class SensorNode:
+    def __init__(self):
+        self.publisher = create_publisher('/sensor_data')
+
+    def publish_data(self, sensor_reading):
+        self.publisher.publish(sensor_reading)
+```
+
+**Target Word Count**: 1000–1200 words
+
+---
+
+#### Chapter 4: ROS 2 Core Concepts – Nodes, Topics, and Messages
+
+**Learning Objectives**:
+- Define nodes, topics, and messages in ROS 2
+- Understand publish-subscribe communication pattern
+- Map ROS 2 concepts to humanoid robot subsystems (e.g., vision node publishing camera data)
+
+**Content Guidance**:
+- Use concrete humanoid robot scenario (e.g., camera node publishes images, navigation node subscribes)
+- Explain asynchronous communication benefits
+- Provide clear definitions with examples
+
+**Diagrams**:
+- **Diagram 1**: Node-topic-message flow (camera node → `/camera/image` topic → navigation node)
+- **Diagram 2**: Multi-node system diagram for a humanoid (sensor nodes, control nodes, actuator nodes)
+
+**Code Examples**:
+- **Pseudo-code snippet**: Publisher and subscriber pattern
+
+```python
+# Publisher (Sensor Node - Pseudo-code)
+publisher = create_publisher('/joint_states')
+publisher.publish(joint_positions)
+
+# Subscriber (Control Node - Pseudo-code)
+def joint_callback(msg):
+    process_joint_data(msg)
+
+subscriber = create_subscriber('/joint_states', joint_callback)
+```
+
+**Target Word Count**: 1100–1300 words
+
+---
+
+#### Chapter 5: ROS 2 Services and Actions
+
+**Learning Objectives**:
+- Distinguish between topics (continuous data) and services (request-response)
+- Understand when to use actions for long-running tasks
+- Apply services and actions to humanoid robot use cases
+
+**Content Guidance**:
+- Explain request-response pattern with real-world analogy (ordering food vs. streaming music)
+- Describe action pattern for tasks like "walk to location" (goal, feedback, result)
+- Provide humanoid-specific examples (e.g., "grasp object" action)
+
+**Diagrams**:
+- **Diagram 1**: Service call flow (client requests, server responds)
+- **Diagram 2**: Action flow with feedback (client sends goal, server sends progress updates, final result)
+
+**Code Examples**:
+- **Pseudo-code snippet**: Service call
+
+```python
+# Service Client (Pseudo-code)
+client = create_service_client('/set_joint_position')
+response = client.call(target_position)
+```
+
+- **Pseudo-code snippet**: Action goal
+
+```python
+# Action Client (Pseudo-code)
+action_client = create_action_client('/navigate_to_goal')
+goal = NavigateGoal(target_location)
+action_client.send_goal(goal)
+```
+
+**Target Word Count**: 1000–1200 words
+
+---
+
+#### Chapter 6: ROS 2 System Integration for Humanoids
+
+**Learning Objectives**:
+- Understand how ROS 2 components integrate into a complete humanoid robot system
+- Learn patterns for coordinating multiple nodes in humanoid applications
+- Apply launch files and parameter management to humanoid robot configurations
+
+**Content Guidance**:
+- Show how perception, planning, and control nodes interconnect via ROS 2
+- Explain launch file concepts for starting multi-node systems
+- Describe parameter servers and configuration management
+- Provide humanoid-specific integration patterns (sensor fusion, coordinated control)
+
+**Diagrams**:
+- **Diagram 1**: Complete humanoid ROS 2 system architecture (all subsystems connected)
+- **Diagram 2**: Launch file dependency graph showing node startup sequence
+
+**Code Examples**:
+- **Pseudo-code snippet**: Multi-node coordination
+
+```python
+# Humanoid System Launch (Pseudo-code)
+launch_nodes = [
+    SensorNode('/camera'),
+    SensorNode('/imu'),
+    PerceptionNode('/object_detector'),
+    PlanningNode('/path_planner'),
+    ControlNode('/joint_controller')
+]
+coordinator.launch_all(launch_nodes)
+```
+
+**Target Word Count**: 1200–1500 words
+
+---
+
+### Module 2: Digital Twin – Simulation for Safe Development
+
+#### Chapter 7: What is a Digital Twin?
+
+**Learning Objectives**:
+- Define digital twin in the context of robotics
+- Explain why simulation is critical for humanoid robot development
+- Understand the concept of virtual-physical parity
+
+**Content Guidance**:
+- Use relatable analogy (flight simulators for pilot training)
+- Explain cost, safety, and iteration speed benefits
+- Introduce the idea of testing in simulation before physical deployment
+
+**Diagrams**:
+- **Diagram 1**: Side-by-side comparison (physical humanoid robot vs. simulated digital twin)
+- **Diagram 2**: Simulation-to-real workflow (design → simulate → test → deploy)
+
+**Code Examples**: None
+
+**Target Word Count**: 900–1000 words
+
+---
+
+#### Chapter 8: Gazebo – Physics-Based Simulation
+
+**Learning Objectives**:
+- Understand Gazebo's role in robotic simulation
+- Explain physics engines and sensor simulation
+- Recognize use cases for Gazebo in humanoid robotics
+
+**Content Guidance**:
+- Explain physics simulation (gravity, collisions, friction) in simple terms
+- Describe sensor simulation (LiDAR, cameras, IMUs)
+- Provide humanoid-specific examples (simulating bipedal walking, object manipulation)
+
+**Diagrams**:
+- **Diagram 1**: Gazebo simulation environment showing a humanoid robot in a virtual room
+- **Diagram 2**: Sensor data flow from simulated sensors to ROS 2 nodes
+
+**Code Examples**:
+- **Pseudo-code snippet**: Simulated sensor data retrieval
+
+```python
+# Simulated Camera Node (Pseudo-code)
+camera_data = gazebo_sim.get_camera_image()
+publisher.publish(camera_data)
+```
+
+**Target Word Count**: 1000–1200 words
+
+---
+
+#### Chapter 9: Unity – Visual Rendering and Interactive Environments
+
+**Learning Objectives**:
+- Understand Unity's role in creating realistic visual environments
+- Distinguish between Gazebo (physics-focused) and Unity (visual-focused)
+- Recognize when to use Unity for robotics simulation
+
+**Content Guidance**:
+- Explain visual rendering vs. physics simulation trade-offs
+- Describe Unity's strengths (photorealistic graphics, VR/AR integration)
+- Provide use cases (human-robot interaction scenarios, visual perception training)
+
+**Diagrams**:
+- **Diagram 1**: Gazebo vs. Unity comparison table (physics fidelity vs. visual fidelity)
+- **Diagram 2**: Unity environment with humanoid interacting with objects
+
+**Code Examples**: None (conceptual, no code needed)
+
+**Target Word Count**: 900–1100 words
+
+---
+
+#### Chapter 10: Simulation-to-Real (Sim-to-Real) Transfer
+
+**Learning Objectives**:
+- Define the Sim-to-Real problem
+- Identify common challenges (domain gap, reality gap)
+- Understand strategies to improve transfer (domain randomization, system identification)
+
+**Content Guidance**:
+- Explain domain gap with clear examples (simulated friction ≠ real-world friction)
+- Describe practical mitigation strategies without deep math
+- Provide humanoid-specific challenges (bipedal balance, contact dynamics)
+
+**Diagrams**:
+- **Diagram 1**: Domain gap illustration (simulated vs. real sensor noise, lighting conditions)
+- **Diagram 2**: Domain randomization strategy (varying simulation parameters to improve robustness)
+
+**Code Examples**: None
+
+**Target Word Count**: 1100–1300 words
+
+---
+
+### Module 3: NVIDIA Isaac – The AI-Robot Brain
+
+#### Chapter 11: Introduction to NVIDIA Isaac Sim
+
+**Learning Objectives**:
+- Understand what NVIDIA Isaac Sim is and why it's used
+- Explain GPU-accelerated simulation benefits
+- Recognize Isaac Sim's role in AI training for robotics
+
+**Content Guidance**:
+- Explain GPU acceleration in simple terms (parallel processing, speed advantages)
+- Describe photorealistic rendering and physics accuracy
+- Highlight use cases (training deep learning models, reinforcement learning)
+
+**Diagrams**:
+- **Diagram 1**: Isaac Sim architecture (GPU-accelerated physics, rendering, AI integration)
+- **Diagram 2**: Training pipeline (Isaac Sim → AI model training → deployment to robot)
+
+**Code Examples**: None (conceptual overview)
+
+**Target Word Count**: 900–1100 words
+
+---
+
+#### Chapter 12: Isaac ROS – Bridging AI and ROS 2
+
+**Learning Objectives**:
+- Understand Isaac ROS's role in integrating AI models with ROS 2
+- Identify key Isaac ROS packages (perception, navigation)
+- Map AI model outputs to robotic actions
+
+**Content Guidance**:
+- Explain AI-ROS integration without requiring deep learning expertise
+- Describe perception pipeline (camera image → AI model → object detection → ROS 2 message)
+- Provide humanoid-specific examples (pose estimation, object recognition)
+
+**Diagrams**:
+- **Diagram 1**: Isaac ROS perception pipeline (camera → Isaac ROS node → AI inference → detected objects → ROS 2 topic)
+- **Diagram 2**: Integration of Isaac ROS with ROS 2 navigation stack
+
+**Code Examples**:
+- **Pseudo-code snippet**: AI inference in ROS 2 node
+
+```python
+# Isaac ROS AI Node (Pseudo-code)
+def camera_callback(image_msg):
+    detections = ai_model.infer(image_msg)
+    publisher.publish(detections)
+```
+
+**Target Word Count**: 1100–1300 words
+
+---
+
+#### Chapter 13: Perception, Planning, and Control with Isaac
+
+**Learning Objectives**:
+- Understand the perception-planning-control loop
+- Explain how AI models fit into each stage
+- Apply concepts to humanoid robot scenarios
+
+**Content Guidance**:
+- Use concrete example (humanoid navigating a room: perceive obstacles → plan path → execute motion)
+- Explain each stage with minimal jargon
+- Highlight AI's role in each (CNN for perception, RL for planning, PID for control)
+
+**Diagrams**:
+- **Diagram 1**: Perception-planning-control loop with AI models annotated
+- **Diagram 2**: Humanoid navigation example (visual perception → path planning → motor control)
+
+**Code Examples**:
+- **Pseudo-code snippet**: Simplified planning logic
+
+```python
+# Path Planning (Pseudo-code)
+obstacles = perception.get_obstacles()
+path = planner.compute_path(current_position, goal, obstacles)
+controller.execute(path)
+```
+
+**Target Word Count**: 1200–1400 words
+
+---
+
+#### Chapter 14: Isaac Gym – Reinforcement Learning at Scale
+
+**Learning Objectives**:
+- Understand Isaac Gym's role in GPU-accelerated reinforcement learning for robotics
+- Learn how parallel simulation enables rapid policy training
+- Apply reinforcement learning concepts to humanoid locomotion and manipulation
+
+**Content Guidance**:
+- Explain reinforcement learning basics (agent, environment, reward, policy) in simple terms
+- Describe how Isaac Gym enables thousands of parallel simulations for faster training
+- Highlight humanoid-specific RL applications (walking, balancing, manipulation)
+- Discuss Sim-to-Real transfer considerations for RL-trained policies
+
+**Diagrams**:
+- **Diagram 1**: Isaac Gym parallel training architecture (multiple environments running simultaneously)
+- **Diagram 2**: Reinforcement learning training loop for humanoid locomotion
+
+**Code Examples**:
+- **Pseudo-code snippet**: RL training loop
+
+```python
+# Isaac Gym RL Training (Pseudo-code)
+environments = create_parallel_envs(num_envs=4096)
+policy = NeuralNetworkPolicy()
+
+for iteration in range(num_iterations):
+    actions = policy.compute_actions(observations)
+    observations, rewards = environments.step(actions)
+    policy.update(rewards)
+```
+
+**Target Word Count**: 1200–1500 words
+
+---
+
+### Module 4: Vision-Language-Action (VLA) – The Future of Robotics
+
+#### Chapter 15: What is Vision-Language-Action (VLA)?
+
+**Learning Objectives**:
+- Define the VLA paradigm
+- Understand how vision, language, and action integrate
+- Recognize VLA's significance for humanoid robotics
+
+**Content Guidance**:
+- Explain VLA pipeline in simple terms (see → understand → act)
+- Use relatable example (human giving verbal command, robot seeing environment, executing task)
+- Introduce LLMs' role in robotic task understanding
+
+**Diagrams**:
+- **Diagram 1**: VLA pipeline (camera image + voice command → LLM → action plan → robot motion)
+- **Diagram 2**: Comparison of traditional robotics (hard-coded rules) vs. VLA (language-driven flexibility)
+
+**Code Examples**: None (conceptual introduction)
+
+**Target Word Count**: 900–1100 words
+
+---
+
+#### Chapter 16: Large Language Models (LLMs) for Robotics
+
+**Learning Objectives**:
+- Understand how LLMs process natural language commands
+- Explain how LLMs map language to robotic actions
+- Recognize limitations and challenges of LLMs in robotics
+
+**Content Guidance**:
+- Explain LLM basics without deep NLP theory (trained on text, generate responses)
+- Describe prompt engineering for robotics (how to structure commands)
+- Highlight grounding problem (language must connect to physical actions)
+
+**Diagrams**:
+- **Diagram 1**: LLM processing pipeline (text command → LLM → action sequence)
+- **Diagram 2**: Grounding challenge (mapping "pick up the cup" to specific motor commands)
+
+**Code Examples**:
+- **Pseudo-code snippet**: LLM query for action planning
+
+```python
+# LLM-based Action Planner (Pseudo-code)
+command = "pick up the red cup"
+action_plan = llm.query(f"Robot task: {command}. Output: step-by-step actions")
+robot.execute(action_plan)
+```
+
+**Target Word Count**: 1100–1300 words
+
+---
+
+#### Chapter 17: Vision-Language Integration
+
+**Learning Objectives**:
+- Understand how vision and language combine in VLA
+- Explain multimodal AI models (processing images and text together)
+- Apply vision-language integration to humanoid scenarios
+
+**Content Guidance**:
+- Explain multimodal models in simple terms (AI that "sees" and "reads")
+- Describe visual grounding (identifying objects mentioned in commands)
+- Provide humanoid example (robot sees red cup, hears "pick up the cup," identifies target)
+
+**Diagrams**:
+- **Diagram 1**: Multimodal AI architecture (image encoder + text encoder → joint embedding → action)
+- **Diagram 2**: Visual grounding example (camera image with objects, command "pick up the red cup," highlighted target object)
+
+**Code Examples**:
+- **Pseudo-code snippet**: Multimodal input processing
+
+```python
+# Vision-Language Model (Pseudo-code)
+image = camera.get_image()
+command = "pick up the red cup"
+target_object = vla_model.identify_target(image, command)
+robot.grasp(target_object)
+```
+
+**Target Word Count**: 1200–1400 words
+
+---
+
+#### Chapter 18: Capstone Example – Voice-Commanded Humanoid in Simulation
+
+**Learning Objectives**:
+- Integrate all prior modules into a complete VLA system
+- Understand end-to-end pipeline from voice command to robot action
+- Recognize real-world applications and limitations
+
+**Content Guidance**:
+- Walk through complete scenario (user says "bring me the book," robot perceives environment, plans, executes)
+- Explain system integration (ROS 2 + Isaac Sim + LLM + vision model)
+- Discuss current limitations and future directions
+
+**Diagrams**:
+- **Diagram 1**: End-to-end VLA system architecture (microphone → speech recognition → LLM → vision model → Isaac ROS → Gazebo/Unity sim → humanoid robot)
+- **Diagram 2**: Step-by-step execution flow (command received → scene understanding → path planning → grasping → delivery)
+
+**Code Examples**:
+- **Pseudo-code snippet**: Complete VLA pipeline
+
+```python
+# VLA Capstone System (Pseudo-code)
+voice_command = speech_recognizer.listen()  # "bring me the book"
+scene = camera.get_image()
+target = vla_model.identify_target(scene, voice_command)
+path = planner.plan_to_object(target)
+robot.navigate(path)
+robot.grasp(target)
+robot.navigate_to(user_location)
+robot.release()
+```
+
+**Target Word Count**: 1400–1600 words
+
+---
+
+## Content Quality Assurance *(mandatory)*
+
+### Technical Review Process
+
+All chapter content MUST undergo expert review before publication to ensure technical accuracy and alignment with learning objectives.
+
+**Review Stages**:
+1. **Draft Completion**: Author completes chapter content following the chapter template and content guidance
+2. **Self-Review**: Author validates against chapter checklist (learning objectives met, diagrams present, code examples functional, word count within range)
+3. **Expert Technical Review**: Robotics/AI specialist reviews for technical accuracy, conceptual clarity, and appropriate depth for target audience
+4. **Checklist Validation**: Reviewer completes standardized validation checklist covering:
+   - Technical accuracy (no errors in ROS 2, simulation, AI concepts)
+   - Alignment with learning objectives
+   - Diagram quality and clarity
+   - Code example correctness (pseudo-code is logically sound)
+   - Accessibility for target audience (basic programming knowledge assumed)
+   - Consistency with constitution principles (accuracy, clarity, transparency)
+5. **Revision**: Author addresses reviewer feedback
+6. **Final Approval**: Reviewer confirms all issues resolved
+
+**Reviewer Qualifications**: Must have professional experience (3+ years) or advanced degree (M.S./Ph.D.) in robotics, AI, or related field, with specific expertise in the module topic (ROS 2, simulation, NVIDIA Isaac, or VLA).
+
+**Pass/Fail Criteria**:
+- **PASS**: All checklist items verified, no factual errors, learning objectives achievable, code examples logically sound
+- **FAIL**: Any factual error in technical content, missing learning objective coverage, code examples with logical flaws, or accessibility issues for target audience
+- **Escalation**: If reviewer and author cannot resolve disagreement, escalate to a second independent reviewer for tie-breaking decision
+
+---
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
@@ -117,6 +699,10 @@ A learner wants to understand how large language models (LLMs) enable humanoid r
 - **FR-016**: Book MUST NOT include hallucinated technical claims or unverified information
 - **FR-017**: Book MUST structure content to support clear chapter organization with logical flow
 - **FR-018**: Book MUST include practical examples illustrating complex concepts where appropriate
+- **FR-019**: All diagrams MUST be created using professional diagramming tools (Lucidchart, Figma, or similar) and exported in SVG format with consistent styling. Quality criteria: minimum 1200px width at 1x scale, WCAG 2.1 AA color contrast compliance, all text elements legible at 100% zoom, labeled components with consistent font family and size across all diagrams
+- **FR-020**: All chapter content MUST undergo expert technical review by robotics/AI specialists with standardized checklist validation before publication
+- **FR-021**: Each chapter MUST be self-contained and readable independently, with sufficient context provided for readers who skip prior modules. See "Standalone Chapter Approach" in Book Structure section for implementation guidance including the Identical Definition Rule
+- **FR-022**: Deployment MUST be automated via GitHub Actions CI/CD pipeline with production deployment on merge to main and preview builds for pull requests
 
 ### Key Entities
 
@@ -151,6 +737,8 @@ A learner wants to understand how large language models (LLMs) enable humanoid r
 - Readers interested in hands-on practice will seek additional resources (tutorials, courses, labs) beyond the book
 - Educational hardware guidance assumes readers want to understand systems, not purchase specific products
 - Standard Docusaurus deployment to GitHub Pages is sufficient (no custom hosting requirements)
+- Book content follows continuous deployment model without formal version numbers; updates are deployed directly after review approval
+- GitHub Actions CI/CD pipeline automates deployment: merges to main branch trigger production deployment, pull requests generate preview builds for review
 
 ## Out of Scope
 
