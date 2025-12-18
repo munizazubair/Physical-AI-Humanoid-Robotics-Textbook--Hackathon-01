@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-module-4-vla/15-intro-vla" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Chapter 15: Introduction to Vision-Language-Action Systems | Physical AI &amp; Humanoid Robotics</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/img/social-card.png"><meta data-rh="true" name="twitter:image" content="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/img/social-card.png"><meta data-rh="true" property="og:url" content="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/15-intro-vla"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Chapter 15: Introduction to Vision-Language-Action Systems | Physical AI &amp; Humanoid Robotics"><meta data-rh="true" name="description" content="Imagine telling your humanoid robot: &quot;Bring me the book on the table.&quot; The robot looks around, identifies the table, locates the book among other objects, walks over, picks it up, and hands it to you. No programming, no pre-defined waypoints, no hardcoded object detectors—just natural language."><meta data-rh="true" property="og:description" content="Imagine telling your humanoid robot: &quot;Bring me the book on the table.&quot; The robot looks around, identifies the table, locates the book among other objects, walks over, picks it up, and hands it to you. No programming, no pre-defined waypoints, no hardcoded object detectors—just natural language."><link data-rh="true" rel="icon" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/15-intro-vla"><link data-rh="true" rel="alternate" href="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/15-intro-vla" hreflang="en"><link data-rh="true" rel="alternate" href="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/15-intro-vla" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"15. Introduction to VLA","item":"https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/15-intro-vla"}]}</script><link rel="stylesheet" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/assets/css/styles.39957658.css">
+<script src="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/assets/js/runtime~main.0c7738f2.js" defer="defer"></script>
+<script src="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/assets/js/main.50cf05cd.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||"light"),document.documentElement.setAttribute("data-theme-choice",t||"light")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/intro"><div class="navbar__logo"><img src="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/img/logo.svg" alt="Physical AI Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/img/logo.svg" alt="Physical AI Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Physical AI &amp; Humanoid Robotics</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/intro">Book</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/SIBGHAT/Physical-AI-Humanoid-Robotics-Textbook" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/intro"><span title="Welcome to Physical AI &amp; Humanoid Robotics" class="linkLabel_WmDU">Welcome to Physical AI &amp; Humanoid Robotics</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/foundation/01-intro-physical-ai"><span title="Foundation" class="categoryLinkLabel_W154">Foundation</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-1-ros2/03-intro-ros2"><span title="Module 1: ROS 2" class="categoryLinkLabel_W154">Module 1: ROS 2</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/07-intro-digital-twins"><span title="Module 2: Digital Twin" class="categoryLinkLabel_W154">Module 2: Digital Twin</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-3-nvidia-isaac/11-intro-isaac"><span title="Module 3: NVIDIA Isaac" class="categoryLinkLabel_W154">Module 3: NVIDIA Isaac</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/15-intro-vla"><span title="Module 4: VLA Capstone" class="categoryLinkLabel_W154">Module 4: VLA Capstone</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/15-intro-vla"><span title="15. Introduction to VLA" class="linkLabel_WmDU">15. Introduction to VLA</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/16-vision-systems"><span title="16. Vision Systems" class="linkLabel_WmDU">16. Vision Systems</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/17-llm-action-planning"><span title="17. LLM Action Planning" class="linkLabel_WmDU">17. LLM Action Planning</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/18-capstone"><span title="18. Capstone Integration" class="linkLabel_WmDU">18. Capstone Integration</span></a></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Module 4: VLA Capstone</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">15. Introduction to VLA</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Chapter 15: Introduction to Vision-Language-Action Systems</h1></header>
+<p>Imagine telling your humanoid robot: <strong>&quot;Bring me the book on the table.&quot;</strong> The robot looks around, identifies the table, locates the book among other objects, walks over, picks it up, and hands it to you. No programming, no pre-defined waypoints, no hardcoded object detectors—just natural language.</p>
+<p>This is the promise of <strong>Vision-Language-Action (VLA) systems</strong>: robots that understand what you say, see what you see, and translate your intent into physical actions. By combining visual perception, large language models (LLMs), and robotic control, VLA systems enable intuitive human-robot interaction at a level never before possible.</p>
+<p>In this final module (Chapters 15-18), we&#x27;ll explore VLA systems: how they work, what makes them different from traditional robotics, and how they represent the future of humanoid robots in human environments.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-is-a-vision-language-action-system">What is a Vision-Language-Action System?<a href="#what-is-a-vision-language-action-system" class="hash-link" aria-label="Direct link to What is a Vision-Language-Action System?" title="Direct link to What is a Vision-Language-Action System?" translate="no">​</a></h2>
+<p>A <strong>VLA system</strong> integrates three capabilities:</p>
+<ol>
+<li class=""><strong>Vision</strong>: Perceive the environment through cameras (objects, scenes, people)</li>
+<li class=""><strong>Language</strong>: Understand natural language commands (text or speech)</li>
+<li class=""><strong>Action</strong>: Execute physical tasks by controlling robot actuators</li>
+</ol>
+<p><strong>Key Insight</strong>: VLA systems don&#x27;t just respond to pre-programmed commands—they understand <em>intent</em> and adapt behavior based on visual context and language meaning.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="traditional-robotics-vs-vla-systems">Traditional Robotics vs. VLA Systems<a href="#traditional-robotics-vs-vla-systems" class="hash-link" aria-label="Direct link to Traditional Robotics vs. VLA Systems" title="Direct link to Traditional Robotics vs. VLA Systems" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="traditional-approach">Traditional Approach<a href="#traditional-approach" class="hash-link" aria-label="Direct link to Traditional Approach" title="Direct link to Traditional Approach" translate="no">​</a></h3>
+<p><strong>Command</strong>: &quot;Pick up object at position (0.5, 0.3, 0.8)&quot;</p>
+<ul>
+<li class=""><strong>Limitations</strong>:<!-- -->
+<ul>
+<li class="">User must know exact coordinates</li>
+<li class="">Robot has no understanding of &quot;cup&quot; vs. &quot;book&quot;</li>
+<li class="">Cannot handle ambiguity (&quot;the red cup&quot; when multiple cups exist)</li>
+<li class="">Requires pre-programmed behaviors for each task</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="vla-approach">VLA Approach<a href="#vla-approach" class="hash-link" aria-label="Direct link to VLA Approach" title="Direct link to VLA Approach" translate="no">​</a></h3>
+<p><strong>Command</strong>: &quot;Pick up the red cup&quot;</p>
+<ul>
+<li class=""><strong>Capabilities</strong>:<!-- -->
+<ul>
+<li class="">Robot identifies objects by description (&quot;red&quot;, &quot;cup&quot;)</li>
+<li class="">Understands spatial relationships (&quot;on the table&quot;, &quot;to the left of&quot;)</li>
+<li class="">Generalizes to new objects (never seen <em>this</em> cup before)</li>
+<li class="">Adapts to context (chooses red cup among multiple cups)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Difference</strong>: Traditional systems execute instructions; VLA systems understand goals.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-three-pillars-of-vla">The Three Pillars of VLA<a href="#the-three-pillars-of-vla" class="hash-link" aria-label="Direct link to The Three Pillars of VLA" title="Direct link to The Three Pillars of VLA" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="pillar-1-vision-perception">Pillar 1: Vision (Perception)<a href="#pillar-1-vision-perception" class="hash-link" aria-label="Direct link to Pillar 1: Vision (Perception)" title="Direct link to Pillar 1: Vision (Perception)" translate="no">​</a></h3>
+<p><strong>What the robot sees</strong>:</p>
+<ul>
+<li class="">Objects: &quot;cup&quot;, &quot;book&quot;, &quot;chair&quot;, &quot;person&quot;</li>
+<li class="">Attributes: &quot;red&quot;, &quot;large&quot;, &quot;wooden&quot;, &quot;open&quot;</li>
+<li class="">Spatial relations: &quot;on the table&quot;, &quot;next to the lamp&quot;, &quot;in the corner&quot;</li>
+</ul>
+<p><strong>Technologies</strong>:</p>
+<ul>
+<li class="">Object detection (YOLO, Faster R-CNN)</li>
+<li class="">Semantic segmentation (identify object boundaries)</li>
+<li class="">Depth estimation (how far away is the cup?)</li>
+<li class="">3D pose estimation (which direction is the cup handle facing?)</li>
+</ul>
+<p><strong>Example</strong>: Robot sees table with cup, book, and lamp. Vision system outputs:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Objects detected:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- Cup (red, ceramic, position: table, coordinates: (0.5, 0.3, 0.8))</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- Book (blue cover, position: table, coordinates: (0.6, 0.2, 0.8))</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- Lamp (metal, position: table, coordinates: (0.7, 0.4, 1.0))</span><br></span></code></pre></div></div>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="pillar-2-language-understanding">Pillar 2: Language (Understanding)<a href="#pillar-2-language-understanding" class="hash-link" aria-label="Direct link to Pillar 2: Language (Understanding)" title="Direct link to Pillar 2: Language (Understanding)" translate="no">​</a></h3>
+<p><strong>What the robot understands</strong>:</p>
+<ul>
+<li class="">Commands: &quot;Pick up&quot;, &quot;Put down&quot;, &quot;Move&quot;, &quot;Bring&quot;</li>
+<li class="">Objects: &quot;the red cup&quot;, &quot;the book&quot;, &quot;that lamp&quot;</li>
+<li class="">Locations: &quot;on the table&quot;, &quot;in the kitchen&quot;, &quot;next to the door&quot;</li>
+<li class="">Goals: &quot;Bring me the book&quot; (implicit: find book, pick it up, navigate to human, hand over)</li>
+</ul>
+<p><strong>Technologies</strong>:</p>
+<ul>
+<li class="">Speech recognition (convert voice to text)</li>
+<li class="">Large Language Models (LLMs): GPT-4, Claude, PaLM</li>
+<li class="">Semantic parsing (decompose &quot;bring me the book&quot; into subtasks)</li>
+</ul>
+<p><strong>Example</strong>: User says &quot;Bring me the red cup&quot;</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">LLM reasoning:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">1. Goal: Deliver red cup to human</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">2. Subtasks:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   - Locate red cup (vision)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   - Navigate to cup (navigation)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   - Grasp cup (manipulation)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   - Navigate to human (navigation)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   - Hand over cup (manipulation + HRI)</span><br></span></code></pre></div></div>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="pillar-3-action-execution">Pillar 3: Action (Execution)<a href="#pillar-3-action-execution" class="hash-link" aria-label="Direct link to Pillar 3: Action (Execution)" title="Direct link to Pillar 3: Action (Execution)" translate="no">​</a></h3>
+<p><strong>What the robot does</strong>:</p>
+<ul>
+<li class="">Navigate: Move to target location</li>
+<li class="">Manipulate: Grasp, lift, place objects</li>
+<li class="">Coordinate: Walk while holding object (whole-body control)</li>
+<li class="">Interact: Hand object to human, receive feedback</li>
+</ul>
+<p><strong>Technologies</strong>:</p>
+<ul>
+<li class="">Motion planning (MoveIt 2, OMPL)</li>
+<li class="">Grasp planning (how to hold the cup without spilling?)</li>
+<li class="">Whole-body control (coordinate arms and legs)</li>
+<li class="">ROS 2 actions for complex tasks</li>
+</ul>
+<p><strong>Example</strong>: Execute &quot;bring me the red cup&quot;</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Actions:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">1. navigate_to(table) → Walk to table</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">2. grasp(red_cup) → Pick up cup</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">3. navigate_to(human) → Walk to human</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">4. handover(red_cup) → Extend arm, wait for human to take cup</span><br></span></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-vla-pipeline-end-to-end">The VLA Pipeline: End-to-End<a href="#the-vla-pipeline-end-to-end" class="hash-link" aria-label="Direct link to The VLA Pipeline: End-to-End" title="Direct link to The VLA Pipeline: End-to-End" translate="no">​</a></h2>
+<p>Let&#x27;s trace a complete VLA interaction from command to execution.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="scenario-bring-me-the-book-on-the-table">Scenario: &quot;Bring me the book on the table&quot;<a href="#scenario-bring-me-the-book-on-the-table" class="hash-link" aria-label="Direct link to Scenario: &quot;Bring me the book on the table&quot;" title="Direct link to Scenario: &quot;Bring me the book on the table&quot;" translate="no">​</a></h3>
+<p><strong>Step 1: Speech Recognition</strong></p>
+<ul>
+<li class="">User speaks: &quot;Bring me the book on the table&quot;</li>
+<li class="">Speech-to-text system converts to text: <code>&quot;bring me the book on the table&quot;</code></li>
+</ul>
+<p><strong>Step 2: Language Understanding (LLM)</strong></p>
+<ul>
+<li class="">Input: <code>&quot;bring me the book on the table&quot;</code></li>
+<li class="">LLM reasoning:<!-- -->
+<ul>
+<li class="">Task type: Object retrieval</li>
+<li class="">Target object: &quot;book&quot;</li>
+<li class="">Location constraint: &quot;on the table&quot;</li>
+<li class="">Implied goal: Pick up book, deliver to human</li>
+</ul>
+</li>
+<li class="">Output: High-level plan<!-- -->
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[locate(book, on_table), navigate_to(book), grasp(book),</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> navigate_to(human), handover(book)]</span><br></span></code></pre></div></div>
+</li>
+</ul>
+<p><strong>Step 3: Visual Grounding</strong></p>
+<ul>
+<li class="">Robot looks at table</li>
+<li class="">Vision system identifies objects: book, cup, lamp</li>
+<li class="">Matches &quot;book&quot; from language to visual detection</li>
+<li class="">Outputs: Book position (0.6, 0.2, 0.8), orientation, bounding box</li>
+</ul>
+<p><strong>Step 4: Action Translation</strong></p>
+<ul>
+<li class="">Translate high-level plan to ROS 2 actions:<!-- -->
+<ul>
+<li class=""><code>navigate_to(book)</code> → Nav2 goal: (0.6, 0.2)</li>
+<li class=""><code>grasp(book)</code> → MoveIt 2 grasp action with book pose</li>
+<li class=""><code>navigate_to(human)</code> → Nav2 goal: human position</li>
+<li class=""><code>handover(book)</code> → Arm extension + wait for contact</li>
+</ul>
+</li>
+</ul>
+<p><strong>Step 5: Execution</strong></p>
+<ul>
+<li class="">Robot walks to table (Nav2 navigation)</li>
+<li class="">Reaches for book (MoveIt 2 arm planning)</li>
+<li class="">Grasps book (grasp controller)</li>
+<li class="">Walks to human (Nav2 navigation)</li>
+<li class="">Extends arm for handover (manipulation + HRI)</li>
+</ul>
+<p><strong>Step 6: Feedback</strong></p>
+<ul>
+<li class="">Robot confirms: &quot;I&#x27;ve brought you the book&quot; (text-to-speech)</li>
+<li class="">Or visual confirmation: Human takes book, robot detects release</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-vla-systems-matter-for-humanoid-robotics">Why VLA Systems Matter for Humanoid Robotics<a href="#why-vla-systems-matter-for-humanoid-robotics" class="hash-link" aria-label="Direct link to Why VLA Systems Matter for Humanoid Robotics" title="Direct link to Why VLA Systems Matter for Humanoid Robotics" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-natural-human-robot-interaction">1. Natural Human-Robot Interaction<a href="#1-natural-human-robot-interaction" class="hash-link" aria-label="Direct link to 1. Natural Human-Robot Interaction" title="Direct link to 1. Natural Human-Robot Interaction" translate="no">​</a></h3>
+<p>Humans don&#x27;t think in coordinates or code—we use language. VLA enables:</p>
+<ul>
+<li class=""><strong>Voice commands</strong>: &quot;Set the table for dinner&quot;</li>
+<li class=""><strong>Gestural commands</strong>: Point at object + &quot;Bring me that&quot;</li>
+<li class=""><strong>Contextual understanding</strong>: &quot;Put it back&quot; (LLM remembers what &quot;it&quot; is)</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-generalization-to-new-tasks">2. Generalization to New Tasks<a href="#2-generalization-to-new-tasks" class="hash-link" aria-label="Direct link to 2. Generalization to New Tasks" title="Direct link to 2. Generalization to New Tasks" translate="no">​</a></h3>
+<p>Traditional robots require programming for every task. VLA systems generalize:</p>
+<ul>
+<li class=""><strong>New objects</strong>: &quot;Pick up the purple mug&quot; (never saw purple mug before)</li>
+<li class=""><strong>New locations</strong>: &quot;Put the book on the shelf&quot; (adapt to different shelf heights)</li>
+<li class=""><strong>New goals</strong>: &quot;Tidy up the room&quot; (LLM decomposes into: pick up items, place in designated locations)</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-adaptability-to-human-environments">3. Adaptability to Human Environments<a href="#3-adaptability-to-human-environments" class="hash-link" aria-label="Direct link to 3. Adaptability to Human Environments" title="Direct link to 3. Adaptability to Human Environments" translate="no">​</a></h3>
+<p>Homes and offices are cluttered, dynamic, and unpredictable. VLA systems:</p>
+<ul>
+<li class=""><strong>Reason about scenes</strong>: &quot;The cup is behind the laptop&quot;</li>
+<li class=""><strong>Handle ambiguity</strong>: &quot;The book&quot; → Which one? → &quot;The blue one&quot;</li>
+<li class=""><strong>Adjust to changes</strong>: Table was clear yesterday, now has laptop and papers</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="challenges-in-vla-systems">Challenges in VLA Systems<a href="#challenges-in-vla-systems" class="hash-link" aria-label="Direct link to Challenges in VLA Systems" title="Direct link to Challenges in VLA Systems" translate="no">​</a></h2>
+<p>VLA systems are powerful but face significant challenges:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-the-grounding-problem">1. The Grounding Problem<a href="#1-the-grounding-problem" class="hash-link" aria-label="Direct link to 1. The Grounding Problem" title="Direct link to 1. The Grounding Problem" translate="no">​</a></h3>
+<p><strong>Problem</strong>: LLMs operate on text; robots operate on physical actions.</p>
+<p><strong>Challenge</strong>: How to map &quot;pick up the red cup&quot; to joint torques?</p>
+<p><strong>Solution Approaches</strong>:</p>
+<ul>
+<li class=""><strong>Action primitives</strong>: Define reusable actions (navigate, grasp, place) that LLM can compose</li>
+<li class=""><strong>Vision-language models</strong>: CLIP, PaLM-E link visual and language representations</li>
+<li class=""><strong>Reinforcement learning</strong>: Train policies to execute language-specified goals</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-real-time-constraints">2. Real-Time Constraints<a href="#2-real-time-constraints" class="hash-link" aria-label="Direct link to 2. Real-Time Constraints" title="Direct link to 2. Real-Time Constraints" translate="no">​</a></h3>
+<p><strong>Problem</strong>: LLMs are slow (100ms-1s inference); robots need real-time control (&lt; 50ms).</p>
+<p><strong>Challenge</strong>: Cannot wait 500ms for LLM response during dynamic grasping.</p>
+<p><strong>Solution Approaches</strong>:</p>
+<ul>
+<li class=""><strong>Hierarchical control</strong>: LLM plans high-level (slow), low-level control is reactive (fast)</li>
+<li class=""><strong>Caching</strong>: Pre-compute common action sequences</li>
+<li class=""><strong>Smaller models</strong>: Use faster LLMs (GPT-3.5 vs GPT-4) or fine-tuned models</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-safety-and-robustness">3. Safety and Robustness<a href="#3-safety-and-robustness" class="hash-link" aria-label="Direct link to 3. Safety and Robustness" title="Direct link to 3. Safety and Robustness" translate="no">​</a></h3>
+<p><strong>Problem</strong>: LLMs can hallucinate or suggest unsafe actions.</p>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li class="">LLM: &quot;Push the heavy object off the table&quot; (unsafe: object could break)</li>
+<li class="">LLM: &quot;Open the door while holding the cup&quot; (risky: might spill)</li>
+</ul>
+<p><strong>Solution Approaches</strong>:</p>
+<ul>
+<li class=""><strong>Safety constraints</strong>: Hard-coded rules (never release object above fragile items)</li>
+<li class=""><strong>Human-in-the-loop</strong>: Ask for confirmation before risky actions</li>
+<li class=""><strong>Learned safety policies</strong>: Train models to recognize unsafe situations</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-data-requirements">4. Data Requirements<a href="#4-data-requirements" class="hash-link" aria-label="Direct link to 4. Data Requirements" title="Direct link to 4. Data Requirements" translate="no">​</a></h3>
+<p><strong>Problem</strong>: Training VLA models requires massive datasets of (language, vision, action) triplets.</p>
+<p><strong>Challenge</strong>: Collecting real robot data is expensive and slow.</p>
+<p><strong>Solution Approaches</strong>:</p>
+<ul>
+<li class=""><strong>Simulation</strong>: Generate synthetic data in Isaac Sim or Unity</li>
+<li class=""><strong>Transfer learning</strong>: Pre-train on internet data (CLIP on image-text pairs), fine-tune on robot data</li>
+<li class=""><strong>Imitation learning</strong>: Collect demonstrations from humans via teleoperation</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="state-of-the-art-vla-models">State-of-the-Art VLA Models<a href="#state-of-the-art-vla-models" class="hash-link" aria-label="Direct link to State-of-the-Art VLA Models" title="Direct link to State-of-the-Art VLA Models" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="palm-e-google-2023">PaLM-E (Google, 2023)<a href="#palm-e-google-2023" class="hash-link" aria-label="Direct link to PaLM-E (Google, 2023)" title="Direct link to PaLM-E (Google, 2023)" translate="no">​</a></h3>
+<p><strong>Architecture</strong>: Multimodal language model (vision + language → actions)</p>
+<p><strong>Capabilities</strong>:</p>
+<ul>
+<li class="">Processes images and text jointly</li>
+<li class="">Outputs action sequences for manipulation tasks</li>
+<li class="">Transfer learning from internet-scale data to robotics</li>
+</ul>
+<p><strong>Example</strong>: &quot;Stack the blue block on the red block&quot;</p>
+<ul>
+<li class="">Input: Image of blocks + text command</li>
+<li class="">Output: Sequence of arm movements</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="rt-2-robotic-transformer-2-google-2023">RT-2 (Robotic Transformer 2, Google, 2023)<a href="#rt-2-robotic-transformer-2-google-2023" class="hash-link" aria-label="Direct link to RT-2 (Robotic Transformer 2, Google, 2023)" title="Direct link to RT-2 (Robotic Transformer 2, Google, 2023)" translate="no">​</a></h3>
+<p><strong>Architecture</strong>: Vision-language-action transformer</p>
+<p><strong>Capabilities</strong>:</p>
+<ul>
+<li class="">End-to-end: Image + text → motor commands (no separate vision/language modules)</li>
+<li class="">Trained on 13 robots, 800+ tasks</li>
+<li class="">Generalizes to new objects and tasks</li>
+</ul>
+<p><strong>Example</strong>: &quot;Pick up the extinct animal&quot; (recognizes toy dinosaur)</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="clip-openai-2021">CLIP (OpenAI, 2021)<a href="#clip-openai-2021" class="hash-link" aria-label="Direct link to CLIP (OpenAI, 2021)" title="Direct link to CLIP (OpenAI, 2021)" translate="no">​</a></h3>
+<p><strong>Architecture</strong>: Vision-language pre-training</p>
+<p><strong>Capabilities</strong>:</p>
+<ul>
+<li class="">Matches images to text descriptions</li>
+<li class="">Zero-shot object recognition (&quot;find the red cup&quot; without training on cups)</li>
+</ul>
+<p><strong>Use in Robotics</strong>: Visual grounding for VLA systems</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="summary">Summary<a href="#summary" class="hash-link" aria-label="Direct link to Summary" title="Direct link to Summary" translate="no">​</a></h2>
+<p><strong>Vision-Language-Action (VLA) systems</strong> combine perception, language understanding, and robotic control to enable intuitive human-robot interaction. By integrating:</p>
+<ul>
+<li class=""><strong>Vision</strong>: Object detection, scene understanding</li>
+<li class=""><strong>Language</strong>: Natural language commands, LLM reasoning</li>
+<li class=""><strong>Action</strong>: Motion planning, manipulation, navigation</li>
+</ul>
+<p>VLA systems allow humans to interact with robots using natural language instead of code or coordinates.</p>
+<p><strong>Key Benefits</strong>:</p>
+<ul>
+<li class="">Natural interaction (voice commands)</li>
+<li class="">Generalization (adapt to new objects/tasks)</li>
+<li class="">Contextual understanding (handle ambiguity)</li>
+</ul>
+<p><strong>Key Challenges</strong>:</p>
+<ul>
+<li class="">Grounding problem (language → actions)</li>
+<li class="">Real-time constraints (LLM latency)</li>
+<li class="">Safety (preventing unsafe behaviors)</li>
+<li class="">Data requirements (need large datasets)</li>
+</ul>
+<p>In the next chapters, we&#x27;ll explore:</p>
+<ul>
+<li class=""><strong>Chapter 16</strong>: Vision systems for VLA (object detection, visual grounding)</li>
+<li class=""><strong>Chapter 17</strong>: LLMs for action planning and task decomposition</li>
+<li class=""><strong>Chapter 18</strong>: Capstone integration—bringing together all modules (ROS 2, simulation, Isaac, VLA) in a complete humanoid system</li>
+</ul>
+<p>By the end of this module, you&#x27;ll understand how VLA systems represent the next frontier in robotics—enabling robots that understand what we say and do what we mean.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="further-reading">Further Reading<a href="#further-reading" class="hash-link" aria-label="Direct link to Further Reading" title="Direct link to Further Reading" translate="no">​</a></h2>
+<ul>
+<li class="">Driess, D., et al. (2023). PaLM-E: An embodied multimodal language model. <em>arXiv preprint arXiv:2303.03378</em>.</li>
+<li class="">Brohan, A., et al. (2023). RT-2: Vision-language-action models transfer web knowledge to robotic control. <em>arXiv preprint arXiv:2307.15818</em>.</li>
+<li class="">Radford, A., et al. (2021). Learning transferable visual models from natural language supervision. <em>International Conference on Machine Learning</em>.</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/SIBGHAT/Physical-AI-Humanoid-Robotics-Textbook/tree/main/docs/module-4-vla/15-intro-vla.mdx" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-3-nvidia-isaac/14-isaac-gym"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">14. Isaac Gym</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/16-vision-systems"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">16. Vision Systems</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#what-is-a-vision-language-action-system" class="table-of-contents__link toc-highlight">What is a Vision-Language-Action System?</a></li><li><a href="#traditional-robotics-vs-vla-systems" class="table-of-contents__link toc-highlight">Traditional Robotics vs. VLA Systems</a><ul><li><a href="#traditional-approach" class="table-of-contents__link toc-highlight">Traditional Approach</a></li><li><a href="#vla-approach" class="table-of-contents__link toc-highlight">VLA Approach</a></li></ul></li><li><a href="#the-three-pillars-of-vla" class="table-of-contents__link toc-highlight">The Three Pillars of VLA</a><ul><li><a href="#pillar-1-vision-perception" class="table-of-contents__link toc-highlight">Pillar 1: Vision (Perception)</a></li><li><a href="#pillar-2-language-understanding" class="table-of-contents__link toc-highlight">Pillar 2: Language (Understanding)</a></li><li><a href="#pillar-3-action-execution" class="table-of-contents__link toc-highlight">Pillar 3: Action (Execution)</a></li></ul></li><li><a href="#the-vla-pipeline-end-to-end" class="table-of-contents__link toc-highlight">The VLA Pipeline: End-to-End</a><ul><li><a href="#scenario-bring-me-the-book-on-the-table" class="table-of-contents__link toc-highlight">Scenario: &quot;Bring me the book on the table&quot;</a></li></ul></li><li><a href="#why-vla-systems-matter-for-humanoid-robotics" class="table-of-contents__link toc-highlight">Why VLA Systems Matter for Humanoid Robotics</a><ul><li><a href="#1-natural-human-robot-interaction" class="table-of-contents__link toc-highlight">1. Natural Human-Robot Interaction</a></li><li><a href="#2-generalization-to-new-tasks" class="table-of-contents__link toc-highlight">2. Generalization to New Tasks</a></li><li><a href="#3-adaptability-to-human-environments" class="table-of-contents__link toc-highlight">3. Adaptability to Human Environments</a></li></ul></li><li><a href="#challenges-in-vla-systems" class="table-of-contents__link toc-highlight">Challenges in VLA Systems</a><ul><li><a href="#1-the-grounding-problem" class="table-of-contents__link toc-highlight">1. The Grounding Problem</a></li><li><a href="#2-real-time-constraints" class="table-of-contents__link toc-highlight">2. Real-Time Constraints</a></li><li><a href="#3-safety-and-robustness" class="table-of-contents__link toc-highlight">3. Safety and Robustness</a></li><li><a href="#4-data-requirements" class="table-of-contents__link toc-highlight">4. Data Requirements</a></li></ul></li><li><a href="#state-of-the-art-vla-models" class="table-of-contents__link toc-highlight">State-of-the-Art VLA Models</a><ul><li><a href="#palm-e-google-2023" class="table-of-contents__link toc-highlight">PaLM-E (Google, 2023)</a></li><li><a href="#rt-2-robotic-transformer-2-google-2023" class="table-of-contents__link toc-highlight">RT-2 (Robotic Transformer 2, Google, 2023)</a></li><li><a href="#clip-openai-2021" class="table-of-contents__link toc-highlight">CLIP (OpenAI, 2021)</a></li></ul></li><li><a href="#summary" class="table-of-contents__link toc-highlight">Summary</a></li><li><a href="#further-reading" class="table-of-contents__link toc-highlight">Further Reading</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Textbook</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/intro">Getting Started</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/SIBGHAT/Physical-AI-Humanoid-Robotics-Textbook" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Physical AI & Humanoid Robotics Textbook. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

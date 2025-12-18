@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-module-2-digital-twin/10-sim-to-real" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Chapter 10: Simulation-to-Real Transfer | Physical AI &amp; Humanoid Robotics</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/img/social-card.png"><meta data-rh="true" name="twitter:image" content="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/img/social-card.png"><meta data-rh="true" property="og:url" content="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/10-sim-to-real"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Chapter 10: Simulation-to-Real Transfer | Physical AI &amp; Humanoid Robotics"><meta data-rh="true" name="description" content="You&#x27;ve spent weeks perfecting your humanoid&#x27;s walking controller in Gazebo. In simulation, it strides confidently across virtual terrain, maintaining perfect balance. Excited, you deploy the same controller on your physical robot. It takes two steps—and crashes to the floor."><meta data-rh="true" property="og:description" content="You&#x27;ve spent weeks perfecting your humanoid&#x27;s walking controller in Gazebo. In simulation, it strides confidently across virtual terrain, maintaining perfect balance. Excited, you deploy the same controller on your physical robot. It takes two steps—and crashes to the floor."><link data-rh="true" rel="icon" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/10-sim-to-real"><link data-rh="true" rel="alternate" href="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/10-sim-to-real" hreflang="en"><link data-rh="true" rel="alternate" href="https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/10-sim-to-real" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"10. Sim-to-Real Transfer","item":"https://munizazubair.github.io/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/10-sim-to-real"}]}</script><link rel="stylesheet" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/assets/css/styles.39957658.css">
+<script src="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/assets/js/runtime~main.0c7738f2.js" defer="defer"></script>
+<script src="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/assets/js/main.50cf05cd.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||"light"),document.documentElement.setAttribute("data-theme-choice",t||"light")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/intro"><div class="navbar__logo"><img src="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/img/logo.svg" alt="Physical AI Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/img/logo.svg" alt="Physical AI Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Physical AI &amp; Humanoid Robotics</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/intro">Book</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/SIBGHAT/Physical-AI-Humanoid-Robotics-Textbook" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/intro"><span title="Welcome to Physical AI &amp; Humanoid Robotics" class="linkLabel_WmDU">Welcome to Physical AI &amp; Humanoid Robotics</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/foundation/01-intro-physical-ai"><span title="Foundation" class="categoryLinkLabel_W154">Foundation</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-1-ros2/03-intro-ros2"><span title="Module 1: ROS 2" class="categoryLinkLabel_W154">Module 1: ROS 2</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/07-intro-digital-twins"><span title="Module 2: Digital Twin" class="categoryLinkLabel_W154">Module 2: Digital Twin</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/07-intro-digital-twins"><span title="7. Introduction to Digital Twins" class="linkLabel_WmDU">7. Introduction to Digital Twins</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/08-gazebo"><span title="8. Gazebo Simulation" class="linkLabel_WmDU">8. Gazebo Simulation</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/09-unity"><span title="9. Unity Simulation" class="linkLabel_WmDU">9. Unity Simulation</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/10-sim-to-real"><span title="10. Sim-to-Real Transfer" class="linkLabel_WmDU">10. Sim-to-Real Transfer</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-3-nvidia-isaac/11-intro-isaac"><span title="Module 3: NVIDIA Isaac" class="categoryLinkLabel_W154">Module 3: NVIDIA Isaac</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-4-vla/15-intro-vla"><span title="Module 4: VLA Capstone" class="categoryLinkLabel_W154">Module 4: VLA Capstone</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Module 2: Digital Twin</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">10. Sim-to-Real Transfer</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Chapter 10: Simulation-to-Real Transfer</h1></header>
+<p>You&#x27;ve spent weeks perfecting your humanoid&#x27;s walking controller in Gazebo. In simulation, it strides confidently across virtual terrain, maintaining perfect balance. Excited, you deploy the same controller on your physical robot. It takes two steps—and crashes to the floor.</p>
+<p>Welcome to the <strong>simulation-to-real (sim-to-real) gap</strong>: the frustrating reality that behaviors learned in simulation often fail on physical hardware. Physics engines approximate reality but can&#x27;t perfectly model friction, sensor noise, actuator delays, and countless other real-world complexities. This chapter explores <em>why</em> the sim-to-real gap exists, <em>when</em> it matters most, and <em>how</em> to bridge it through domain randomization, system identification, and transfer learning.</p>
+<p>By the end of this chapter, you&#x27;ll understand strategies to make simulated policies robust enough to deploy on real humanoid robots.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-is-the-sim-to-real-gap">What is the Sim-to-Real Gap?<a href="#what-is-the-sim-to-real-gap" class="hash-link" aria-label="Direct link to What is the Sim-to-Real Gap?" title="Direct link to What is the Sim-to-Real Gap?" translate="no">​</a></h2>
+<p>The <strong>sim-to-real gap</strong> refers to discrepancies between simulated and physical environments that cause policies trained in simulation to perform poorly—or fail catastrophically—on real robots.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="types-of-sim-to-real-gaps">Types of Sim-to-Real Gaps<a href="#types-of-sim-to-real-gaps" class="hash-link" aria-label="Direct link to Types of Sim-to-Real Gaps" title="Direct link to Types of Sim-to-Real Gaps" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-physics-gap-reality-gap">1. Physics Gap (Reality Gap)<a href="#1-physics-gap-reality-gap" class="hash-link" aria-label="Direct link to 1. Physics Gap (Reality Gap)" title="Direct link to 1. Physics Gap (Reality Gap)" translate="no">​</a></h4>
+<p>Simulated physics is an approximation. Key sources of error:</p>
+<table><thead><tr><th>Simulated</th><th>Reality</th><th>Impact</th></tr></thead><tbody><tr><td><strong>Contact friction</strong></td><td>Static friction: μ = 0.8</td><td>Measured friction: μ = 0.6-1.0 (varies by surface)</td></tr><tr><td><strong>Actuator dynamics</strong></td><td>Instantaneous torque response</td><td>Motor delays (10-50 ms), backlash, compliance</td></tr><tr><td><strong>Joint limits</strong></td><td>Hard limits enforced</td><td>Soft limits with spring-damper behavior</td></tr><tr><td><strong>Material properties</strong></td><td>Rigid bodies</td><td>Deformation, elasticity, wear</td></tr></tbody></table>
+<p><strong>Example</strong>: A walking controller tuned for simulated friction (μ = 0.8) fails when deployed on polished floors (μ = 0.5)—the robot&#x27;s feet slip during push-off.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-sensor-gap-perception-gap">2. Sensor Gap (Perception Gap)<a href="#2-sensor-gap-perception-gap" class="hash-link" aria-label="Direct link to 2. Sensor Gap (Perception Gap)" title="Direct link to 2. Sensor Gap (Perception Gap)" translate="no">​</a></h4>
+<p>Simulated sensors produce idealized data. Real sensors have:</p>
+<ul>
+<li class=""><strong>Noise</strong>: Camera pixel noise, IMU drift, LiDAR reflections.</li>
+<li class=""><strong>Artifacts</strong>: Motion blur, lens distortion, exposure variation.</li>
+<li class=""><strong>Failures</strong>: Sensor dropout, occlusion, saturation.</li>
+</ul>
+<p><strong>Example</strong>: A camera-based object detector trained on Unity&#x27;s perfect images fails when real cameras produce motion-blurred images during fast head movements.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-latency-gap-temporal-gap">3. Latency Gap (Temporal Gap)<a href="#3-latency-gap-temporal-gap" class="hash-link" aria-label="Direct link to 3. Latency Gap (Temporal Gap)" title="Direct link to 3. Latency Gap (Temporal Gap)" translate="no">​</a></h4>
+<p>Simulations run in discrete steps (e.g., 1 ms). Real systems have:</p>
+<ul>
+<li class=""><strong>Computation delays</strong>: Neural network inference (20-100 ms).</li>
+<li class=""><strong>Communication delays</strong>: ROS 2 message transport, network latency.</li>
+<li class=""><strong>Sensor delays</strong>: Camera frame capture (33 ms for 30 FPS).</li>
+</ul>
+<p><strong>Example</strong>: A balance controller that works in 1 ms simulation steps fails on a real robot where sensor-to-actuator delay is 50 ms.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-the-sim-to-real-gap-matters">Why the Sim-to-Real Gap Matters<a href="#why-the-sim-to-real-gap-matters" class="hash-link" aria-label="Direct link to Why the Sim-to-Real Gap Matters" title="Direct link to Why the Sim-to-Real Gap Matters" translate="no">​</a></h2>
+<p>Not all tasks are equally sensitive to the sim-to-real gap.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="high-sensitivity-critical-gap">High Sensitivity (Critical Gap)<a href="#high-sensitivity-critical-gap" class="hash-link" aria-label="Direct link to High Sensitivity (Critical Gap)" title="Direct link to High Sensitivity (Critical Gap)" translate="no">​</a></h3>
+<p><strong>Bipedal locomotion</strong>: Walking requires precise contact dynamics. Small friction errors cause slipping; small timing errors cause falls.</p>
+<p><strong>Grasping</strong>: Contact forces, finger compliance, and object slip are hard to model. Simulated grasps often fail in reality.</p>
+<p><strong>Dynamic manipulation</strong>: Tasks involving impacts (hammering, throwing) depend on accurate inertia and contact models.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="moderate-sensitivity">Moderate Sensitivity<a href="#moderate-sensitivity" class="hash-link" aria-label="Direct link to Moderate Sensitivity" title="Direct link to Moderate Sensitivity" translate="no">​</a></h3>
+<p><strong>Navigation</strong>: Path planning is robust to minor physics errors, but dynamic obstacle avoidance requires accurate sensor models.</p>
+<p><strong>Perception</strong>: Object detection tolerates small rendering differences but fails if training data lacks real-world visual diversity (lighting, occlusion).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="low-sensitivity-minimal-gap">Low Sensitivity (Minimal Gap)<a href="#low-sensitivity-minimal-gap" class="hash-link" aria-label="Direct link to Low Sensitivity (Minimal Gap)" title="Direct link to Low Sensitivity (Minimal Gap)" translate="no">​</a></h3>
+<p><strong>High-level planning</strong>: Task planning (symbolic reasoning) doesn&#x27;t depend on low-level physics.</p>
+<p><strong>Kinematic motion</strong>: Reaching without contact is purely geometric—physics gaps don&#x27;t affect it.</p>
+<p><strong>Takeaway</strong>: The more a task involves <strong>contact</strong>, <strong>dynamics</strong>, or <strong>real-time feedback</strong>, the more critical sim-to-real transfer becomes.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="strategy-1-domain-randomization">Strategy 1: Domain Randomization<a href="#strategy-1-domain-randomization" class="hash-link" aria-label="Direct link to Strategy 1: Domain Randomization" title="Direct link to Strategy 1: Domain Randomization" translate="no">​</a></h2>
+<p><strong>Idea</strong>: If you can&#x27;t perfectly model reality, train on a <em>wide variety</em> of simulated conditions. The policy learns to be robust to variations, including reality&#x27;s imperfections.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-domain-randomization-works">How Domain Randomization Works<a href="#how-domain-randomization-works" class="hash-link" aria-label="Direct link to How Domain Randomization Works" title="Direct link to How Domain Randomization Works" translate="no">​</a></h3>
+<p>Instead of training on a single simulation configuration:</p>
+<ol>
+<li class=""><strong>Randomize physical parameters</strong>: Vary friction (±30%), mass (±20%), joint damping (±50%).</li>
+<li class=""><strong>Randomize sensor properties</strong>: Add noise to cameras, IMU, force sensors.</li>
+<li class=""><strong>Randomize environments</strong>: Change lighting, object positions, terrain roughness.</li>
+<li class=""><strong>Train policies</strong>: Neural network learns features that work <em>across all variations</em>.</li>
+</ol>
+<p><strong>Hypothesis</strong>: If the policy works for friction = 0.5, 0.8, and 1.2, it&#x27;s likely to work for real-world friction (unknown but within that range).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-bipedal-walking-with-domain-randomization">Example: Bipedal Walking with Domain Randomization<a href="#example-bipedal-walking-with-domain-randomization" class="hash-link" aria-label="Direct link to Example: Bipedal Walking with Domain Randomization" title="Direct link to Example: Bipedal Walking with Domain Randomization" translate="no">​</a></h3>
+<p><strong>Standard Training</strong> (No Randomization):</p>
+<ul>
+<li class="">Friction: 0.8 (fixed)</li>
+<li class="">Result: Controller walks perfectly in simulation, falls on real robot (friction = 0.6).</li>
+</ul>
+<p><strong>Domain Randomization</strong>:</p>
+<ul>
+<li class="">Friction: Uniform random [0.5, 1.1]</li>
+<li class="">Mass: Uniform random ±15% of nominal</li>
+<li class="">Joint damping: Uniform random [0.1, 2.0]</li>
+<li class="">Training: 1 million steps across randomized environments</li>
+<li class=""><strong>Result</strong>: Controller learns conservative foot placement and adapts to friction variations. Works on real robot.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-to-randomize">What to Randomize?<a href="#what-to-randomize" class="hash-link" aria-label="Direct link to What to Randomize?" title="Direct link to What to Randomize?" translate="no">​</a></h3>
+<table><thead><tr><th>Parameter</th><th>Variation Range</th><th>Impact</th></tr></thead><tbody><tr><td><strong>Ground friction</strong></td><td>±30%</td><td>High (walking, manipulation)</td></tr><tr><td><strong>Link mass</strong></td><td>±20%</td><td>High (dynamics, balance)</td></tr><tr><td><strong>Joint damping</strong></td><td>±50%</td><td>Medium (control smoothness)</td></tr><tr><td><strong>Camera noise</strong></td><td>0-5% pixel noise</td><td>High (perception)</td></tr><tr><td><strong>Lighting</strong></td><td>500-5000 lux</td><td>High (vision)</td></tr><tr><td><strong>Actuator delay</strong></td><td>0-50 ms</td><td>High (control)</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="limitations">Limitations<a href="#limitations" class="hash-link" aria-label="Direct link to Limitations" title="Direct link to Limitations" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Training time</strong>: Randomization increases episode diversity, requiring more training steps.</li>
+<li class=""><strong>Over-conservatism</strong>: Policies trained on extreme variations may be overly cautious (slower, less efficient).</li>
+<li class=""><strong>Unknown unknowns</strong>: You can&#x27;t randomize parameters you don&#x27;t know matter.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="strategy-2-system-identification">Strategy 2: System Identification<a href="#strategy-2-system-identification" class="hash-link" aria-label="Direct link to Strategy 2: System Identification" title="Direct link to Strategy 2: System Identification" translate="no">​</a></h2>
+<p><strong>Idea</strong>: Measure the <em>real</em> robot&#x27;s parameters and update the simulator to match.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="process">Process<a href="#process" class="hash-link" aria-label="Direct link to Process" title="Direct link to Process" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Select parameters</strong>: Identify critical unknowns (e.g., joint friction, link inertias).</li>
+<li class=""><strong>Design experiments</strong>: Collect data on real robot (e.g., drop tests for inertia, joint sweep for friction).</li>
+<li class=""><strong>Estimate parameters</strong>: Use optimization or learning algorithms to fit simulation parameters to real data.</li>
+<li class=""><strong>Update simulator</strong>: Retrain policies with calibrated simulation.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-actuator-identification">Example: Actuator Identification<a href="#example-actuator-identification" class="hash-link" aria-label="Direct link to Example: Actuator Identification" title="Direct link to Example: Actuator Identification" translate="no">​</a></h3>
+<p><strong>Problem</strong>: Simulated motors respond instantly; real motors have delays and compliance.</p>
+<p><strong>Experiment</strong>:</p>
+<ol>
+<li class="">Command joint to move from 0° to 90° at max speed.</li>
+<li class="">Record actual joint angle over time.</li>
+<li class="">Fit a second-order dynamic model: <code>τ = k_p * (θ_desired - θ_actual) + k_d * (ω_desired - ω_actual)</code>.</li>
+<li class="">Update Gazebo plugin with identified <code>k_p</code>, <code>k_d</code> parameters.</li>
+</ol>
+<p><strong>Result</strong>: Simulated and real motor responses match closely, improving controller transfer.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="when-to-use-system-identification">When to Use System Identification<a href="#when-to-use-system-identification" class="hash-link" aria-label="Direct link to When to Use System Identification" title="Direct link to When to Use System Identification" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Early development</strong>: Invest time upfront to improve simulation accuracy.</li>
+<li class=""><strong>Known unknowns</strong>: You suspect specific parameters are wrong (e.g., friction, mass).</li>
+<li class=""><strong>Performance-critical tasks</strong>: Bipedal walking, precise manipulation.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="limitations-1">Limitations<a href="#limitations-1" class="hash-link" aria-label="Direct link to Limitations" title="Direct link to Limitations" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Time-consuming</strong>: Requires access to physical hardware for experiments.</li>
+<li class=""><strong>Partial modeling</strong>: Even with identification, some phenomena (e.g., stick-slip friction) are hard to model.</li>
+<li class=""><strong>Hardware wear</strong>: Parameters change over time (bearing wear, belt stretch).</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="strategy-3-sim-to-real-transfer-learning">Strategy 3: Sim-to-Real Transfer Learning<a href="#strategy-3-sim-to-real-transfer-learning" class="hash-link" aria-label="Direct link to Strategy 3: Sim-to-Real Transfer Learning" title="Direct link to Strategy 3: Sim-to-Real Transfer Learning" translate="no">​</a></h2>
+<p><strong>Idea</strong>: Train initially in simulation, then fine-tune with a small amount of real-world data.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="workflow">Workflow<a href="#workflow" class="hash-link" aria-label="Direct link to Workflow" title="Direct link to Workflow" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Pre-train in simulation</strong>: Use domain randomization to train a robust policy (e.g., 1 million steps).</li>
+<li class=""><strong>Initial deployment</strong>: Test policy on real robot. It performs reasonably but not optimally.</li>
+<li class=""><strong>Collect real data</strong>: Run robot for 100-500 episodes, logging sensor data, actions, outcomes.</li>
+<li class=""><strong>Fine-tune</strong>: Update policy using real data (reinforcement learning, supervised learning).</li>
+<li class=""><strong>Re-deploy</strong>: Policy now adapted to real-world conditions.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-grasping-objects">Example: Grasping Objects<a href="#example-grasping-objects" class="hash-link" aria-label="Direct link to Example: Grasping Objects" title="Direct link to Example: Grasping Objects" translate="no">​</a></h3>
+<p><strong>Simulation Pre-training</strong>:</p>
+<ul>
+<li class="">Train grasp policy in Unity with randomized object shapes, weights, friction.</li>
+<li class="">Policy learns to adjust grip force based on object appearance.</li>
+</ul>
+<p><strong>Real-World Fine-Tuning</strong>:</p>
+<ul>
+<li class="">Deploy on robot: 70% grasp success rate.</li>
+<li class="">Collect 200 real grasp attempts (successes and failures).</li>
+<li class="">Fine-tune neural network on real data (supervised learning: input = image, output = grip force).</li>
+<li class=""><strong>Result</strong>: Grasp success rate improves to 90%.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="advantages">Advantages<a href="#advantages" class="hash-link" aria-label="Direct link to Advantages" title="Direct link to Advantages" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Sample efficiency</strong>: Requires only 100-1000 real trials (vs. training from scratch: 10,000+).</li>
+<li class=""><strong>Adaptation</strong>: Captures real-world nuances impossible to simulate.</li>
+<li class=""><strong>Safety</strong>: Most learning happens in simulation (safe); real-world phase is controlled.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="challenges">Challenges<a href="#challenges" class="hash-link" aria-label="Direct link to Challenges" title="Direct link to Challenges" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Catastrophic forgetting</strong>: Fine-tuning may degrade performance on other tasks.</li>
+<li class=""><strong>Data collection</strong>: Real trials are slow and require human supervision.</li>
+<li class=""><strong>Safety</strong>: Initial policy must be safe enough to collect data (no self-destructive behaviors).</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="strategy-4-reality-augmented-simulation">Strategy 4: Reality-Augmented Simulation<a href="#strategy-4-reality-augmented-simulation" class="hash-link" aria-label="Direct link to Strategy 4: Reality-Augmented Simulation" title="Direct link to Strategy 4: Reality-Augmented Simulation" translate="no">​</a></h2>
+<p><strong>Idea</strong>: Use real sensor data in simulation (hybrid approach).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="approach">Approach<a href="#approach" class="hash-link" aria-label="Direct link to Approach" title="Direct link to Approach" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Record real sensor data</strong>: Collect camera images, IMU data, LiDAR scans from real robot.</li>
+<li class=""><strong>Replay in simulation</strong>: Feed real sensor data to simulated controller.</li>
+<li class=""><strong>Compare outputs</strong>: Simulated robot&#x27;s actions vs. real robot&#x27;s actions.</li>
+<li class=""><strong>Tune parameters</strong>: Adjust simulation until responses match.</li>
+</ol>
+<p><strong>Use Case</strong>: Validate perception pipelines. Use real camera images in Gazebo to test if object detectors produce same outputs in simulation and reality.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="hybrid-strategies-combining-approaches">Hybrid Strategies: Combining Approaches<a href="#hybrid-strategies-combining-approaches" class="hash-link" aria-label="Direct link to Hybrid Strategies: Combining Approaches" title="Direct link to Hybrid Strategies: Combining Approaches" translate="no">​</a></h2>
+<p><strong>Best Practice</strong>: Use multiple strategies together.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-workflow-for-humanoid-walking">Example Workflow for Humanoid Walking<a href="#example-workflow-for-humanoid-walking" class="hash-link" aria-label="Direct link to Example Workflow for Humanoid Walking" title="Direct link to Example Workflow for Humanoid Walking" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p><strong>System Identification</strong> (Week 1):</p>
+<ul>
+<li class="">Measure real robot&#x27;s joint friction, link masses.</li>
+<li class="">Update Gazebo model.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Domain Randomization</strong> (Weeks 2-3):</p>
+<ul>
+<li class="">Train walking policy in Gazebo with ±20% friction variation, ±15% mass variation.</li>
+<li class="">Result: Robust policy with 85% success rate in randomized simulations.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Initial Deployment</strong> (Week 4):</p>
+<ul>
+<li class="">Test on real robot: 60% success rate (better than no randomization but not perfect).</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Transfer Learning</strong> (Week 5):</p>
+<ul>
+<li class="">Collect 200 real walking trials.</li>
+<li class="">Fine-tune policy on real data.</li>
+<li class=""><strong>Final result</strong>: 90% success rate on real robot.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="when-sim-to-real-transfer-fails">When Sim-to-Real Transfer Fails<a href="#when-sim-to-real-transfer-fails" class="hash-link" aria-label="Direct link to When Sim-to-Real Transfer Fails" title="Direct link to When Sim-to-Real Transfer Fails" translate="no">​</a></h2>
+<p>Even with best practices, some tasks remain challenging:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-deformable-objects">1. Deformable Objects<a href="#1-deformable-objects" class="hash-link" aria-label="Direct link to 1. Deformable Objects" title="Direct link to 1. Deformable Objects" translate="no">​</a></h3>
+<p><strong>Problem</strong>: Grasping cloth, rubber, soft objects.
+<strong>Challenge</strong>: Simulating deformation requires expensive FEM (finite element method) solvers.
+<strong>Solution</strong>: Collect real-world data; use learning-based methods.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-human-interaction">2. Human Interaction<a href="#2-human-interaction" class="hash-link" aria-label="Direct link to 2. Human Interaction" title="Direct link to 2. Human Interaction" translate="no">​</a></h3>
+<p><strong>Problem</strong>: Humans are unpredictable and non-rigid.
+<strong>Challenge</strong>: No accurate human models exist for simulation.
+<strong>Solution</strong>: Use imitation learning (learn from human demonstrations).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-unforeseen-failures">3. Unforeseen Failures<a href="#3-unforeseen-failures" class="hash-link" aria-label="Direct link to 3. Unforeseen Failures" title="Direct link to 3. Unforeseen Failures" translate="no">​</a></h3>
+<p><strong>Problem</strong>: Real world has surprises (cable snags, sensor condensation, battery voltage drops).
+<strong>Challenge</strong>: Can&#x27;t simulate unknown unknowns.
+<strong>Solution</strong>: Extensive real-world testing, fault detection systems.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="evaluation-measuring-sim-to-real-success">Evaluation: Measuring Sim-to-Real Success<a href="#evaluation-measuring-sim-to-real-success" class="hash-link" aria-label="Direct link to Evaluation: Measuring Sim-to-Real Success" title="Direct link to Evaluation: Measuring Sim-to-Real Success" translate="no">​</a></h2>
+<p>How do you know if your transfer strategy worked?</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="metrics">Metrics<a href="#metrics" class="hash-link" aria-label="Direct link to Metrics" title="Direct link to Metrics" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Task Success Rate</strong>: Percentage of trials where robot completes task.<!-- -->
+<ul>
+<li class="">Example: Walking 5 meters without falling.</li>
+</ul>
+</li>
+<li class=""><strong>Trajectory Error</strong>: Difference between simulated and real trajectories.<!-- -->
+<ul>
+<li class="">Example: Joint angle RMSE between sim and real.</li>
+</ul>
+</li>
+<li class=""><strong>Sample Efficiency</strong>: Number of real-world trials needed for acceptable performance.<!-- -->
+<ul>
+<li class="">Fewer trials = better transfer.</li>
+</ul>
+</li>
+<li class=""><strong>Robustness</strong>: Performance under distribution shift (different floors, lighting, objects).</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="benchmarking">Benchmarking<a href="#benchmarking" class="hash-link" aria-label="Direct link to Benchmarking" title="Direct link to Benchmarking" translate="no">​</a></h3>
+<p>Compare your method to baselines:</p>
+<ul>
+<li class=""><strong>No transfer</strong> (train from scratch on real robot).</li>
+<li class=""><strong>No randomization</strong> (train in single simulation configuration).</li>
+<li class=""><strong>State-of-the-art</strong> (published sim-to-real methods).</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="summary">Summary<a href="#summary" class="hash-link" aria-label="Direct link to Summary" title="Direct link to Summary" translate="no">​</a></h2>
+<p>The <strong>simulation-to-real gap</strong> is the central challenge in using digital twins for robotics. Simulators approximate reality, but discrepancies in physics, sensors, and timing cause policies to fail when deployed on physical robots.</p>
+<p><strong>Key Strategies to Bridge the Gap</strong>:</p>
+<ol>
+<li class=""><strong>Domain Randomization</strong>: Train on diverse simulated conditions to learn robust policies.</li>
+<li class=""><strong>System Identification</strong>: Calibrate simulation parameters to match real hardware.</li>
+<li class=""><strong>Transfer Learning</strong>: Pre-train in simulation, fine-tune with limited real data.</li>
+<li class=""><strong>Hybrid Approaches</strong>: Combine strategies for best results.</li>
+</ol>
+<p><strong>When to Invest in Sim-to-Real</strong>:</p>
+<ul>
+<li class=""><strong>High-contact tasks</strong> (walking, grasping): Critical.</li>
+<li class=""><strong>Perception tasks</strong>: Important (synthetic data needs realism).</li>
+<li class=""><strong>High-level planning</strong>: Less critical (symbolic reasoning is robust).</li>
+</ul>
+<p>By applying these strategies, you can develop humanoid controllers and perception systems in simulation, then successfully deploy them on physical robots—dramatically accelerating development while minimizing hardware risk.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="looking-ahead">Looking Ahead<a href="#looking-ahead" class="hash-link" aria-label="Direct link to Looking Ahead" title="Direct link to Looking Ahead" translate="no">​</a></h2>
+<p>We&#x27;ve now covered the <strong>Digital Twin Module</strong> (Chapters 7-10):</p>
+<ul>
+<li class="">Chapter 7: Why simulation matters.</li>
+<li class="">Chapter 8: Gazebo for physics-based testing.</li>
+<li class="">Chapter 9: Unity for perception and HRI.</li>
+<li class="">Chapter 10: Bridging simulation and reality.</li>
+</ul>
+<p>In <strong>Module 3: NVIDIA Isaac</strong> (Chapters 11-14), we&#x27;ll explore GPU-accelerated simulation and AI-powered perception that further narrows the sim-to-real gap through massive-scale training and hardware optimization.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="further-reading">Further Reading<a href="#further-reading" class="hash-link" aria-label="Direct link to Further Reading" title="Direct link to Further Reading" translate="no">​</a></h2>
+<ul>
+<li class="">Zhao, W., et al. (2020). Sim-to-real transfer in deep reinforcement learning for robotics: A survey. <em>IEEE Symposium Series on Computational Intelligence</em>.</li>
+<li class="">Tobin, J., et al. (2017). Domain randomization for transferring deep neural networks from simulation to the real world. <em>IEEE/RSJ International Conference on Intelligent Robots and Systems</em>.</li>
+<li class="">Peng, X. B., et al. (2018). Sim-to-real transfer of robotic control with dynamics randomization. <em>IEEE International Conference on Robotics and Automation</em>.</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/SIBGHAT/Physical-AI-Humanoid-Robotics-Textbook/tree/main/docs/module-2-digital-twin/10-sim-to-real.mdx" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-2-digital-twin/09-unity"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">9. Unity Simulation</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/module-3-nvidia-isaac/11-intro-isaac"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">11. Introduction to Isaac</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#what-is-the-sim-to-real-gap" class="table-of-contents__link toc-highlight">What is the Sim-to-Real Gap?</a><ul><li><a href="#types-of-sim-to-real-gaps" class="table-of-contents__link toc-highlight">Types of Sim-to-Real Gaps</a></li></ul></li><li><a href="#why-the-sim-to-real-gap-matters" class="table-of-contents__link toc-highlight">Why the Sim-to-Real Gap Matters</a><ul><li><a href="#high-sensitivity-critical-gap" class="table-of-contents__link toc-highlight">High Sensitivity (Critical Gap)</a></li><li><a href="#moderate-sensitivity" class="table-of-contents__link toc-highlight">Moderate Sensitivity</a></li><li><a href="#low-sensitivity-minimal-gap" class="table-of-contents__link toc-highlight">Low Sensitivity (Minimal Gap)</a></li></ul></li><li><a href="#strategy-1-domain-randomization" class="table-of-contents__link toc-highlight">Strategy 1: Domain Randomization</a><ul><li><a href="#how-domain-randomization-works" class="table-of-contents__link toc-highlight">How Domain Randomization Works</a></li><li><a href="#example-bipedal-walking-with-domain-randomization" class="table-of-contents__link toc-highlight">Example: Bipedal Walking with Domain Randomization</a></li><li><a href="#what-to-randomize" class="table-of-contents__link toc-highlight">What to Randomize?</a></li><li><a href="#limitations" class="table-of-contents__link toc-highlight">Limitations</a></li></ul></li><li><a href="#strategy-2-system-identification" class="table-of-contents__link toc-highlight">Strategy 2: System Identification</a><ul><li><a href="#process" class="table-of-contents__link toc-highlight">Process</a></li><li><a href="#example-actuator-identification" class="table-of-contents__link toc-highlight">Example: Actuator Identification</a></li><li><a href="#when-to-use-system-identification" class="table-of-contents__link toc-highlight">When to Use System Identification</a></li><li><a href="#limitations-1" class="table-of-contents__link toc-highlight">Limitations</a></li></ul></li><li><a href="#strategy-3-sim-to-real-transfer-learning" class="table-of-contents__link toc-highlight">Strategy 3: Sim-to-Real Transfer Learning</a><ul><li><a href="#workflow" class="table-of-contents__link toc-highlight">Workflow</a></li><li><a href="#example-grasping-objects" class="table-of-contents__link toc-highlight">Example: Grasping Objects</a></li><li><a href="#advantages" class="table-of-contents__link toc-highlight">Advantages</a></li><li><a href="#challenges" class="table-of-contents__link toc-highlight">Challenges</a></li></ul></li><li><a href="#strategy-4-reality-augmented-simulation" class="table-of-contents__link toc-highlight">Strategy 4: Reality-Augmented Simulation</a><ul><li><a href="#approach" class="table-of-contents__link toc-highlight">Approach</a></li></ul></li><li><a href="#hybrid-strategies-combining-approaches" class="table-of-contents__link toc-highlight">Hybrid Strategies: Combining Approaches</a><ul><li><a href="#example-workflow-for-humanoid-walking" class="table-of-contents__link toc-highlight">Example Workflow for Humanoid Walking</a></li></ul></li><li><a href="#when-sim-to-real-transfer-fails" class="table-of-contents__link toc-highlight">When Sim-to-Real Transfer Fails</a><ul><li><a href="#1-deformable-objects" class="table-of-contents__link toc-highlight">1. Deformable Objects</a></li><li><a href="#2-human-interaction" class="table-of-contents__link toc-highlight">2. Human Interaction</a></li><li><a href="#3-unforeseen-failures" class="table-of-contents__link toc-highlight">3. Unforeseen Failures</a></li></ul></li><li><a href="#evaluation-measuring-sim-to-real-success" class="table-of-contents__link toc-highlight">Evaluation: Measuring Sim-to-Real Success</a><ul><li><a href="#metrics" class="table-of-contents__link toc-highlight">Metrics</a></li><li><a href="#benchmarking" class="table-of-contents__link toc-highlight">Benchmarking</a></li></ul></li><li><a href="#summary" class="table-of-contents__link toc-highlight">Summary</a></li><li><a href="#looking-ahead" class="table-of-contents__link toc-highlight">Looking Ahead</a></li><li><a href="#further-reading" class="table-of-contents__link toc-highlight">Further Reading</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Textbook</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01/intro">Getting Started</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/SIBGHAT/Physical-AI-Humanoid-Robotics-Textbook" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Physical AI & Humanoid Robotics Textbook. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
