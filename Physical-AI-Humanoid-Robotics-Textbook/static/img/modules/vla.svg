@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- VLA icon: eye + brain + hand (vision-language-action) -->
+
+  <!-- Vision (Eye) - top left -->
+  <g id="vision">
+    <ellipse cx="25" cy="30" rx="12" ry="8" fill="#00CED1" stroke="#000000" stroke-width="2"/>
+    <circle cx="25" cy="30" r="5" fill="#000000"/>
+    <circle cx="27" cy="28" r="2" fill="#FFFFFF"/>
+  </g>
+
+  <!-- Language (Brain/Neural Network) - top right -->
+  <g id="language">
+    <circle cx="75" cy="30" r="12" fill="#FFD700" stroke="#000000" stroke-width="2"/>
+    <!-- Neural connections inside brain -->
+    <circle cx="70" cy="27" r="2" fill="#000000"/>
+    <circle cx="80" cy="27" r="2" fill="#000000"/>
+    <circle cx="75" cy="33" r="2" fill="#000000"/>
+    <line x1="70" y1="27" x2="75" y2="33" stroke="#000000" stroke-width="1"/>
+    <line x1="80" y1="27" x2="75" y2="33" stroke="#000000" stroke-width="1"/>
+  </g>
+
+  <!-- Action (Robot Hand/Gripper) - bottom center -->
+  <g id="action">
+    <!-- Palm -->
+    <rect x="40" y="60" width="20" height="25" rx="3" fill="#C0C0C0" stroke="#000000" stroke-width="2"/>
+    <!-- Fingers -->
+    <rect x="38" y="55" width="4" height="10" rx="1" fill="#C0C0C0" stroke="#000000" stroke-width="1"/>
+    <rect x="44" y="52" width="4" height="13" rx="1" fill="#C0C0C0" stroke="#000000" stroke-width="1"/>
+    <rect x="52" y="52" width="4" height="13" rx="1" fill="#C0C0C0" stroke="#000000" stroke-width="1"/>
+    <rect x="58" y="55" width="4" height="10" rx="1" fill="#C0C0C0" stroke="#000000" stroke-width="1"/>
+  </g>
+
+  <!-- Connection arrows: Vision → Language → Action -->
+  <path d="M 35 32 L 65 32" stroke="#00CED1" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 72 42 L 55 55" stroke="#FFD700" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0,0 8,4 0,8" fill="#000000"/>
+    </marker>
+  </defs>
+</svg>

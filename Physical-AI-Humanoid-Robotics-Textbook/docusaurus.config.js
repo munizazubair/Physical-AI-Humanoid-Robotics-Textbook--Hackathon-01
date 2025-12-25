@@ -7,9 +7,9 @@ const darkCodeTheme = themes.dracula;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Physical AI & Humanoid Robotics',
-  tagline: 'A comprehensive guide to Physical AI, ROS 2, Digital Twins, NVIDIA Isaac, and Vision-Language-Action systems',
-  favicon: 'img/favicon.ico',
+  title: 'RoboTextbook',
+  tagline: 'Master Physical AI, ROS 2, Digital Twins, and Vision-Language-Action Robotics',
+  favicon: 'img/robot-logo.svg',
 
   // Set the production url of your site here
   url: 'https://munizazubair.github.io',
@@ -60,13 +60,13 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/social-card.png',
+      image: 'img/robot-logo.svg',
       navbar: {
-        title: 'Physical AI & Humanoid Robotics',
+        title: 'RoboTextbook',
         logo: {
-          alt: 'Physical AI Logo',
-          src: 'img/logo.svg',
-          href: '/intro',
+          alt: 'RoboTextbook Robot Logo',
+          src: 'img/robot-logo.svg',
+          href: '/',
         },
         items: [
           {
@@ -76,7 +76,7 @@ const config = {
             label: 'Book',
           },
           {
-            href: 'https://github.com/SIBGHAT/Physical-AI-Humanoid-Robotics-Textbook',
+            href: 'https://github.com/munizazubair/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01',
             label: 'GitHub',
             position: 'right',
           },
@@ -104,7 +104,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Humanoid Robotics Textbook. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} RoboTextbook. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,

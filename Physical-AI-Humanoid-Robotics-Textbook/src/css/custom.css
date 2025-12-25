@@ -1,30 +1,339 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * RoboTextbook Custom Styles
+ * Black/Yellow theme with futuristic typography for educational robotics
  */
 
-/* You can override the default Infima variables here. */
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700;800&family=Inter:wght@400;500;600&display=swap');
+
+/* ========================================
+   ROOT VARIABLES - RoboTextbook Theme
+   ======================================== */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* Primary Theme Colors */
+  --color-black: #000000;
+  --color-yellow: #FFD700;
+  --color-gray: #C0C0C0;
+  --color-cyan: #00CED1;
+  --color-white: #FFFFFF;
+
+  /* Gradients */
+  --gradient-hero: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  --gradient-cta: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
+
+  /* Typography */
+  --font-primary: 'Exo 2', 'Orbitron', 'Roboto', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+
+  /* Shadows */
+  --shadow-card: 0 4px 20px rgba(255, 215, 0, 0.2);
+  --shadow-hover: 0 8px 30px rgba(255, 215, 0, 0.4);
+
+  /* Override Infima defaults */
+  --ifm-color-primary: #FFD700;
+  --ifm-color-primary-dark: #e6c200;
+  --ifm-color-primary-darker: #d9b800;
+  --ifm-color-primary-darkest: #b39700;
+  --ifm-color-primary-light: #ffdf33;
+  --ifm-color-primary-lighter: #ffe347;
+  --ifm-color-primary-lightest: #ffeb75;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-/* For readability improvements */
+/* ========================================
+   HERO SECTION
+   ======================================== */
+.hero {
+  background: var(--gradient-hero);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero__content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero__logo-container {
+  margin-bottom: 2rem;
+}
+
+.hero__logo {
+  width: 200px;
+  height: 200px;
+  filter: drop-shadow(0 0 30px rgba(0, 206, 209, 0.6));
+}
+
+.hero__logo--rotating {
+  animation: rotate360 20s linear infinite;
+}
+
+@keyframes rotate360 {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.hero__title {
+  font-family: var(--font-primary);
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--color-yellow);
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  margin: 1rem 0;
+}
+
+.hero__subtitle {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  color: var(--color-white);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+  color: var(--color-gray);
+  font-size: larger;
+}
+
+.hero__cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ========================================
+   FEATURE CARDS
+   ======================================== */
+.features {
+  background: #0a0a0a;
+  padding: 4rem 2rem;
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: var(--color-black);
+  border: 2px solid var(--color-yellow);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: block;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+  text-decoration: none;
+}
+
+.feature-card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feature-card__icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1rem;
+}
+
+.feature-card__title {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  color: var(--color-yellow);
+  margin-bottom: 0.5rem;
+}
+
+.feature-card__description {
+  color: var(--color-white);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-family: var(--font-body);
+}
+
+/* ========================================
+   CTA SECTION
+   ======================================== */
+.cta-section {
+  background: var(--gradient-cta);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.cta-section__content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-section__title {
+  font-family: var(--font-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 1rem;
+}
+
+.cta-section__subtitle {
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  color: var(--color-black);
+  margin-bottom: 2rem;
+}
+
+.cta-section__buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.footer-custom {
+  background: var(--color-black);
+  border-top: 2px solid var(--color-yellow);
+  padding: 2rem;
+  text-align: center;
+}
+
+.footer-custom__content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.footer-custom__copyright {
+  color: var(--color-gray);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-custom__links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-custom__links a {
+  color: var(--color-yellow);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-custom__links a:hover {
+  color: var(--color-cyan);
+}
+
+.footer-custom__separator {
+  color: var(--color-gray);
+}
+
+/* ========================================
+   BUTTON OVERRIDES
+   ======================================== */
+.button--primary {
+  background: var(--gradient-cta);
+  color: var(--color-black);
+  font-weight: 600;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.button--primary:hover {
+  background: var(--color-yellow);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.button--secondary {
+  background: transparent;
+  color: var(--color-yellow);
+  border: 2px solid var(--color-yellow);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.button--secondary:hover {
+  background: rgba(255, 215, 0, 0.1);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   RESPONSIVE BREAKPOINTS
+   ======================================== */
+@media (max-width: 996px) {
+  .features__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero__title {
+    font-size: 2.5rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1.2rem;
+  }
+
+  .hero__logo {
+    width: 150px;
+    height: 150px;
+  }
+
+  .hero__cta {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .features {
+    padding: 2rem 1rem;
+  }
+
+  .cta-section__title {
+    font-size: 2rem;
+  }
+
+  .cta-section__subtitle {
+    font-size: 1rem;
+  }
+
+  .cta-section__buttons {
+    flex-direction: column;
+  }
+}
+
+/* ========================================
+   DARK MODE OVERRIDES
+   ======================================== */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #FFD700;
+  --ifm-color-primary-dark: #e6c200;
+  --ifm-color-primary-darker: #d9b800;
+  --ifm-color-primary-darkest: #b39700;
+  --ifm-color-primary-light: #ffdf33;
+  --ifm-color-primary-lighter: #ffe347;
+  --ifm-color-primary-lightest: #ffeb75;
+  --docusaurus-highlighted-code-line-bg: rgba(255, 215, 0, 0.1);
 }
