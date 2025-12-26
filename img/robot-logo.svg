@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background circle - Black -->
+  <circle cx="100" cy="100" r="90" fill="#000000" stroke="#FFD700" stroke-width="3"/>
+
+  <!-- Yellow accent panels (left and right) -->
+  <path d="M 30 100 Q 30 60, 60 50 L 60 150 Q 30 140, 30 100 Z" fill="#FFD700"/>
+  <path d="M 170 100 Q 170 60, 140 50 L 140 150 Q 170 140, 170 100 Z" fill="#FFD700"/>
+
+  <!-- Top antenna -->
+  <line x1="100" y1="15" x2="100" y2="35" stroke="#FFD700" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="100" cy="12" r="6" fill="#00CED1"/>
+
+  <!-- Robot face panel - darker center -->
+  <rect x="50" y="60" width="100" height="80" rx="10" fill="#1a1a1a" stroke="#C0C0C0" stroke-width="2"/>
+
+  <!-- Left eye - metallic gray with cyan glow -->
+  <circle cx="75" cy="85" r="16" fill="#C0C0C0"/>
+  <circle cx="75" cy="85" r="10" fill="#00CED1"/>
+  <circle cx="78" cy="82" r="4" fill="#FFFFFF" opacity="0.8"/>
+
+  <!-- Right eye - metallic gray with cyan glow -->
+  <circle cx="125" cy="85" r="16" fill="#C0C0C0"/>
+  <circle cx="125" cy="85" r="10" fill="#00CED1"/>
+  <circle cx="128" cy="82" r="4" fill="#FFFFFF" opacity="0.8"/>
+
+  <!-- Friendly smile - yellow line -->
+  <path d="M 70 110 Q 100 125, 130 110" stroke="#FFD700" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <!-- Decorative bolts on corners -->
+  <circle cx="55" cy="65" r="3" fill="#C0C0C0"/>
+  <circle cx="145" cy="65" r="3" fill="#C0C0C0"/>
+  <circle cx="55" cy="135" r="3" fill="#C0C0C0"/>
+  <circle cx="145" cy="135" r="3" fill="#C0C0C0"/>
+
+  <!-- Panel lines for tech detail -->
+  <line x1="50" y1="100" x2="150" y2="100" stroke="#C0C0C0" stroke-width="1" opacity="0.5"/>
+  <line x1="100" y1="60" x2="100" y2="140" stroke="#C0C0C0" stroke-width="1" opacity="0.5"/>
+
+  <!-- Bottom accent - small yellow strip -->
+  <rect x="85" y="155" width="30" height="8" rx="2" fill="#FFD700"/>
+  <circle cx="90" cy="159" r="2" fill="#00CED1"/>
+  <circle cx="110" cy="159" r="2" fill="#00CED1"/>
+</svg>

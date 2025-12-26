@@ -1,0 +1,7 @@
+<!-- Note: This is a placeholder. A proper 1200x630px PNG social card should be created with:
+- Robot logo
+- "RoboTextbook" title in Exo 2
+- Tagline: "Master Physical AI, ROS 2, Digital Twins, and Vision-Language-Action Robotics"
+- Black/yellow gradient background
+Use a tool like Canva, Figma, or ImageMagick to generate from the SVG assets.
+For now, we'll use the robot logo as a temporary fallback in docusaurus.config.js -->
