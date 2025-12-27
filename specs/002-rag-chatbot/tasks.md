@@ -530,7 +530,7 @@
 
 ### T024: Unit Tests for US1 Services
 
-- [ ] T024 [P] [US1] Write unit tests for QdrantService, GeminiService, RAGService
+- [X] T024 [P] [US1] Write unit tests for QdrantService, GeminiService, RAGService
 
 **Scope**:
 - Create unit tests for each service class
@@ -557,7 +557,7 @@
 
 ### T025: Implement Conversation Retrieval Endpoint
 
-- [ ] T025 [P] [US2] Create GET /api/conversation/history endpoint
+- [X] T025 [P] [US2] Create GET /api/conversation/history endpoint
 
 **Scope**:
 - Create endpoint to retrieve conversation history for a session
@@ -579,7 +579,7 @@
 
 ### T026: Update RAG Service for Context Window
 
-- [ ] T026 [US2] Update RAGService to include conversation context in prompts
+- [X] T026 [US2] Update RAGService to include conversation context in prompts
 
 **Scope**:
 - Modify process_question to retrieve last 20 messages
@@ -602,7 +602,7 @@
 
 ### T027: Implement New Conversation Feature
 
-- [ ] T027 [P] [US2] Create POST /api/conversation/new endpoint
+- [X] T027 [P] [US2] Create POST /api/conversation/new endpoint
 
 **Scope**:
 - Create endpoint to start a new conversation
@@ -624,7 +624,7 @@
 
 ### T028: Update Frontend for History Display
 
-- [ ] T028 [P] [US2] Update ChatWidget to load and display conversation history
+- [X] T028 [P] [US2] Update ChatWidget to load and display conversation history
 
 **Scope**:
 - Call GET /api/conversation/history on widget load
@@ -646,7 +646,7 @@
 
 ### T029: Implement Conversation Titles
 
-- [ ] T029 [P] [US2] Auto-generate conversation titles from first user question
+- [X] T029 [P] [US2] Auto-generate conversation titles from first user question
 
 **Scope**:
 - Extract first 50 characters of first question as title
@@ -666,7 +666,7 @@
 
 ### T030: Frontend "New Conversation" Button
 
-- [ ] T030 [P] [US2] Add "New Conversation" button to chat widget
+- [X] T030 [P] [US2] Add "New Conversation" button to chat widget
 
 **Scope**:
 - Add button to chat widget header
@@ -688,7 +688,7 @@
 
 ### T031: Integration Test for Conversation History
 
-- [ ] T031 [US2] Create integration test for conversation history flow
+- [X] T031 [US2] Create integration test for conversation history flow
 
 **Scope**:
 - Test multi-turn conversation with context

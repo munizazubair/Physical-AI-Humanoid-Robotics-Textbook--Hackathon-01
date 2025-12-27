@@ -143,6 +143,56 @@ const fetchWithRetry = async (url, options, maxRetries = 3, retryDelay = 1000) =
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
+ * Load conversation history for a session
+ *
+ * @param {string} sessionId - Session ID to load history for
+ * @param {string|null} conversationId - Optional conversation ID to filter by
+ * @returns {Promise<Object>} History object with messages array
+ */
+export const loadConversationHistory = async (sessionId, conversationId = null) => {
+  if (!sessionId) {
+    return { messages: [], total_messages: 0 };
+  }
+
+  try {
+    const url = new URL(`${API_BASE_URL}/api/conversation/history`);
+    url.searchParams.append('session_id', sessionId);
+    if (conversationId) {
+      url.searchParams.append('conversation_id', conversationId);
+    }
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new ChatApiError(
+        errorData.detail || `HTTP ${response.status}: ${response.statusText}`,
+        response.status,
+        errorData
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    if (error instanceof ChatApiError) {
+      throw error;
+    }
+
+    throw new ChatApiError(
+      `Unable to load conversation history: ${error.message}`,
+      0,
+      { originalError: error.message }
+    );
+  }
+};
+
+/**
  * Check API health status
  *
  * @returns {Promise<Object>} Health status object
@@ -229,8 +279,59 @@ export class ChatApiError extends Error {
   }
 }
 
+/**
+ * Create a new conversation for a session
+ *
+ * @param {string} sessionId - Session ID to create conversation for
+ * @returns {Promise<Object>} New conversation details
+ */
+export const createNewConversation = async (sessionId) => {
+  if (!sessionId) {
+    throw new ChatApiError('Session ID is required', 400);
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/conversation/new`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({ session_id: sessionId }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new ChatApiError(
+        errorData.detail || `HTTP ${response.status}: ${response.statusText}`,
+        response.status,
+        errorData
+      );
+    }
+
+    const data = await response.json();
+    return {
+      conversationId: data.conversation_id,
+      sessionId: data.session_id,
+      createdAt: data.created_at,
+    };
+  } catch (error) {
+    if (error instanceof ChatApiError) {
+      throw error;
+    }
+
+    throw new ChatApiError(
+      `Unable to create new conversation: ${error.message}`,
+      0,
+      { originalError: error.message }
+    );
+  }
+};
+
 export default {
   sendMessage,
+  loadConversationHistory,
+  createNewConversation,
   checkHealth,
   ChatApiError,
 };
