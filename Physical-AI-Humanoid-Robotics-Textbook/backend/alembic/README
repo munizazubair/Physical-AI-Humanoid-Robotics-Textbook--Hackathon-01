@@ -1,0 +1,39 @@
+Generic single-database configuration with async support.
+
+## Usage
+
+### Create a new migration
+
+```bash
+cd backend
+alembic revision --autogenerate -m "description of changes"
+```
+
+### Apply migrations
+
+```bash
+cd backend
+alembic upgrade head
+```
+
+### Rollback migrations
+
+```bash
+cd backend
+alembic downgrade -1  # Rollback one migration
+alembic downgrade base  # Rollback all migrations
+```
+
+### View migration history
+
+```bash
+cd backend
+alembic history
+alembic current
+```
+
+## Notes
+
+- All models must be imported in `alembic/env.py` for autogenerate to detect them
+- Database URL is loaded from environment variable (DATABASE_URL)
+- Migrations use async SQLAlchemy for compatibility with FastAPI async patterns
