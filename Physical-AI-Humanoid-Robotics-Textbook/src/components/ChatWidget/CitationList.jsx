@@ -13,6 +13,36 @@ const CitationList = ({ citations }) => {
   }
 
   /**
+   * Get icon for content type
+   */
+  const getContentTypeIcon = (contentType) => {
+    switch (contentType) {
+      case 'code':
+        return '💻';
+      case 'diagram':
+        return '📊';
+      case 'text':
+      default:
+        return '📄';
+    }
+  };
+
+  /**
+   * Get tooltip text for content type
+   */
+  const getContentTypeTooltip = (contentType) => {
+    switch (contentType) {
+      case 'code':
+        return 'Code Example';
+      case 'diagram':
+        return 'Diagram/Figure';
+      case 'text':
+      default:
+        return 'Text Content';
+    }
+  };
+
+  /**
    * Parse citation text to extract chapter and section
    * Expected format: "[Chapter X, Section Y]" or "[Chapter X]"
    */
@@ -58,11 +88,22 @@ const CitationList = ({ citations }) => {
       </div>
       <ul className={styles.citations}>
         {citations.map((citation, index) => {
-          const citationText = typeof citation === 'string' ? citation : citation.reference;
+          const citationText = typeof citation === 'string' ? citation : citation.text || citation.reference;
+          const contentType = typeof citation === 'object' ? citation.content_type : 'text';
           const link = generateLink(citation);
+          const icon = getContentTypeIcon(contentType);
+          const tooltip = getContentTypeTooltip(contentType);
 
           return (
             <li key={index} className={styles.citationItem}>
+              <span
+                className={styles.contentTypeIcon}
+                title={tooltip}
+                role="img"
+                aria-label={tooltip}
+              >
+                {icon}
+              </span>
               <a
                 href={link}
                 className={styles.citationLink}

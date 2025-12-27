@@ -97,12 +97,16 @@ class RAGService:
                     "is_off_topic": True
                 }
 
-            # Step 3: Generate response using Gemini with knowledge level
+            # Step 3: Categorize chunks by content type
+            content_type_groups = self._group_chunks_by_type(retrieved_chunks)
+
+            # Step 4: Generate response using Gemini with knowledge level and content types
             response_text = await self.gemini.generate_response(
                 question=question,
                 context_chunks=retrieved_chunks,
                 conversation_history=conversation_history,
-                knowledge_level=knowledge_level
+                knowledge_level=knowledge_level,
+                content_type_groups=content_type_groups
             )
 
             # Step 4: Extract and format citations
@@ -123,6 +127,45 @@ class RAGService:
                 "citations": [],
                 "is_off_topic": False
             }
+
+    def _group_chunks_by_type(
+        self,
+        retrieved_chunks: List[Dict[str, Any]]
+    ) -> Dict[str, List[Dict[str, Any]]]:
+        """
+        Group retrieved chunks by content type.
+
+        Args:
+            retrieved_chunks (List[Dict]): Chunks from Qdrant
+
+        Returns:
+            Dict[str, List[Dict]]: Chunks grouped by content type
+                {
+                    "text": [chunk1, chunk2, ...],
+                    "code": [chunk3, ...],
+                    "diagram": [chunk4, ...]
+                }
+        """
+        groups = {
+            "text": [],
+            "code": [],
+            "diagram": []
+        }
+
+        for chunk in retrieved_chunks:
+            content_type = chunk["metadata"].get("content_type", "text")
+            if content_type in groups:
+                groups[content_type].append(chunk)
+            else:
+                # Default unknown types to text
+                groups["text"].append(chunk)
+
+        logger.info(
+            f"Grouped chunks: {len(groups['text'])} text, "
+            f"{len(groups['code'])} code, {len(groups['diagram'])} diagrams"
+        )
+
+        return groups
 
     def _extract_citations(
         self,

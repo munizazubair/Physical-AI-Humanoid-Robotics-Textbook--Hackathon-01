@@ -867,7 +867,7 @@
 
 ### T039: Enhance Qdrant Metadata for Content Types
 
-- [ ] T039 [P] [US4] Verify and enhance Qdrant metadata to include content_type
+- [X] T039 [P] [US4] Verify and enhance Qdrant metadata to include content_type
 
 **Scope**:
 - Check existing Qdrant schema for content_type field
@@ -888,7 +888,7 @@
 
 ### T040: Implement Content Type Detection
 
-- [ ] T040 [P] [US4] Implement content type detection in RAG service
+- [X] T040 [P] [US4] Implement content type detection in RAG service
 
 **Scope**:
 - Parse content_type from Qdrant metadata
@@ -908,7 +908,7 @@
 
 ### T041: Update Gemini Prompts for Visual Content
 
-- [ ] T041 [US4] Update Gemini prompts to reference diagrams and code
+- [X] T041 [US4] Update Gemini prompts to reference diagrams and code
 
 **Scope**:
 - Modify prompt engineering to handle visual content
@@ -928,7 +928,7 @@
 
 ### T042: Enhanced Citation Display for Multi-Modal
 
-- [ ] T042 [P] [US4] Enhance citation display to show content type icons
+- [X] T042 [P] [US4] Enhance citation display to show content type icons
 
 **Scope**:
 - Update Citation component to show icons for content types
@@ -948,7 +948,7 @@
 
 ### T043: Integration Test for Multi-Modal Content
 
-- [ ] T043 [US4] Create integration test for multi-modal content retrieval
+- [X] T043 [US4] Create integration test for multi-modal content retrieval
 
 **Scope**:
 - Test questions that should return diagrams or code

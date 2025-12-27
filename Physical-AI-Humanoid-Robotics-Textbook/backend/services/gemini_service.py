@@ -74,7 +74,8 @@ class GeminiService:
         question: str,
         context_chunks: List[Dict[str, Any]],
         conversation_history: Optional[List[Dict[str, str]]] = None,
-        knowledge_level: KnowledgeLevel = KnowledgeLevel.BEGINNER
+        knowledge_level: KnowledgeLevel = KnowledgeLevel.BEGINNER,
+        content_type_groups: Optional[Dict[str, List[Dict[str, Any]]]] = None
     ) -> str:
         """
         Generate a response using Gemini API with retrieved context.
@@ -84,6 +85,7 @@ class GeminiService:
             context_chunks (List[Dict]): Retrieved textbook chunks with metadata
             conversation_history (List[Dict]): Previous messages for context
             knowledge_level (KnowledgeLevel): User's knowledge level for adaptive responses
+            content_type_groups (Dict): Chunks grouped by content type
 
         Returns:
             str: Generated response
@@ -92,8 +94,14 @@ class GeminiService:
             Exception: If generation fails
         """
         try:
-            # Build prompt with retrieved context and knowledge level
-            prompt = self._build_prompt(question, context_chunks, conversation_history, knowledge_level)
+            # Build prompt with retrieved context, knowledge level, and content types
+            prompt = self._build_prompt(
+                question,
+                context_chunks,
+                conversation_history,
+                knowledge_level,
+                content_type_groups
+            )
 
             # Generate response
             response = self.model.generate_content(prompt)
@@ -114,7 +122,8 @@ class GeminiService:
         question: str,
         context_chunks: List[Dict[str, Any]],
         conversation_history: Optional[List[Dict[str, str]]] = None,
-        knowledge_level: KnowledgeLevel = KnowledgeLevel.BEGINNER
+        knowledge_level: KnowledgeLevel = KnowledgeLevel.BEGINNER,
+        content_type_groups: Optional[Dict[str, List[Dict[str, Any]]]] = None
     ) -> str:
         """
         Build a prompt for Gemini API with context and history.
@@ -124,6 +133,7 @@ class GeminiService:
             context_chunks (List[Dict]): Retrieved textbook chunks
             conversation_history (List[Dict]): Previous conversation messages
             knowledge_level (KnowledgeLevel): User's knowledge level
+            content_type_groups (Dict): Chunks grouped by content type
 
         Returns:
             str: Formatted prompt
@@ -148,6 +158,21 @@ class GeminiService:
 - Focus on depth and technical accuracy"""
         }
 
+        # Multi-modal content instructions
+        content_type_instructions = ""
+        if content_type_groups:
+            has_code = len(content_type_groups.get("code", [])) > 0
+            has_diagrams = len(content_type_groups.get("diagram", [])) > 0
+
+            if has_code or has_diagrams:
+                content_type_instructions = "\n\nMulti-Modal Content Guidelines:\n"
+                if has_diagrams:
+                    content_type_instructions += "- When referencing diagrams, use: 'Refer to Figure X in [Chapter Y, Section Z]'\n"
+                    content_type_instructions += "- Explicitly mention diagram relevance in your explanation\n"
+                if has_code:
+                    content_type_instructions += "- When referencing code examples, use: 'See code example in [Chapter Y, Section Z]'\n"
+                    content_type_instructions += "- Explain what the code does in context of the question\n"
+
         # System instruction with adaptive complexity
         system_prompt = f"""You are a helpful AI assistant for the Physical AI & Humanoid Robotics textbook.
 
@@ -161,17 +186,30 @@ Your role:
 Important:
 - Always cite your sources using the format: [Chapter X, Section Y]
 - If multiple sections are relevant, cite all of them
-- Stay focused on Physical AI, humanoid robotics, and related topics
+- Stay focused on Physical AI, humanoid robotics, and related topics{content_type_instructions}
 
 Response Style (User Knowledge Level: {knowledge_level.value.upper()}):
 {level_instructions[knowledge_level]}
 """
 
-        # Format retrieved context
-        context_text = "\n\n".join([
-            f"[Chapter {chunk['metadata']['chapter']}, Section {chunk['metadata']['section']}]\n{chunk['content']}"
-            for chunk in context_chunks
-        ])
+        # Format retrieved context with content type labels
+        context_parts = []
+        for chunk in context_chunks:
+            metadata = chunk['metadata']
+            content_type = metadata.get('content_type', 'text')
+
+            # Add content type label
+            type_label = ""
+            if content_type == "code":
+                type_label = " [CODE EXAMPLE]"
+            elif content_type == "diagram":
+                type_label = " [DIAGRAM/FIGURE]"
+
+            context_parts.append(
+                f"[Chapter {metadata['chapter']}, Section {metadata['section']}]{type_label}\n{chunk['content']}"
+            )
+
+        context_text = "\n\n".join(context_parts)
 
         # Format conversation history
         history_text = ""
