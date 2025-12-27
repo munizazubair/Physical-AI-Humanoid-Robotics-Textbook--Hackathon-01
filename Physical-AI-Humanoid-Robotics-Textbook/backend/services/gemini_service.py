@@ -8,6 +8,7 @@ contextual responses based on retrieved textbook content.
 from typing import List, Dict, Any, Optional
 import google.generativeai as genai
 import logging
+import time
 
 from config import settings
 from models.user_profile import KnowledgeLevel
@@ -93,29 +94,43 @@ class GeminiService:
         Raises:
             Exception: If generation fails
         """
-        try:
-            # Build prompt with retrieved context, knowledge level, and content types
-            prompt = self._build_prompt(
-                question,
-                context_chunks,
-                conversation_history,
-                knowledge_level,
-                content_type_groups
-            )
+        # Retry with exponential backoff
+        max_retries = 2
+        base_delay = 1  # seconds
 
-            # Generate response
-            response = self.model.generate_content(prompt)
+        for attempt in range(max_retries + 1):
+            try:
+                # Build prompt with retrieved context, knowledge level, and content types
+                prompt = self._build_prompt(
+                    question,
+                    context_chunks,
+                    conversation_history,
+                    knowledge_level,
+                    content_type_groups
+                )
 
-            if response.text:
-                logger.info(f"Generated response for question: {question[:50]}...")
-                return response.text
-            else:
-                logger.warning("Gemini returned empty response")
-                return "I apologize, but I couldn't generate a response. Please try rephrasing your question."
+                # Generate response
+                response = self.model.generate_content(prompt)
 
-        except Exception as e:
-            logger.error(f"Gemini generation failed: {e}")
-            raise
+                if response.text:
+                    logger.info(f"Generated response for question: {question[:50]}... (attempt {attempt + 1})")
+                    return response.text
+                else:
+                    logger.warning("Gemini returned empty response")
+                    return "I apologize, but I couldn't generate a response. Please try rephrasing your question."
+
+            except Exception as e:
+                logger.error(f"Gemini generation failed (attempt {attempt + 1}/{max_retries + 1}): {e}")
+
+                # Check if this was the last attempt
+                if attempt == max_retries:
+                    logger.error("All Gemini retry attempts exhausted", exc_info=True)
+                    return "Response generation is temporarily unavailable. Please try again in a moment."
+
+                # Exponential backoff: wait before retrying
+                delay = base_delay * (2 ** attempt)
+                logger.info(f"Retrying after {delay} seconds...")
+                time.sleep(delay)
 
     def _build_prompt(
         self,

@@ -110,7 +110,11 @@ class QdrantService:
             return formatted_results
 
         except Exception as e:
-            logger.error(f"Qdrant search failed: {e}")
+            logger.error(f"Qdrant search failed: {e}", exc_info=True)
+            logger.warning(
+                "Qdrant service unavailable - returning empty results for graceful degradation. "
+                "RAG service will return error message to user."
+            )
             # Return empty results instead of raising to allow graceful degradation
             return []
 

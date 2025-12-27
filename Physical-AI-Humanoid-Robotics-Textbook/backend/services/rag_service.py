@@ -78,11 +78,13 @@ class RAGService:
                 score_threshold=self.min_relevance_score
             )
 
-            # Step 2: Check if question is off-topic
+            # Step 2: Check if question is off-topic or search service failed
             if not retrieved_chunks or len(retrieved_chunks) == 0:
                 logger.warning(f"No relevant chunks found for question: {question[:50]}...")
+                # Could be off-topic OR Qdrant service failure
+                # Return generic error message that covers both cases
                 return {
-                    "response": self._get_off_topic_response(),
+                    "response": "I apologize, but I'm having trouble finding relevant information. This could be because the question is outside the textbook scope, or the search service is temporarily unavailable. Please try again in a moment.",
                     "citations": [],
                     "is_off_topic": True
                 }

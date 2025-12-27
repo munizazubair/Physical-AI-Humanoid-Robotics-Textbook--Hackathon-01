@@ -7,9 +7,15 @@ configuring routes, middleware, and core application settings.
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from config import settings
 from routers import health, chat, conversation, personalization, feedback
+from middleware.rate_limiter import RateLimitMiddleware
+from logging_config import setup_logging
+
+# Initialize logging
+setup_logging(log_level="INFO")
 
 # Initialize FastAPI application
 app = FastAPI(
@@ -29,6 +35,9 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
     expose_headers=["*"],  # Expose all headers to the browser
 )
+
+# Configure rate limiting middleware (20 requests per hour)
+app.middleware("http")(RateLimitMiddleware(app, limit=20))
 
 # Include routers
 app.include_router(health.router)
