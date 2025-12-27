@@ -76,6 +76,11 @@ const config = {
             label: 'Book',
           },
           {
+            to: '/chatbot',
+            label: 'AI Chatbot',
+            position: 'left',
+          },
+          {
             href: 'https://github.com/munizazubair/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01',
             label: 'GitHub',
             position: 'right',

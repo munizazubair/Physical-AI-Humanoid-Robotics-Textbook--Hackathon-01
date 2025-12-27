@@ -348,7 +348,7 @@
 
 ### T016: Setup React Chat UI Library
 
-- [ ] T016 [P] [US1] Setup ChatKit or @chatscope/chat-ui-kit-react in frontend
+- [X] T016 [P] [US1] Setup ChatKit or @chatscope/chat-ui-kit-react in frontend
 
 **Scope**:
 - Install chat UI library (ChatKit or chatscope)
@@ -369,7 +369,7 @@
 
 ### T017: Implement Frontend API Client
 
-- [ ] T017 [P] [US1] Implement API client in frontend/src/services/chatApi.js
+- [X] T017 [P] [US1] Implement API client in frontend/src/services/chatApi.js
 
 **Scope**:
 - Create chatApi module for backend communication
@@ -392,7 +392,7 @@
 
 ### T018: Implement Session Management
 
-- [ ] T018 [P] [US1] Implement session management in frontend/src/services/sessionManager.js
+- [X] T018 [P] [US1] Implement session management in frontend/src/services/sessionManager.js
 
 **Scope**:
 - Create session manager to handle anonymous session IDs
@@ -437,7 +437,7 @@
 
 ### T020: Display Citations in Chat UI
 
-- [ ] T020 [P] [US1] Display citations as clickable links in chat messages
+- [X] T020 [P] [US1] Display citations as clickable links in chat messages
 
 **Scope**:
 - Parse citations from API response
@@ -461,7 +461,7 @@
 
 ### T021: Implement Loading States
 
-- [ ] T021 [P] [US1] Implement loading states ("typing..." indicator) in chat UI
+- [X] T021 [P] [US1] Implement loading states ("typing..." indicator) in chat UI
 
 **Scope**:
 - Add loading indicator while waiting for API response
@@ -484,7 +484,7 @@
 
 ### T022: Implement Off-Topic Detection
 
-- [ ] T022 [P] [US1] Implement off-topic detection in RAG service
+- [X] T022 [P] [US1] Implement off-topic detection in RAG service
 
 **Scope**:
 - Add relevance scoring to Qdrant retrieval results
@@ -507,7 +507,7 @@
 
 ### T023: End-to-End Integration Test for US1
 
-- [ ] T023 [US1] Create end-to-end integration test for basic Q&A flow
+- [X] T023 [US1] Create end-to-end integration test for basic Q&A flow
 
 **Scope**:
 - Write integration test covering full RAG pipeline

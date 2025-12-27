@@ -1,0 +1,28 @@
+/**
+ * ChatWidget Component Styles
+ *
+ * Styling for the RAG chatbot chat widget integrated into Docusaurus.
+ */
+
+.chatWidgetContainer {
+  height: 600px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .chatWidgetContainer {
+    height: 500px;
+    max-width: 100%;
+  }
+}
+
+/* Dark mode support */
+[data-theme='dark'] .chatWidgetContainer {
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
