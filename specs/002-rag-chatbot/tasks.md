@@ -413,7 +413,7 @@
 
 ### T019: Integrate Chat Widget with Docusaurus
 
-- [ ] T019 [US1] Integrate ChatWidget into Docusaurus layout
+- [X] T019 [US1] Integrate ChatWidget into Docusaurus layout
 
 **Scope**:
 - Add ChatWidget to Docusaurus theme components
