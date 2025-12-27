@@ -12,8 +12,11 @@ import uuid
 import logging
 import re
 
+from sqlalchemy.ext.asyncio import AsyncSession
 from services.qdrant_service import qdrant_service
 from services.gemini_service import gemini_service
+from services.personalization_service import personalization_service
+from models.user_profile import KnowledgeLevel
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +38,8 @@ class RAGService:
         self,
         question: str,
         session_id: uuid.UUID,
-        conversation_history: Optional[List[Dict[str, str]]] = None
+        conversation_history: Optional[List[Dict[str, str]]] = None,
+        db: Optional[AsyncSession] = None
     ) -> Dict[str, Any]:
         """
         Process a user question through the complete RAG pipeline.
@@ -44,6 +48,7 @@ class RAGService:
             question (str): User's question
             session_id (UUID): User session identifier
             conversation_history (List[Dict]): Previous conversation messages
+            db (AsyncSession): Database session for personalization
 
         Returns:
             Dict: Response with text and citations
@@ -54,7 +59,17 @@ class RAGService:
                 }
         """
         try:
-            # Step 1: Retrieve relevant chunks from Qdrant
+            # Step 1: Get user knowledge level for adaptive responses
+            knowledge_level = KnowledgeLevel.BEGINNER  # Default
+            if db:
+                try:
+                    profile = await personalization_service.get_or_create_profile(session_id, db)
+                    knowledge_level = profile.knowledge_level
+                    logger.info(f"Using knowledge level {knowledge_level} for session {session_id}")
+                except Exception as e:
+                    logger.warning(f"Could not retrieve knowledge level: {e}")
+
+            # Step 2: Retrieve relevant chunks from Qdrant
             logger.info(f"Processing question for session {session_id}: {question[:50]}...")
 
             retrieved_chunks = await self.qdrant.search(
@@ -82,11 +97,12 @@ class RAGService:
                     "is_off_topic": True
                 }
 
-            # Step 3: Generate response using Gemini
+            # Step 3: Generate response using Gemini with knowledge level
             response_text = await self.gemini.generate_response(
                 question=question,
                 context_chunks=retrieved_chunks,
-                conversation_history=conversation_history
+                conversation_history=conversation_history,
+                knowledge_level=knowledge_level
             )
 
             # Step 4: Extract and format citations

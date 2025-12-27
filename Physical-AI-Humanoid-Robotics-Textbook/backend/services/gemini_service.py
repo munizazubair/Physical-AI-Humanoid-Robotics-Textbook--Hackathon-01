@@ -10,6 +10,7 @@ import google.generativeai as genai
 import logging
 
 from config import settings
+from models.user_profile import KnowledgeLevel
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +73,8 @@ class GeminiService:
         self,
         question: str,
         context_chunks: List[Dict[str, Any]],
-        conversation_history: Optional[List[Dict[str, str]]] = None
+        conversation_history: Optional[List[Dict[str, str]]] = None,
+        knowledge_level: KnowledgeLevel = KnowledgeLevel.BEGINNER
     ) -> str:
         """
         Generate a response using Gemini API with retrieved context.
@@ -81,6 +83,7 @@ class GeminiService:
             question (str): User's question
             context_chunks (List[Dict]): Retrieved textbook chunks with metadata
             conversation_history (List[Dict]): Previous messages for context
+            knowledge_level (KnowledgeLevel): User's knowledge level for adaptive responses
 
         Returns:
             str: Generated response
@@ -89,8 +92,8 @@ class GeminiService:
             Exception: If generation fails
         """
         try:
-            # Build prompt with retrieved context
-            prompt = self._build_prompt(question, context_chunks, conversation_history)
+            # Build prompt with retrieved context and knowledge level
+            prompt = self._build_prompt(question, context_chunks, conversation_history, knowledge_level)
 
             # Generate response
             response = self.model.generate_content(prompt)
@@ -110,7 +113,8 @@ class GeminiService:
         self,
         question: str,
         context_chunks: List[Dict[str, Any]],
-        conversation_history: Optional[List[Dict[str, str]]] = None
+        conversation_history: Optional[List[Dict[str, str]]] = None,
+        knowledge_level: KnowledgeLevel = KnowledgeLevel.BEGINNER
     ) -> str:
         """
         Build a prompt for Gemini API with context and history.
@@ -119,12 +123,33 @@ class GeminiService:
             question (str): User's question
             context_chunks (List[Dict]): Retrieved textbook chunks
             conversation_history (List[Dict]): Previous conversation messages
+            knowledge_level (KnowledgeLevel): User's knowledge level
 
         Returns:
             str: Formatted prompt
         """
-        # System instruction
-        system_prompt = """You are a helpful AI assistant for the Physical AI & Humanoid Robotics textbook.
+        # Adaptive instruction based on knowledge level
+        level_instructions = {
+            KnowledgeLevel.BEGINNER: """
+- Explain concepts in simple, accessible terms
+- Use analogies and real-world examples to clarify complex ideas
+- Define technical terms when you use them
+- Break down complex topics into smaller, digestible parts
+- Encourage learning with a supportive tone""",
+            KnowledgeLevel.INTERMEDIATE: """
+- Balance technical accuracy with clear explanations
+- Assume familiarity with basic concepts but explain advanced ones
+- Include practical applications and implementation details
+- Connect related concepts to build deeper understanding""",
+            KnowledgeLevel.ADVANCED: """
+- Provide detailed technical explanations with precise terminology
+- Discuss implementation details, trade-offs, and edge cases
+- Reference advanced concepts and related research areas
+- Focus on depth and technical accuracy"""
+        }
+
+        # System instruction with adaptive complexity
+        system_prompt = f"""You are a helpful AI assistant for the Physical AI & Humanoid Robotics textbook.
 
 Your role:
 1. Answer questions ONLY using information from the provided textbook content
@@ -137,7 +162,9 @@ Important:
 - Always cite your sources using the format: [Chapter X, Section Y]
 - If multiple sections are relevant, cite all of them
 - Stay focused on Physical AI, humanoid robotics, and related topics
-- Provide clear explanations suitable for students learning the material
+
+Response Style (User Knowledge Level: {knowledge_level.value.upper()}):
+{level_instructions[knowledge_level]}
 """
 
         # Format retrieved context

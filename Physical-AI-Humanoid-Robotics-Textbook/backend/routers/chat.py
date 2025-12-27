@@ -169,11 +169,12 @@ async def chat(
             for msg in reversed(history_messages)  # Reverse to chronological order
         ]
 
-        # Step 5: Process question through RAG pipeline
+        # Step 5: Process question through RAG pipeline with personalization
         rag_result = await rag_service.process_question(
             question=request.question,
             session_id=session_id,
-            conversation_history=conversation_history
+            conversation_history=conversation_history,
+            db=db
         )
 
         # Step 6: Save assistant response

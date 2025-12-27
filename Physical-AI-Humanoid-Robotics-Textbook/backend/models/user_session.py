@@ -61,6 +61,14 @@ class UserSession(Base):
         lazy="selectin",
     )
 
+    profile = relationship(
+        "UserProfile",
+        back_populates="session",
+        uselist=False,
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+
     def __repr__(self) -> str:
         return f"<UserSession(id={self.id}, created_at={self.created_at})>"
 
