@@ -972,7 +972,7 @@
 
 ### T044: Create Feedback Model
 
-- [ ] T044 [P] [US5] Create Feedback database model
+- [X] T044 [P] [US5] Create Feedback database model
 
 **Scope**:
 - Define SQLAlchemy model for user feedback
@@ -993,7 +993,7 @@
 
 ### T045: Implement Feedback Endpoint
 
-- [ ] T045 [P] [US5] Create POST /api/feedback endpoint
+- [X] T045 [P] [US5] Create POST /api/feedback endpoint
 
 **Scope**:
 - Create endpoint to submit feedback for a message
@@ -1015,7 +1015,7 @@
 
 ### T046: Add Feedback Buttons to Chat UI
 
-- [ ] T046 [P] [US5] Add thumbs up/down buttons to assistant messages
+- [X] T046 [P] [US5] Add thumbs up/down buttons to assistant messages
 
 **Scope**:
 - Add feedback buttons below each assistant message
@@ -1038,7 +1038,7 @@
 
 ### T047: Create RateLimit Model
 
-- [ ] T047 [P] [US5] Create RateLimit database model
+- [X] T047 [P] [US5] Create RateLimit database model
 
 **Scope**:
 - Define SQLAlchemy model for rate limiting

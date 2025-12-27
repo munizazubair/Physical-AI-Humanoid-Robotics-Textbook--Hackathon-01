@@ -1,15 +1,16 @@
 import React from 'react';
 import { Message } from '@chatscope/chat-ui-kit-react';
 import CitationList from './CitationList';
+import FeedbackButtons from './FeedbackButtons';
 import styles from './MessageWithCitations.module.css';
 
 /**
  * MessageWithCitations Component
  *
  * A wrapper around the chat-ui-kit Message component that adds citation support.
- * Displays assistant messages with citations below the message text.
+ * Displays assistant messages with citations and feedback buttons below the message text.
  */
-const MessageWithCitations = ({ message, citations, isOffTopic, ...messageProps }) => {
+const MessageWithCitations = ({ message, citations, isOffTopic, messageId, ...messageProps }) => {
   return (
     <div className={styles.messageContainer}>
       <Message {...messageProps} />
@@ -28,6 +29,13 @@ const MessageWithCitations = ({ message, citations, isOffTopic, ...messageProps 
       {citations && citations.length > 0 && (
         <div className={styles.citationsWrapper}>
           <CitationList citations={citations} />
+        </div>
+      )}
+
+      {/* Show feedback buttons for assistant messages */}
+      {!isOffTopic && messageId && (
+        <div className={styles.feedbackWrapper}>
+          <FeedbackButtons messageId={messageId} />
         </div>
       )}
     </div>

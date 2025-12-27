@@ -69,6 +69,13 @@ class UserSession(Base):
         lazy="selectin",
     )
 
+    rate_limits = relationship(
+        "RateLimit",
+        back_populates="session",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+
     def __repr__(self) -> str:
         return f"<UserSession(id={self.id}, created_at={self.created_at})>"
 

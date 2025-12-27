@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
-from routers import health, chat, conversation, personalization
+from routers import health, chat, conversation, personalization, feedback
 
 # Initialize FastAPI application
 app = FastAPI(
@@ -35,6 +35,7 @@ app.include_router(health.router)
 app.include_router(chat.router)
 app.include_router(conversation.router)
 app.include_router(personalization.router)
+app.include_router(feedback.router)
 
 
 if __name__ == "__main__":

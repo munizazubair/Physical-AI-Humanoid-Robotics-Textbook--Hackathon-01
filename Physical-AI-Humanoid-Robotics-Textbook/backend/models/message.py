@@ -80,6 +80,14 @@ class Message(Base):
         back_populates="messages",
     )
 
+    feedback = relationship(
+        "Feedback",
+        back_populates="message",
+        uselist=False,
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+
     # Constraints
     __table_args__ = (
         CheckConstraint(
