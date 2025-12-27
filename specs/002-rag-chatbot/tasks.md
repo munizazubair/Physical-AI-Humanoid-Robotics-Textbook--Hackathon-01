@@ -231,7 +231,7 @@
 
 ### T011: Generate Initial Database Migration
 
-- [ ] T011 [US1] Generate initial database migration for UserSession, Conversation, Message
+- [X] T011 [US1] Generate initial database migration for UserSession, Conversation, Message
 
 **Scope**:
 - Create Alembic migration for US1 models
@@ -297,7 +297,7 @@
 
 ### T014: Implement RAG Orchestration Service
 
-- [ ] T014 [US1] Implement RAG orchestration in backend/services/rag_service.py
+- [X] T014 [US1] Implement RAG orchestration in backend/services/rag_service.py
 
 **Scope**:
 - Create RAGService class to orchestrate retrieval + generation
@@ -321,7 +321,7 @@
 
 ### T015: Create POST /api/chat Endpoint
 
-- [ ] T015 [US1] Create POST /api/chat endpoint in backend/routers/chat.py
+- [X] T015 [US1] Create POST /api/chat endpoint in backend/routers/chat.py
 
 **Scope**:
 - Create chat router with POST /api/chat endpoint
