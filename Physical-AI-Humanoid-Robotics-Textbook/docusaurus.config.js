@@ -35,6 +35,14 @@ const config = {
     locales: ['en'],
   },
 
+  // Custom fields for runtime configuration
+  customFields: {
+    // Backend API URL for RAG chatbot
+    // Development: http://localhost:8000
+    // Production: Set via REACT_APP_API_URL environment variable
+    apiBaseUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000',
+  },
+
   presets: [
     [
       'classic',
@@ -74,6 +82,11 @@ const config = {
             sidebarId: 'tutorialSidebar',
             position: 'left',
             label: 'Book',
+          },
+          {
+            to: '/chatbot',
+            label: 'AI Chatbot',
+            position: 'left',
           },
           {
             href: 'https://github.com/munizazubair/Physical-AI-Humanoid-Robotics-Textbook--Hackathon-01',

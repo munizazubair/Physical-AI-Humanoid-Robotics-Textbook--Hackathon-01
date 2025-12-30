@@ -1,0 +1,74 @@
+/**
+ * FeedbackButtons Component Styles
+ */
+
+.feedbackContainer {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.feedbackButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.feedbackButton {
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.feedbackButton:hover:not(:disabled) {
+  background-color: var(--ifm-color-emphasis-100);
+  border-color: var(--ifm-color-primary);
+  transform: scale(1.1);
+}
+
+.feedbackButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.feedbackButton.active {
+  background-color: var(--ifm-color-primary-lightest);
+  border-color: var(--ifm-color-primary);
+}
+
+.thankYouMessage {
+  font-size: 0.85rem;
+  color: var(--ifm-color-success);
+  font-weight: 500;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode support */
+[data-theme='dark'] .feedbackButton {
+  border-color: var(--ifm-color-emphasis-500);
+}
+
+[data-theme='dark'] .feedbackButton:hover:not(:disabled) {
+  background-color: var(--ifm-color-emphasis-300);
+}
