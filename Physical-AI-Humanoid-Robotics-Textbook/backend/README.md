@@ -1,139 +1,164 @@
-# RAG Chatbot Backend
+---
+title: RAG Chatbot Backend API
+emoji: 🤖
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+license: mit
+app_port: 8000
+---
 
-FastAPI-based backend for the Physical AI & Humanoid Robotics Textbook chatbot.
+# RAG Chatbot Backend - Physical AI Textbook
 
-## Architecture
+FastAPI backend service for the RAG chatbot integrated with the Physical AI & Humanoid Robotics textbook.
 
-**RAG (Retrieval-Augmented Generation) Pipeline**:
-1. **Retrieval**: Qdrant vector database for semantic search
-2. **Generation**: Google Gemini API for contextual responses
-3. **Storage**: Neon PostgreSQL for conversations and history
+## Features
 
-## Project Structure
+- **RAG Pipeline**: Retrieval-Augmented Generation using Qdrant + Gemini
+- **Conversation History**: Multi-turn conversations with context
+- **Personalization**: Interest detection and adaptive responses
+- **Multi-Modal Support**: Text, code, and diagram citations
+- **Error Handling**: Graceful degradation and rate limiting
+- **Feedback System**: Thumbs up/down ratings
 
-```
-backend/
-├── main.py                  # FastAPI application entry point
-├── config.py                # Environment configuration (Pydantic Settings)
-├── database.py              # Async PostgreSQL connection
-├── requirements.txt         # Python dependencies
-├── .env.example             # Environment variable template
-├── alembic/                 # Database migrations
-│   ├── env.py               # Migration environment (async)
-│   ├── versions/            # Migration files
-│   └── alembic.ini          # Alembic configuration
-├── models/                  # SQLAlchemy ORM models
-│   ├── user_session.py      # Anonymous user sessions
-│   ├── conversation.py      # Conversation threads
-│   └── message.py           # Chat messages (user + assistant)
-├── services/                # Business logic
-│   ├── qdrant_service.py    # Vector database client
-│   ├── gemini_service.py    # Gemini API integration
-│   └── rag_service.py       # RAG orchestration
-├── routers/                 # API endpoints
-│   ├── health.py            # Health check endpoints
-│   └── chat.py              # Chat API endpoints
-└── tests/                   # Test suite
-```
+## Tech Stack
 
-## Setup
+- **Framework**: FastAPI (Python 3.12)
+- **Database**: Neon PostgreSQL (serverless)
+- **Vector DB**: Qdrant Cloud
+- **LLM**: Google Gemini 2.5 Pro
+- **Embeddings**: Cohere API (embed-english-v3.0)
 
-### 1. Install Dependencies
+## Environment Variables
+
+Configure these secrets in Hugging Face Spaces settings:
 
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-### 2. Configure Environment Variables
-
-Copy `.env.example` to `.env` and fill in your API keys:
-
-```bash
-cp .env.example .env
-```
-
-Required variables:
-- `GEMINI_API_KEY` - Get from https://ai.google.dev/
-- `QDRANT_URL` - Qdrant Cloud URL
-- `QDRANT_API_KEY` - Qdrant API key
-- `DATABASE_URL` - Neon PostgreSQL connection string
-- `CORS_ORIGINS` - Allowed frontend origins (comma-separated)
-
-Example `.env`:
-```
-GEMINI_API_KEY=AIzaSy...
+GEMINI_API_KEY=your_gemini_api_key
+COHERE_API_KEY=your_cohere_api_key
 QDRANT_URL=https://your-cluster.qdrant.io
-QDRANT_API_KEY=your-qdrant-key
+QDRANT_API_KEY=your_qdrant_api_key
 DATABASE_URL=postgresql+asyncpg://user:pass@host/db
-CORS_ORIGINS=http://localhost:3000,https://yourusername.github.io
+CORS_ORIGINS=https://yourusername.github.io
+ENVIRONMENT=production
+LOG_LEVEL=INFO
+HOST=0.0.0.0
+PORT=8000
 ```
-
-### 3. Run Database Migrations
-
-```bash
-# Generate initial migration
-alembic revision --autogenerate -m "Initial schema"
-
-# Apply migrations
-alembic upgrade head
-```
-
-### 4. Run Development Server
-
-```bash
-# Start server with auto-reload
-uvicorn main:app --reload
-
-# Or use Python directly
-python main.py
-```
-
-Server runs at: http://localhost:8000
 
 ## API Endpoints
 
-### Health Check
-- **GET** `/health` - Check API and database status
-- **GET** `/` - API information
+### Chat & Conversation
+- `POST /api/chat` - Send question, receive response with citations
+- `GET /api/conversation/history` - Retrieve conversation history
+- `POST /api/conversation/new` - Start new conversation
+- `DELETE /api/conversation/{id}` - Delete conversation
 
-### Chat
-- **POST** `/api/chat` - Send a message to the chatbot
+### Feedback
+- `POST /api/feedback` - Submit thumbs up/down rating
 
-Request:
-```json
-{
-  "session_id": "uuid-optional",
-  "conversation_id": "uuid-optional",
-  "question": "What is ROS 2?"
-}
+### Health
+- `GET /health` - Health check endpoint
+
+## Deployment on Hugging Face Spaces
+
+This app is configured for Hugging Face Spaces with Docker SDK.
+
+### 1. Create Hugging Face Space
+
+1. Go to https://huggingface.co/spaces
+2. Click "Create new Space"
+3. Choose:
+   - **Owner**: Your username or organization
+   - **Space name**: `rag-chatbot-backend` (or your choice)
+   - **License**: MIT
+   - **SDK**: Docker
+   - **Visibility**: Public or Private
+
+### 2. Upload Files
+
+Push this backend directory to your Space:
+
+```bash
+# Clone your space
+git clone https://huggingface.co/spaces/YOUR_USERNAME/SPACE_NAME
+cd SPACE_NAME
+
+# Copy backend files
+cp -r ../Physical-AI-Humanoid-Robotics-Textbook/backend/* .
+
+# Commit and push
+git add .
+git commit -m "Initial backend deployment"
+git push
 ```
 
-Response:
-```json
-{
-  "response": "ROS 2 is...",
-  "citations": [
-    {
-      "chapter": "3",
-      "section": "2.1",
-      "page": "45",
-      "text": "[Chapter 3, Section 2.1]",
-      "content_type": "text"
-    }
-  ],
-  "message_id": "uuid",
-  "conversation_id": "uuid",
-  "session_id": "uuid",
-  "is_off_topic": false
-}
+### 3. Configure Secrets
+
+In your Space's Settings → Repository secrets, add:
+
+- `GEMINI_API_KEY`
+- `COHERE_API_KEY`
+- `QDRANT_URL`
+- `QDRANT_API_KEY`
+- `DATABASE_URL`
+- `CORS_ORIGINS` (your GitHub Pages URL)
+
+### 4. Auto-Deploy
+
+Hugging Face Spaces will automatically build and deploy your Docker container.
+
+## Local Development
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run migrations
+alembic upgrade head
+
+# Start server
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### Interactive API Documentation
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+## Generate Embeddings
+
+Populate Qdrant with textbook embeddings:
+
+```bash
+python scripts/generate_embeddings.py
+```
+
+This will:
+- Read all .md and .mdx files from docs/
+- Generate embeddings using Cohere API (embed-english-v3.0)
+- Upload to Qdrant vector database
+
+## Testing
+
+```bash
+# Health check
+curl https://YOUR_USERNAME-SPACE_NAME.hf.space/health
+
+# Test chat endpoint
+curl -X POST https://YOUR_USERNAME-SPACE_NAME.hf.space/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is a VLA model?"}'
+```
+
+## Architecture
+
+```
+Frontend (GitHub Pages)
+    ↓
+Backend API (Hugging Face Spaces)
+    ↓
+├── Qdrant Cloud (vector search)
+├── Gemini API (response generation)
+├── Cohere API (embeddings)
+└── Neon PostgreSQL (conversation history)
+```
 
 ## Database Schema
 
@@ -150,6 +175,7 @@ conversations (
   id UUID PRIMARY KEY,
   session_id UUID REFERENCES user_sessions(id),
   title VARCHAR(255),
+  is_deleted BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP
 )
 
@@ -162,84 +188,57 @@ messages (
   citations JSONB,
   created_at TIMESTAMP
 )
+
+-- Feedback
+feedback (
+  id UUID PRIMARY KEY,
+  message_id UUID REFERENCES messages(id),
+  rating INTEGER CHECK (rating IN (1, -1)),
+  comment TEXT,
+  created_at TIMESTAMP
+)
+
+-- Rate Limiting
+rate_limits (
+  session_id UUID REFERENCES user_sessions(id),
+  request_count INTEGER,
+  window_start TIMESTAMP
+)
 ```
 
-## Development
+## Interactive API Documentation
 
-### Code Quality
-
-```bash
-# Format code
-black .
-
-# Lint code
-flake8 .
-
-# Type checking
-mypy .
-
-# Sort imports
-isort .
-```
-
-### Testing
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=. --cov-report=html
-
-# Run specific test file
-pytest tests/test_rag_service.py
-```
-
-## Deployment
-
-### Environment Variables for Production
-
-- `ENVIRONMENT=production`
-- `LOG_LEVEL=INFO`
-- All API keys (Gemini, Qdrant, Database)
-- `CORS_ORIGINS` with production frontend URL
-
-### Deployment Platforms
-
-**Recommended**: Render or Railway
-
-1. Connect GitHub repository
-2. Set environment variables in dashboard
-3. Deploy automatically on push to main branch
-
-See `render.yaml` or `railway.json` for configuration.
+Once deployed, visit:
+- **Swagger UI**: https://YOUR_USERNAME-SPACE_NAME.hf.space/docs
+- **ReDoc**: https://YOUR_USERNAME-SPACE_NAME.hf.space/redoc
 
 ## Troubleshooting
 
 ### Database Connection Issues
-- Verify `DATABASE_URL` is correct
+- Verify `DATABASE_URL` in Secrets
 - Check Neon dashboard for connection limits
 - Ensure SSL is enabled: `?ssl=require`
 
 ### Qdrant Connection Issues
-- Verify `QDRANT_URL` and `QDRANT_API_KEY`
+- Verify `QDRANT_URL` and `QDRANT_API_KEY` in Secrets
 - Check Qdrant Cloud dashboard for cluster status
-- Verify collection name is `textbook_chunks`
+- Verify collection name is `textbook_embeddings`
 
 ### Gemini API Issues
-- Verify `GEMINI_API_KEY` is valid
+- Verify `GEMINI_API_KEY` in Secrets
 - Check quota limits on Google AI Studio
 - Review rate limiting settings
 
+### Cohere API Issues
+- Verify `COHERE_API_KEY` in Secrets
+- Check usage limits on Cohere dashboard
+- Ensure model `embed-english-v3.0` is available
+
 ### CORS Issues
-- Add frontend URL to `CORS_ORIGINS`
-- Restart server after changing .env
-- Check browser console for specific errors
-
-## Architecture Decisions
-
-See `specs/002-rag-chatbot/plan.md` for detailed architecture decisions and rationale.
+- Add your GitHub Pages URL to `CORS_ORIGINS` in Secrets
+- Format: `https://username.github.io`
+- Restart Space after changing secrets
 
 ## License
 
-See main repository LICENSE file.
+MIT

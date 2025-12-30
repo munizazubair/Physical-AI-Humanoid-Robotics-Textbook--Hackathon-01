@@ -2,7 +2,7 @@
 
 **Feature**: RAG Chatbot with Gemini Integration
 **Branch**: `002-rag-chatbot`
-**Total Tasks**: 65 | **MVP**: 18 tasks (P1) | **Parallel**: 42 tasks [P]
+**Total Tasks**: 67 | **MVP**: 20 tasks (P1) | **Parallel**: 42 tasks [P]
 
 ---
 
@@ -346,6 +346,31 @@
 
 ---
 
+### T015a: Implement Input Sanitization
+
+- [X] T015a [P] [US1] Implement input sanitization in POST /api/chat endpoint
+
+**Scope**:
+- Add input validation and sanitization to prevent injection attacks
+- Validate session_id format (UUID)
+- Sanitize question string (HTML escaping, length limits)
+- Add security middleware for request validation
+
+**Deliverables**:
+- backend/routers/chat.py updated (input validation)
+- backend/middleware/input_validator.py (new middleware)
+
+**Acceptance Criteria**:
+- [ ] session_id validated as valid UUID format
+- [ ] question string sanitized (HTML entities escaped)
+- [ ] question length limited to 500 characters
+- [ ] Malicious HTML/JavaScript stripped from input
+- [ ] SQL injection patterns detected and rejected
+- [ ] Returns 400 with clear error message for invalid input
+- [ ] Passes OWASP input validation tests
+
+---
+
 ### T016: Setup React Chat UI Library
 
 - [X] T016 [P] [US1] Setup ChatKit or @chatscope/chat-ui-kit-react in frontend
@@ -356,7 +381,7 @@
 - Configure basic styling
 
 **Deliverables**:
-- frontend/src/components/ChatWidget.jsx (React component)
+- src/components/ChatWidget.jsx (React component)
 - frontend/package.json updated (chat UI library dependency)
 
 **Acceptance Criteria**:
@@ -369,7 +394,7 @@
 
 ### T017: Implement Frontend API Client
 
-- [X] T017 [P] [US1] Implement API client in frontend/src/services/chatApi.js
+- [X] T017 [P] [US1] Implement API client in src/services/chatApi.js
 
 **Scope**:
 - Create chatApi module for backend communication
@@ -378,7 +403,7 @@
 - Implement error handling and retries
 
 **Deliverables**:
-- frontend/src/services/chatApi.js (API client module)
+- src/services/chatApi.js (API client module)
 
 **Acceptance Criteria**:
 - [ ] sendMessage(sessionId, question) function implemented
@@ -392,7 +417,7 @@
 
 ### T018: Implement Session Management
 
-- [X] T018 [P] [US1] Implement session management in frontend/src/services/sessionManager.js
+- [X] T018 [P] [US1] Implement session management in src/services/sessionManager.js
 
 **Scope**:
 - Create session manager to handle anonymous session IDs
@@ -400,7 +425,7 @@
 - Provide getSessionId() function for components
 
 **Deliverables**:
-- frontend/src/services/sessionManager.js (session manager module)
+- src/services/sessionManager.js (session manager module)
 
 **Acceptance Criteria**:
 - [ ] Generates UUID v4 on first visit
@@ -422,8 +447,8 @@
 - Ensure widget appears on all textbook pages
 
 **Deliverables**:
-- frontend/src/theme/Root.js (Docusaurus swizzled component)
-- frontend/src/components/ChatWidget.jsx updated
+- src/theme/Root.js (Docusaurus swizzled component)
+- src/components/ChatWidget.jsx updated
 
 **Acceptance Criteria**:
 - [ ] ChatWidget component added to Root.js
@@ -444,15 +469,17 @@
 - Render citations below assistant messages
 - Format as [Chapter X, Section Y] with links to textbook sections
 - Handle multiple citations per message
+- **Implement clickable anchor links to textbook sections (FR-020)**
 
 **Deliverables**:
-- frontend/src/components/Citation.jsx (citation display component)
-- frontend/src/components/ChatWidget.jsx updated
+- src/components/Citation.jsx (citation display component)
+- src/components/ChatWidget.jsx updated
 
 **Acceptance Criteria**:
 - [ ] Citations displayed below assistant messages
 - [ ] Each citation is a clickable link
-- [ ] Links navigate to correct textbook section (anchor links)
+- [ ] **Links navigate to correct textbook section using anchor links (FR-020)**
+- [ ] **Anchor format: `/chapter-{chapter}#{section}` or similar based on Docusaurus structure**
 - [ ] Citations styled distinctly (smaller font, gray color)
 - [ ] Multiple citations displayed in comma-separated list
 - [ ] Handles messages with no citations gracefully
@@ -470,7 +497,7 @@
 - Handle loading errors with retry option
 
 **Deliverables**:
-- frontend/src/components/ChatWidget.jsx updated (loading state)
+- src/components/ChatWidget.jsx updated (loading state)
 
 **Acceptance Criteria**:
 - [ ] Loading indicator appears after user sends message
@@ -525,6 +552,8 @@
 - [ ] Verifies citations format correct
 - [ ] Test passes with real Qdrant and Gemini (or mocked)
 - [ ] Test runs in CI pipeline
+- [ ] **Performance validation: Verify 95% of requests complete within 5 seconds (FR-006)**
+- [ ] Measure and log response time for each test request
 
 ---
 
@@ -550,6 +579,82 @@
 - [ ] Error cases tested (API failures, invalid input)
 - [ ] All tests pass
 - [ ] Code coverage ≥80% for services/
+
+---
+
+
+## Phase 2.5: Critical Bug Fixes & Debugging (2 tasks - Priority 1)
+
+### T066: Debug Backend 500 Errors from Chat Endpoint
+
+- [ ] T066 [US1] Debug and fix backend 500 errors from /api/chat endpoint
+
+**Scope**:
+- Investigate root cause of 500 Internal Server Error responses
+- Check database connection and session management
+- Verify API key configuration (Gemini, Cohere, Qdrant)
+- Validate CORS configuration
+- Add debug logging to identify error source
+- Fix identified issues
+
+**Deliverables**:
+- backend/routers/chat.py (bug fixes)
+- backend/services/rag_service.py (error handling improvements)
+- backend/services/gemini_service.py (connection validation)
+- backend/services/qdrant_service.py (error logging)
+
+**Acceptance Criteria**:
+- [ ] Identify specific line/service causing 500 errors
+- [ ] Add try-catch blocks with detailed error logging
+- [ ] Database connection tested and working
+- [ ] API keys validated on startup
+- [ ] CORS configured correctly for frontend origin
+- [ ] /api/chat endpoint returns 200 with valid response
+- [ ] Error responses include meaningful error messages (not 500)
+- [ ] All services log errors with stack traces
+
+**Debug Checklist**:
+- [ ] Check backend logs for Python exceptions
+- [ ] Verify DATABASE_URL connection string
+- [ ] Test Gemini API key with gemini_service.generate_response()
+- [ ] Test Cohere API key with qdrant_service.search()
+- [ ] Verify Qdrant URL and API key
+- [ ] Check if AsyncSessionLocal is properly injected
+- [ ] Validate request payload structure
+- [ ] Test endpoint with curl/Postman
+
+---
+
+### T067: Fix React PropType Warnings in ChatWidget
+
+- [ ] T067 [P] [US1] Fix React PropType validation warnings in ChatWidget components
+
+**Scope**:
+- Audit ChatWidget.jsx component structure
+- Fix PropType validation errors in ChatContainer
+- Ensure only valid children are used in ChatContainer
+- Update component hierarchy if needed
+
+**Deliverables**:
+- src/components/ChatWidget/ChatWidget.jsx (PropType fixes)
+- src/components/FloatingChatWidget/FloatingChatWidget.jsx (structure validation)
+
+**Acceptance Criteria**:
+- [ ] No PropType warnings in browser console
+- [ ] ChatContainer only contains valid children:
+  - ConversationHeader
+  - MessageList
+  - MessageInput
+  - InputToolbox (optional)
+- [ ] All custom div wrappers removed or replaced with valid components
+- [ ] Component renders correctly without errors
+- [ ] Chat functionality still works after fixes
+
+**Investigation Steps**:
+- [ ] Review @chatscope/chat-ui-kit-react documentation for ChatContainer
+- [ ] Identify invalid div children in current implementation
+- [ ] Refactor component structure to match library requirements
+- [ ] Test chat widget after changes
 
 ---
 
@@ -633,7 +738,7 @@
 - Show timestamps for older messages
 
 **Deliverables**:
-- frontend/src/components/ChatWidget.jsx updated (history loading)
+- src/components/ChatWidget.jsx updated (history loading)
 
 **Acceptance Criteria**:
 - [ ] Calls API to fetch history when widget opens
@@ -675,7 +780,7 @@
 - Preserve session ID
 
 **Deliverables**:
-- frontend/src/components/ChatWidget.jsx updated (new conversation button)
+- src/components/ChatWidget.jsx updated (new conversation button)
 
 **Acceptance Criteria**:
 - [ ] Button labeled "New Conversation" in widget header
@@ -706,6 +811,33 @@
 - [ ] Creates new conversation
 - [ ] Verifies new conversation ID different
 - [ ] All tests pass
+
+---
+
+### T031a: Implement Delete Conversation History
+
+- [ ] T031a [P] [US2] Create DELETE /api/conversation/{id} endpoint and UI button
+
+**Scope**:
+- Create endpoint to delete conversation history for a user
+- Add "Delete History" button to chat widget settings
+- Implement soft delete (mark as deleted, don't actually remove from DB)
+- Add confirmation dialog before deletion
+
+**Deliverables**:
+- backend/routers/conversation.py updated (DELETE endpoint)
+- src/components/ChatWidget updated (delete button + confirmation)
+
+**Acceptance Criteria**:
+- [ ] DELETE /api/conversation/{id} endpoint implemented
+- [ ] Endpoint marks conversation as deleted (soft delete)
+- [ ] Returns 200 on successful deletion
+- [ ] Returns 404 if conversation not found
+- [ ] Returns 403 if conversation doesn't belong to session
+- [ ] Frontend shows "Delete History" button in settings/menu
+- [ ] Confirmation dialog appears: "Are you sure you want to delete this conversation? This cannot be undone."
+- [ ] On confirmation, calls DELETE endpoint and clears UI
+- [ ] Deleted conversations excluded from history retrieval
 
 ---
 
@@ -936,7 +1068,7 @@
 - Link to correct page section or figure
 
 **Deliverables**:
-- frontend/src/components/Citation.jsx updated (content type icons)
+- src/components/Citation.jsx updated (content type icons)
 
 **Acceptance Criteria**:
 - [ ] Citations show icon based on content_type
@@ -1024,8 +1156,8 @@
 - Show confirmation message
 
 **Deliverables**:
-- frontend/src/components/FeedbackButtons.jsx (new component)
-- frontend/src/components/ChatWidget.jsx updated
+- src/components/FeedbackButtons.jsx (new component)
+- src/components/ChatWidget.jsx updated
 
 **Acceptance Criteria**:
 - [ ] Thumbs up/down buttons displayed below assistant messages
@@ -1058,7 +1190,7 @@
 
 ### T048: Implement Rate Limiting Middleware
 
-- [ ] T048 [US5] Implement rate limiting in backend/middleware/rate_limiter.py
+- [X] T048 [US5] Implement rate limiting in backend/middleware/rate_limiter.py
 
 **Scope**:
 - Create middleware to enforce 20 questions/hour per session
@@ -1082,7 +1214,7 @@
 
 ### T049: Implement Graceful Degradation for Qdrant
 
-- [ ] T049 [P] [US5] Implement fallback when Qdrant unavailable
+- [X] T049 [P] [US5] Implement fallback when Qdrant unavailable
 
 **Scope**:
 - Wrap Qdrant calls in try-except
@@ -1105,7 +1237,7 @@
 
 ### T050: Implement Graceful Degradation for Gemini
 
-- [ ] T050 [P] [US5] Implement fallback when Gemini API unavailable
+- [X] T050 [P] [US5] Implement fallback when Gemini API unavailable
 
 **Scope**:
 - Wrap Gemini calls in try-except
@@ -1174,34 +1306,35 @@
 
 ### T053: Create Backend Deployment Configuration
 
-- [ ] T053 [P] Create deployment configuration for Render/Railway
+- [ ] T053 [P] Create deployment configuration for Render
 
 **Scope**:
-- Create render.yaml or railway.json deployment config
+- Create render.yaml deployment config (Render chosen as primary deployment platform)
 - Configure environment variables
 - Set build and start commands
 - Configure health check endpoint
 
 **Deliverables**:
-- render.yaml or railway.json (deployment config)
-- .env.production (environment variable template)
+- backend/render.yaml (Render deployment config)
+- backend/.env.production (environment variable template)
 
 **Acceptance Criteria**:
-- [ ] Config specifies Python 3.10+ runtime
+- [ ] render.yaml specifies Python 3.10+ runtime
 - [ ] Build command: pip install -r requirements.txt
 - [ ] Start command: uvicorn main:app --host 0.0.0.0 --port $PORT
 - [ ] Health check: GET /health
-- [ ] Environment variables placeholder for all required keys
+- [ ] Environment variables placeholder for all required keys (GEMINI_API_KEY, QDRANT_URL, DATABASE_URL, CORS_ORIGINS)
+- [ ] Deployment auto-triggers on git push to main branch
 
 ---
 
-### T054: Deploy Backend to Render/Railway
+### T054: Deploy Backend to Render
 
-- [ ] T054 Deploy FastAPI backend to Render or Railway
+- [ ] T054 Deploy FastAPI backend to Render
 
 **Scope**:
-- Connect GitHub repository to Render/Railway
-- Configure environment variables in dashboard
+- Connect GitHub repository to Render (https://render.com)
+- Configure environment variables in Render dashboard
 - Deploy backend application
 - Verify health check passes
 
@@ -1209,33 +1342,37 @@
 - Deployed backend with HTTPS URL
 
 **Acceptance Criteria**:
-- [ ] Backend deployed successfully
+- [ ] Backend deployed successfully to Render
 - [ ] HTTPS URL accessible (e.g., https://chatbot-api.onrender.com)
-- [ ] GET /health returns 200
-- [ ] Database migrations applied (alembic upgrade head)
-- [ ] Environment variables set correctly
-- [ ] CORS configured for GitHub Pages origin
+- [ ] GET /health returns 200 with {"status": "healthy"}
+- [ ] Database migrations applied automatically or manually (alembic upgrade head)
+- [ ] Environment variables set correctly in Render dashboard (GEMINI_API_KEY, QDRANT_URL, QDRANT_API_KEY, DATABASE_URL, COHERE_API_KEY, CORS_ORIGINS)
+- [ ] CORS configured for GitHub Pages origin (https://munizazubair.github.io)
+- [ ] Backend responds to /api/chat endpoint within 5 seconds
 
 ---
 
 ### T055: Update Frontend Environment Variables
 
-- [ ] T055 [P] Update frontend REACT_APP_CHAT_API_URL to production backend
+- [ ] T055 [P] Update frontend REACT_APP_API_URL to production backend
 
 **Scope**:
-- Update .env.production with deployed backend URL
+- Update .env with deployed Render backend URL
 - Rebuild frontend for production
 - Test API connection from frontend
+- **NOTE: Frontend uses Docusaurus customFields (fixed in C1) - env var is injected at build time**
 
 **Deliverables**:
-- frontend/.env.production updated
+- .env updated with Render URL
 - Frontend production build
 
 **Acceptance Criteria**:
-- [ ] REACT_APP_CHAT_API_URL set to production backend URL
+- [ ] REACT_APP_API_URL set to production Render URL (e.g., https://chatbot-api.onrender.com)
+- [ ] Docusaurus customFields correctly exposes apiBaseUrl
 - [ ] npm run build succeeds
 - [ ] Build output in build/ directory
-- [ ] API calls from frontend reach backend
+- [ ] Test API calls from localhost build reach Render backend
+- [ ] Verify window.docusaurus.siteConfig.customFields.apiBaseUrl is correct in built bundle
 
 ---
 

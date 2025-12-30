@@ -4,7 +4,7 @@ UserProfile Model
 Stores user personalization data including interests, knowledge level, and reading history.
 """
 
-from sqlalchemy import Column, String, ForeignKey, DateTime, Enum as SQLEnum
+from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 import uuid
@@ -66,8 +66,8 @@ class UserProfile(Base):
 
     # Additional metadata
     total_questions = Column(
-        String,
-        default="0",
+        Integer,
+        default=0,
         nullable=False,
         comment="Total questions asked by user"
     )
@@ -112,11 +112,10 @@ class UserProfile(Base):
 
     def increment_question_count(self):
         """Increment the total question count."""
-        try:
-            count = int(self.total_questions)
-            self.total_questions = str(count + 1)
-        except ValueError:
-            self.total_questions = "1"
+        if self.total_questions is None:
+            self.total_questions = 1
+        else:
+            self.total_questions += 1
         self.updated_at = datetime.utcnow()
 
     @classmethod
@@ -135,7 +134,7 @@ class UserProfile(Base):
             interests=[],
             knowledge_level=KnowledgeLevel.BEGINNER,
             visited_chapters=[],
-            total_questions="0"
+            total_questions=0
         )
 
     def get_interests_summary(self) -> str:

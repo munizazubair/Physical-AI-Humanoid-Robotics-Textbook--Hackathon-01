@@ -16,6 +16,7 @@ from models.user_session import UserSession
 from models.conversation import Conversation
 from models.message import Message
 from services.rag_service import rag_service
+from middleware.input_validator import InputValidator
 
 router = APIRouter(
     prefix="/api",
@@ -94,6 +95,9 @@ async def chat(
         HTTPException: 400 for invalid input, 500 for processing errors
     """
     try:
+        # Validate and sanitize input
+        sanitized_question = InputValidator.sanitize_question(request.question)
+
         # Step 1: Get or create user session
         session_id = request.session_id
         if not session_id:
@@ -145,14 +149,14 @@ async def chat(
         # Step 3: Save user message
         user_message = Message.create_user_message(
             conversation_id=conversation_id,
-            content=request.question
+            content=sanitized_question
         )
         db.add(user_message)
         await db.flush()
 
         # Set conversation title from first message if not set
         if not conversation.title:
-            conversation.set_title_from_first_message(request.question)
+            conversation.set_title_from_first_message(sanitized_question)
 
         # Step 4: Get conversation history for context
         result = await db.execute(
@@ -171,7 +175,7 @@ async def chat(
 
         # Step 5: Process question through RAG pipeline with personalization
         rag_result = await rag_service.process_question(
-            question=request.question,
+            question=sanitized_question,
             session_id=session_id,
             conversation_history=conversation_history,
             db=db
@@ -205,8 +209,13 @@ async def chat(
     except Exception as e:
         # Log error and return 500
         import logging
+        import traceback
         logger = logging.getLogger(__name__)
         logger.error(f"Chat endpoint error: {e}", exc_info=True)
+
+        # Also print to stdout for debugging
+        print(f"ERROR in chat endpoint: {e}")
+        print(f"Traceback: {traceback.format_exc()}")
 
         await db.rollback()
 

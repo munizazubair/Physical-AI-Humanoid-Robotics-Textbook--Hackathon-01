@@ -5,17 +5,37 @@ This module initializes the FastAPI application for the RAG Chatbot backend,
 configuring routes, middleware, and core application settings.
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from config import settings
+from database import close_db
 from routers import health, chat, conversation, personalization, feedback
 from middleware.rate_limiter import RateLimitMiddleware
 from logging_config import setup_logging
 
 # Initialize logging
 setup_logging(log_level="INFO")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Lifespan context manager for application startup and shutdown.
+
+    Handles initialization and cleanup of resources like database connections.
+    """
+    # Startup - dispose of any existing connections to ensure fresh start
+    from database import engine
+    await engine.dispose()
+
+    yield
+
+    # Shutdown - dispose of database connections
+    await close_db()
+
 
 # Initialize FastAPI application
 app = FastAPI(
@@ -24,6 +44,7 @@ app = FastAPI(
     version="0.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
 )
 
 # Configure CORS middleware

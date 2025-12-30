@@ -59,12 +59,12 @@ class GeminiService:
 
             # Initialize model
             self.model = genai.GenerativeModel(
-                model_name="gemini-1.5-pro",
+                model_name="gemini-2.5-flash",  # Free tier model with good performance
                 generation_config=self.generation_config,
                 safety_settings=self.safety_settings,
             )
 
-            logger.info("Gemini API initialized with gemini-1.5-pro model")
+            logger.info("Gemini API initialized with gemini-2.5-flash model")
 
         except Exception as e:
             logger.error(f"Failed to initialize Gemini API: {e}")

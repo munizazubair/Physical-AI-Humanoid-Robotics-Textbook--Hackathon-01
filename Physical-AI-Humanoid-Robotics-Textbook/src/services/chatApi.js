@@ -5,8 +5,26 @@
  * Implements error handling, retries, and CORS support.
  */
 
-// Backend API base URL - Update this based on deployment environment
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+
+/**
+ * Get the API base URL from Docusaurus customFields
+ * This function must be called from within a React component that has Docusaurus context
+ */
+export const getApiBaseUrl = () => {
+  if (typeof window === 'undefined') {
+    // Server-side rendering - use default
+    return 'http://localhost:8000';
+  }
+
+  // Access Docusaurus site config from window (injected during build)
+  // This is available globally after Docusaurus initializes
+  const siteConfig = window?.docusaurus?.siteConfig;
+  return siteConfig?.customFields?.apiBaseUrl || 'http://localhost:8000';
+};
+
+// Default API base URL (will be overridden by getApiBaseUrl in components)
+let API_BASE_URL = 'http://localhost:8000';
 
 /**
  * Send a message to the chatbot and get a response
@@ -17,6 +35,9 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
  * @returns {Promise<Object>} Response object with answer, citations, and IDs
  */
 export const sendMessage = async (question, sessionId = null, conversationId = null) => {
+  // Get the current API base URL (supports dynamic config)
+  const apiUrl = getApiBaseUrl();
+
   const requestBody = {
     question: question.trim(),
   };
@@ -32,7 +53,7 @@ export const sendMessage = async (question, sessionId = null, conversationId = n
   }
 
   try {
-    const response = await fetchWithRetry(`${API_BASE_URL}/api/chat`, {
+    const response = await fetchWithRetry(`${apiUrl}/api/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -74,7 +95,7 @@ export const sendMessage = async (question, sessionId = null, conversationId = n
     // Handle network errors
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
       throw new ChatApiError(
-        'Unable to connect to the chatbot service. Please check your internet connection.',
+        'Unable to connect to the chatbot service. The API endpoint may not be configured correctly or the server may be offline.',
         0,
         { originalError: error.message }
       );
@@ -154,8 +175,10 @@ export const loadConversationHistory = async (sessionId, conversationId = null) 
     return { messages: [], total_messages: 0 };
   }
 
+  const apiUrl = getApiBaseUrl();
+
   try {
-    const url = new URL(`${API_BASE_URL}/api/conversation/history`);
+    const url = new URL(`${apiUrl}/api/conversation/history`);
     url.searchParams.append('session_id', sessionId);
     if (conversationId) {
       url.searchParams.append('conversation_id', conversationId);
@@ -198,8 +221,10 @@ export const loadConversationHistory = async (sessionId, conversationId = null) 
  * @returns {Promise<Object>} Health status object
  */
 export const checkHealth = async () => {
+  const apiUrl = getApiBaseUrl();
+
   try {
-    const response = await fetch(`${API_BASE_URL}/health`, {
+    const response = await fetch(`${apiUrl}/health`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -264,7 +289,7 @@ export class ChatApiError extends Error {
    */
   getUserMessage() {
     if (this.isNetworkError()) {
-      return 'Unable to connect to the chatbot. Please check your internet connection.';
+      return 'Unable to connect to the chatbot service. The API endpoint may not be configured correctly or the server may be offline.';
     }
 
     if (this.isServerError()) {
@@ -290,8 +315,10 @@ export const createNewConversation = async (sessionId) => {
     throw new ChatApiError('Session ID is required', 400);
   }
 
+  const apiUrl = getApiBaseUrl();
+
   try {
-    const response = await fetch(`${API_BASE_URL}/api/conversation/new`, {
+    const response = await fetch(`${apiUrl}/api/conversation/new`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

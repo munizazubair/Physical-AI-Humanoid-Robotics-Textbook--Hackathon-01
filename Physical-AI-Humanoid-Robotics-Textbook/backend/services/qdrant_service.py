@@ -9,6 +9,9 @@ from typing import List, Dict, Any, Optional
 from qdrant_client import QdrantClient
 from qdrant_client.models import SearchRequest, Filter, FieldCondition, MatchValue
 import logging
+import cohere
+import asyncio
+from functools import partial
 
 from config import settings
 
@@ -29,12 +32,20 @@ class QdrantService:
             self.client = QdrantClient(
                 url=settings.qdrant_url,
                 api_key=settings.qdrant_api_key,
-                timeout=10.0,
+                timeout=60.0,  # Increased from 10s to 60s to accommodate Cohere API
             )
-            self.collection_name = "textbook_chunks"  # Default collection name
+            self.collection_name = "textbook_embeddings"  # Updated collection name
+
+            # Initialize Cohere client for embeddings
+            self.cohere_client = cohere.Client(
+                api_key=settings.cohere_api_key,
+                timeout=120.0  # 120-second timeout for embedding generation (first call can be slow)
+            )
+
             logger.info(f"Qdrant client initialized for {settings.qdrant_url}")
+            logger.info("Cohere embeddings client initialized")
         except Exception as e:
-            logger.error(f"Failed to initialize Qdrant client: {e}")
+            logger.error(f"Failed to initialize Qdrant/Cohere client: {e}")
             raise
 
     async def search(
@@ -64,9 +75,23 @@ class QdrantService:
             Exception: If search fails or Qdrant is unavailable
         """
         try:
-            # Note: This implementation assumes Qdrant has pre-embedded chunks
-            # In production, you would use an embedding model here
-            # For MVP, we rely on Qdrant's built-in search capabilities
+            # Generate embedding for the query using Cohere (run in thread pool to avoid blocking)
+            logger.info(f"Generating embedding for query: {query[:50]}...")
+
+            # Run synchronous Cohere call in thread pool
+            loop = asyncio.get_event_loop()
+            embedding_response = await loop.run_in_executor(
+                None,
+                partial(
+                    self.cohere_client.embed,
+                    texts=[query],
+                    model="embed-english-v3.0",
+                    input_type="search_query"
+                )
+            )
+
+            query_vector = embedding_response.embeddings[0]
+            logger.info(f"Query embedding generated: {len(query_vector)} dimensions")
 
             # Build filter conditions if provided
             filter_conditions = None
@@ -81,12 +106,10 @@ class QdrantService:
                     ]
                 )
 
-            # Perform search
-            # Note: In production, convert query to embedding vector first
-            # For now, this is a placeholder that assumes Qdrant handles it
+            # Perform search with the query vector
             search_results = self.client.search(
                 collection_name=self.collection_name,
-                query_vector=None,  # Would use embedding model here
+                query_vector=query_vector,
                 limit=top_k,
                 score_threshold=score_threshold,
                 query_filter=filter_conditions,

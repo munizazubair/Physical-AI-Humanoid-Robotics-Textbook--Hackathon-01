@@ -166,9 +166,10 @@ When the chatbot provides an incorrect or unhelpful answer, the user can provide
 
 - **FR-033**: System MUST integrate with the existing Qdrant Cloud Free Tier vector database containing book embeddings
 - **FR-034**: System MUST expose a FastAPI backend with RESTful endpoints for chat interactions
-- **FR-035**: System MUST use ChatKit or equivalent UI library for the chat interface components
-- **FR-036**: System MUST be deployable independently from the static Docusaurus site (e.g., as a separate service)
+- **FR-035**: System MUST use @chatscope/chat-ui-kit-react or equivalent UI library for the chat interface components
+- **FR-036**: Backend service MUST be deployable independently from the static Docusaurus site. Frontend integration embeds chat components in Docusaurus `src/` directory (not a separate application).
 - **FR-037**: System MUST support cross-origin requests from the GitHub Pages deployment
+- **FR-037a**: System MUST expose backend API URL to frontend via Docusaurus customFields or build-time substitution to enable dynamic environment configuration (development vs production)
 
 ### Key Entities
 

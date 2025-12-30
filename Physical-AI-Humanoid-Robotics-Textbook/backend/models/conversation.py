@@ -7,7 +7,7 @@ Each conversation can contain multiple messages.
 
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, String, DateTime, ForeignKey
+from sqlalchemy import Column, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -52,6 +52,13 @@ class Conversation(Base):
         String(255),
         nullable=True,
         comment="Auto-generated conversation title",
+    )
+
+    is_deleted = Column(
+        Boolean,
+        default=False,
+        nullable=False,
+        comment="Soft delete flag",
     )
 
     created_at = Column(

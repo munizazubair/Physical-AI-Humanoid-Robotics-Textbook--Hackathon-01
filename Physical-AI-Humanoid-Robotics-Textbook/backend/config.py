@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     # Google Gemini API Configuration
     gemini_api_key: str
 
+    # Cohere API Configuration (for embeddings)
+    cohere_api_key: str
+
     # Qdrant Vector Database Configuration
     qdrant_url: str
     qdrant_api_key: str
@@ -28,7 +31,7 @@ class Settings(BaseSettings):
     database_url: str
 
     # CORS Configuration
-    cors_origins: str = "http://localhost:3000,http://localhost:8000"
+    cors_origins: str = "http://localhost:3000,http://localhost:3001,http://localhost:8000"
 
     # Application Configuration
     environment: str = "development"

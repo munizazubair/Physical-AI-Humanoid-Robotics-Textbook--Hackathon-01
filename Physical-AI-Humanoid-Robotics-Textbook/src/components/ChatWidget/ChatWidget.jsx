@@ -238,38 +238,40 @@ const ChatWidget = () => {
               );
             })}
           </MessageList>
-          {messages.length > 1 && (
-            <div className={styles.newConversationButtonContainer}>
-              <button
-                className={styles.newConversationButton}
-                onClick={handleNewConversation}
-                title="Start a new conversation"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={styles.newConversationIcon}
-                >
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-                New Conversation
-              </button>
-            </div>
-          )}
           <MessageInput
             placeholder="Ask a question about the textbook..."
+            onSend={handleSend}
             value={inputValue}
             onChange={(val) => setInputValue(val)}
-            onSend={handleSend}
             attachButton={false}
           />
         </ChatContainer>
       </MainContainer>
+      {messages.length > 1 && (
+        <div className={styles.newConversationButtonContainer}>
+          <button
+            onClick={handleNewConversation}
+            className={styles.newConversationButton}
+            aria-label="Start new conversation"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={styles.newConversationIcon}
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            New Conversation
+          </button>
+        </div>
+      )}
     </div>
   );
 };

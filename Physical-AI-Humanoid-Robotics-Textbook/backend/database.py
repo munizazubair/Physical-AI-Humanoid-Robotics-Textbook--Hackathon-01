@@ -21,15 +21,15 @@ from config import settings
 Base = declarative_base()
 
 # Create async engine with connection pooling
+# Using NullPool to avoid event loop issues on Windows
 engine: AsyncEngine = create_async_engine(
     settings.database_url,
     echo=settings.is_development,  # Log SQL queries in development
-    pool_size=10,  # Maximum number of connections in the pool
-    max_overflow=20,  # Maximum overflow connections
+    poolclass=NullPool,  # Use NullPool to avoid event loop closure issues
     pool_pre_ping=True,  # Verify connections before using them
-    pool_recycle=3600,  # Recycle connections after 1 hour
-    # Use NullPool for serverless environments if needed
-    # poolclass=NullPool,
+    connect_args={
+        "prepared_statement_cache_size": 0,  # Disable prepared statement cache to avoid schema change issues
+    },
 )
 
 # Create async session factory

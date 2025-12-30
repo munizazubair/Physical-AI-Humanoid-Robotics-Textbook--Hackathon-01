@@ -199,6 +199,64 @@ async def create_new_conversation(
     )
 
 
+@router.delete("/{conversation_id}", status_code=200)
+async def delete_conversation(
+    conversation_id: str,
+    session_id: str = Query(..., description="Session ID to verify ownership"),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Delete a conversation (soft delete).
+
+    Marks the conversation as deleted without physically removing it from the database.
+    Only the owner (session) can delete a conversation.
+
+    Args:
+        conversation_id: UUID of the conversation to delete
+        session_id: UUID of the session (for ownership verification)
+        db: Database session
+
+    Returns:
+        Success message with deleted conversation ID
+
+    Raises:
+        HTTPException: 400 if IDs are invalid
+        HTTPException: 403 if conversation doesn't belong to session
+        HTTPException: 404 if conversation not found
+    """
+    # Validate UUIDs
+    try:
+        conv_uuid = uuid.UUID(conversation_id)
+        sess_uuid = uuid.UUID(session_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid ID format")
+
+    # Find conversation
+    conv_query = select(Conversation).where(Conversation.id == conv_uuid)
+    conv_result = await db.execute(conv_query)
+    conversation = conv_result.scalar_one_or_none()
+
+    if not conversation:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+
+    # Verify ownership
+    if conversation.session_id != sess_uuid:
+        raise HTTPException(
+            status_code=403,
+            detail="Conversation does not belong to this session"
+        )
+
+    # Soft delete: mark as deleted
+    conversation.is_deleted = True
+    await db.commit()
+
+    return {
+        "message": "Conversation deleted successfully",
+        "conversation_id": conversation_id,
+        "deleted_at": datetime.utcnow().isoformat()
+    }
+
+
 @router.get("/list", response_model=List[dict])
 async def list_conversations(
     session_id: str = Query(..., description="Session ID to list conversations for"),

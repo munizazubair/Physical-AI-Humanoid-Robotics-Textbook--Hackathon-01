@@ -13,7 +13,7 @@ import logging
 import uuid
 
 from models.rate_limit import RateLimit
-from database import SessionLocal
+from database import AsyncSessionLocal
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ class RateLimitMiddleware:
 
         # Check rate limit
         try:
-            async with SessionLocal() as db:
+            async with AsyncSessionLocal() as db:
                 is_limited, retry_after = await self._check_rate_limit(
                     session_id, db
                 )
